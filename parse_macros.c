@@ -1,3 +1,3 @@
-int parse_macros(int argc, char* argv[]){
+int parse_macros(char* argv){
 
 }

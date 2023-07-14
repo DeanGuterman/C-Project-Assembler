@@ -1,7 +1,8 @@
 
-
 int main(int argc, char* argv[]){
-    parse_macro(int argc, char* argv[]);
+    for (int i = 0; i < argc; i++){
+        parse_macro(char* argv[i]);
+    }
     return 0;
 }
 
