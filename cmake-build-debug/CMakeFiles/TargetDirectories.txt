@@ -1,0 +1,3 @@
+C:/Users/deang/CLionProjects/assembler-project/cmake-build-debug/CMakeFiles/assembler_project.dir
+C:/Users/deang/CLionProjects/assembler-project/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/deang/CLionProjects/assembler-project/cmake-build-debug/CMakeFiles/rebuild_cache.dir
