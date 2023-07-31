@@ -14,7 +14,11 @@ typedef struct Macro {
 
 /* Function to parse macros from .as file to .am file */
 void parse_macros(char * argv) {
-    FILE * input_file = fopen(argv, "r");
+    char file_name[100];
+    strcpy(file_name, argv);
+    strcat(file_name, ".as");
+    printf("Parsing macros from file: %s\n", file_name);
+    FILE * input_file = fopen(file_name, "r");
     if (input_file == NULL) {
         printf("Error opening file: %s\n", argv);
         return;
