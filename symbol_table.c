@@ -10,8 +10,9 @@ typedef struct symbol_table {
 } symbol_table;
 
 /* Function to add a new node to the symbol table */
-symbol_table* add(symbol_table** tail, const char* symbol) {
+symbol_table* add(symbol_table* tail, const char* symbol) {
     symbol_table* new_node;
+    symbol_table* temp = tail;
     new_node = (symbol_table*)malloc(sizeof(symbol_table));
     if (new_node == NULL) {
         printf("Memory allocation failed!\n");
@@ -23,17 +24,10 @@ symbol_table* add(symbol_table** tail, const char* symbol) {
     new_node->value = 0;
     new_node->prev = NULL;
 
-    if (*tail == NULL) {
-        /* If the list is empty, set the new node as the tail */
-        *tail = new_node;
-    } else {
-        /* Append the new node to the end and update the previous pointer */
-        (*tail)->prev = new_node;
+    while (temp->prev != NULL){
+        temp = temp->prev;
     }
-
-    /* Update the tail to point to the new node */
-    *tail = new_node;
-
+    temp->prev = new_node;
     return new_node;
 }
 
@@ -47,3 +41,4 @@ int check_if_exists(symbol_table* tail, const char* symbol) {
     }
     return 0; /* Symbol does not exist in the table */
 }
+
