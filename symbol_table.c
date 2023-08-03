@@ -11,7 +11,8 @@ typedef struct symbol_table {
 
 /* Function to add a new node to the symbol table */
 symbol_table* add(symbol_table** tail, const char* symbol) {
-    symbol_table* new_node = (symbol_table*)malloc(sizeof(symbol_table));
+    symbol_table* new_node;
+    new_node = (symbol_table*)malloc(sizeof(symbol_table));
     if (new_node == NULL) {
         printf("Memory allocation failed!\n");
         return NULL;

@@ -6,10 +6,12 @@
 #define MAX 100
 
 char* extract_symbol(const char line[]) {
-    int index = 0;
-    int symbol_index = 0;
-
-    char* symbol_name = (char*)malloc(MAX * sizeof(char));
+    int index;
+    int symbol_index;
+    char* symbol_name;
+    index = 0;
+    symbol_index = 0;
+    symbol_name = (char*)malloc(MAX * sizeof(char));
     if (symbol_name == NULL) {
         printf("Memory allocation failed!\n");
         return NULL;
@@ -42,8 +44,11 @@ int first_pass_through(char* argv) {
     char file_name[MAX];
     char line[MAX];
     FILE* input_file;
-    int temp_dc = 0, temp_ic = 100;
-    symbol_table* tail = NULL; /* Initialize head to NULL */
+    int temp_dc, temp_ic;
+    symbol_table* tail;
+    temp_dc = 0;
+    temp_ic = 100;
+    tail = NULL; /* Initialize head to NULL */
 
     /* Opening the file */
     strcpy(file_name, argv);
@@ -54,7 +59,8 @@ int first_pass_through(char* argv) {
     /* Go through every line in the file */
     while (fgets(line, MAX, input_file)) {
         /* Check if it's a symbol declaration */
-        char* symbol_name = extract_symbol(line);
+        char* symbol_name;
+        symbol_name = extract_symbol(line);
         if (symbol_name != NULL) {
             /*char* symbol_name = extract_symbol(line);*/
             symbol_table* new_symbol;
@@ -79,7 +85,8 @@ int first_pass_through(char* argv) {
 
     /* Free the memory for the symbol table nodes when done using the linked list */
     while (tail != NULL) {
-        symbol_table* temp = tail;
+        symbol_table* temp;
+        temp = tail;
         tail = tail->prev;
         free(temp);
     }
