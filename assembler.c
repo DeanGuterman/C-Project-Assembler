@@ -5,10 +5,9 @@
 #include <stdlib.h>
 #include <ctype.h>
 #define TEMP_SYMBOL_NAME "@r0"
-#define MAX_LINE_LENGTH 80
-#define MAX_SYMBOL_LENGTH 30
-/* maximum length of symbol is 31 without \n */
-/* maximum length of line is 80 without \n */
+#define MAX_LINE_LENGTH 82
+#define MAX_SYMBOL_LENGTH 32
+
 
 int parse_macros(char* argv);
 int first_pass_through(char* argv, symbol_table* symbol_head);

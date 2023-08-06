@@ -4,8 +4,8 @@
 #include <ctype.h>
 #include "symbol_table.h"
 #include "utils.h"
-#define MAX_LINE_LENGTH 80
-#define MAX_SYMBOL_LENGTH 30
+#define MAX_LINE_LENGTH 82
+#define MAX_SYMBOL_LENGTH 32
 
 char* extract_symbol(const char line[]) {
     int index;
