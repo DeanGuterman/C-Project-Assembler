@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "symbol_table.h"
+#include "utils.h"
 #define MAX 100
 
 char* extract_symbol(const char line[]) {
@@ -47,59 +48,49 @@ char* extract_symbol(const char line[]) {
     return symbol_name;
 }
 
-int first_pass_through(char* argv) {
-    char file_name[MAX];
+int first_pass_through(char* argv, symbol_table* symbol_head) {
     char line[MAX];
-    FILE* input_file;
+    FILE *input_file;
     int temp_dc, temp_ic;
-    symbol_table* tail;
-    char* symbol_name;
-    symbol_table* new_node;
+    char *symbol_name;
+    symbol_table *new_symbol;
+    int symbol_table_empty;
+
+    symbol_table_empty = 1;
     temp_dc = 0;
     temp_ic = 100;
-    tail = NULL; /* Initialize head to NULL */
-
-    /* Opening the file */
-    strcpy(file_name, argv);
-    strcat(file_name, ".am");
-    printf("Going through file: %s\n", file_name);
-    input_file = fopen(file_name, "r");
+    input_file = open_file(argv, ".am");
 
     /* Go through every line in the file */
     while (fgets(line, MAX, input_file)) {
         /* Check if it's a symbol declaration */
         symbol_name = extract_symbol(line);
         if (symbol_name != NULL) {
-            if (tail == NULL) {
-                new_node = (symbol_table*)malloc(sizeof(symbol_table));
-                if (new_node == NULL) {
-                    printf("Memory allocation failed!\n");
-                }
-                strncpy(new_node->symbol, symbol_name, sizeof(new_node->symbol) - 1);
-                new_node->symbol[sizeof(new_node->symbol) - 1] = '\0'; /* Ensure null-termination */
-                new_node->value = 0;
-                new_node->prev = NULL;
-                tail = new_node;
-            } else if (check_if_exists(tail, symbol_name) == 0) {
-                symbol_table* new_symbol;
+            if (symbol_table_empty){
+                symbol_head = insert_first_symbol(symbol_name);
+                symbol_table_empty = 0;
                 printf("Symbol: %s\n", symbol_name);
-                new_symbol = add(tail, symbol_name);
+            }
+            else if (symbol_exists(symbol_head, symbol_name) == 0){
+                printf("Symbol: %s\n", symbol_name);
+                new_symbol = insert_symbol(symbol_head, symbol_name);
                 new_symbol->value = temp_ic;
+                if (symbol_head == NULL){
+                    symbol_head = new_symbol;
+                }
             } else {
                 printf("error: Symbol \"%s\" already exists in the table\n", symbol_name);
             }
-            free (symbol_name);
+            free(symbol_name);
         }
     }
-
-    fclose(input_file);
-    /* Free the memory for the symbol table nodes when done using the linked list */
-    while (tail != NULL) {
+    /*while (symbol_head != NULL) {
         symbol_table* temp;
-        temp = tail;
-        tail = tail->prev;
+        temp = symbol_head;
+        symbol_head = symbol_head->next;
+        printf("Freeing %s\n", temp->symbol);
         free(temp);
-    }
-
-    return 0;
+    }*/
+    fclose(input_file);
+    return 1;
 }

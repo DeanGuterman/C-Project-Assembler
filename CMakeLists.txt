@@ -6,4 +6,4 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}" )
 
 add_executable(assembler_project
         assembler.c
-        parse_macros.c first_pass_through.c symbol_table.c symbol_table.h)
+        parse_macros.c first_pass_through.c symbol_table.c symbol_table.h utils.c utils.h)

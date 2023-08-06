@@ -5,10 +5,11 @@
 typedef struct symbol_table {
     char symbol[100];
     int value;
-    struct symbol_table* prev;
+    struct symbol_table* next;
 } symbol_table;
 
-symbol_table* add(symbol_table* prev, const char* symbol);
-int check_if_exists(symbol_table* prev, const char* symbol);
+symbol_table* insert_first_symbol(const char* symbol);
+symbol_table* insert_symbol(symbol_table* head, const char* symbol);
+int symbol_exists(symbol_table* head, const char* symbol);
 
 #endif /* SYMBOL_TABLE_H */
