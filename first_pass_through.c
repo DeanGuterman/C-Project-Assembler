@@ -54,9 +54,8 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
     int temp_dc, temp_ic;
     char *symbol_name;
     symbol_table *new_symbol;
-    int symbol_table_empty;
 
-    symbol_table_empty = 1;
+    symbol_name = NULL;
     temp_dc = 0;
     temp_ic = 100;
     input_file = open_file(argv, ".am");
@@ -65,32 +64,17 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
     while (fgets(line, MAX, input_file)) {
         /* Check if it's a symbol declaration */
         symbol_name = extract_symbol(line);
+
         if (symbol_name != NULL) {
-            if (symbol_table_empty){
-                symbol_head = insert_first_symbol(symbol_name);
-                symbol_table_empty = 0;
-                printf("Symbol: %s\n", symbol_name);
+            new_symbol = insert_symbol(symbol_head, symbol_name);
+            if (symbol_head == NULL){
+                symbol_head = new_symbol;
+                printf("Symbol %s is the new head\n", new_symbol->symbol);
             }
-            else if (symbol_exists(symbol_head, symbol_name) == 0){
-                printf("Symbol: %s\n", symbol_name);
-                new_symbol = insert_symbol(symbol_head, symbol_name);
-                new_symbol->value = temp_ic;
-                if (symbol_head == NULL){
-                    symbol_head = new_symbol;
-                }
-            } else {
-                printf("error: Symbol \"%s\" already exists in the table\n", symbol_name);
-            }
+            new_symbol->value = temp_ic;
             free(symbol_name);
         }
     }
-    /*while (symbol_head != NULL) {
-        symbol_table* temp;
-        temp = symbol_head;
-        symbol_head = symbol_head->next;
-        printf("Freeing %s\n", temp->symbol);
-        free(temp);
-    }*/
     fclose(input_file);
     return 1;
 }

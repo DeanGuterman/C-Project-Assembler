@@ -15,9 +15,14 @@ int main(int argc, char* argv[]){
     int i;
     for (i = 1; i < argc; i++){
         symbol_table* symbol_head;
-        symbol_head = insert_symbol(NULL, "NULL");
+
+
+        symbol_head = insert_symbol(NULL, "null");
         parse_macros(argv[i]);
         first_pass_through(argv[i], symbol_head);
+        printf("symbol_head: %s\n", symbol_head->symbol);
+        ;
+
         free_tables(symbol_head);
     }
     return 0;

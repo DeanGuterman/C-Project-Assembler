@@ -22,3 +22,4 @@ FILE* open_file(char* file_name, char* file_type){
     return fopen(complete_file_name, "r");
 }
 
+
