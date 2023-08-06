@@ -12,6 +12,7 @@ void free_tables(symbol_table* symbol_head){
         printf("Freeing %s\n", temp->symbol);
         free(temp);
     }
+    free(symbol_head);
 }
 
 FILE* open_file(char* file_name, char* file_type){

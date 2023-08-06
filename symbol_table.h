@@ -1,7 +1,7 @@
 
 #ifndef SYMBOL_TABLE_H
 #define SYMBOL_TABLE_H
-#define MAX_SYMBOL_LENGTH 32
+#define MAX_SYMBOL_LENGTH 30
 
 typedef struct symbol_table {
     char symbol[MAX_SYMBOL_LENGTH + 1];

@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "utils.h"
-#define MAX_LINE_LENGTH 82
+#define MAX_LINE_LENGTH 80
 
 /* Structure to hold macro information */
 typedef struct Macro {
@@ -96,6 +96,8 @@ void parse_macros(char* argv) {
     Macro* macro_tail;
     Macro* temp;
 
+    current_macro = NULL;
+    inside_macro = 0;
     macro_tail = NULL;
     input_file = open_file(argv, ".as");
 
@@ -153,9 +155,10 @@ void parse_macros(char* argv) {
     }
 
     /* Clean up: free the macro linked list and associated content */
-    while (macro_tail != NULL) {
-        temp = macro_tail;
-        macro_tail = macro_tail->next;
+    while (current_macro != NULL) {
+        temp = current_macro;
+        current_macro = current_macro->next;
+        printf("Freeing macro: %s\n", temp->name);
         free(temp->content); /* Free allocated content memory */
         free(temp);
     }

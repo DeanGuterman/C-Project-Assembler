@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX_LINE_LENGTH 82
-#define MAX_SYMBOL_LENGTH 32
+#define MAX_LINE_LENGTH 80
+#define MAX_SYMBOL_LENGTH 30
 
 typedef struct symbol_table {
     char symbol[MAX_SYMBOL_LENGTH + 1];
