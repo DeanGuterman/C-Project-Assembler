@@ -4,6 +4,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#define TEMP_SYMBOL_NAME "@r0"
+#define MAX_LINE_LENGTH 80
+#define MAX_SYMBOL_LENGTH 30
 /* maximum length of symbol is 31 without \n */
 /* maximum length of line is 80 without \n */
 
@@ -16,12 +19,10 @@ int main(int argc, char* argv[]){
     for (i = 1; i < argc; i++){
         symbol_table* symbol_head;
 
+        symbol_head = insert_symbol(NULL, TEMP_SYMBOL_NAME, -1);
 
-        symbol_head = insert_symbol(NULL, "null");
         parse_macros(argv[i]);
         first_pass_through(argv[i], symbol_head);
-        printf("symbol_head: %s\n", symbol_head->symbol);
-        ;
 
         free_tables(symbol_head);
     }

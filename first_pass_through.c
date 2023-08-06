@@ -4,7 +4,8 @@
 #include <ctype.h>
 #include "symbol_table.h"
 #include "utils.h"
-#define MAX 100
+#define MAX_LINE_LENGTH 80
+#define MAX_SYMBOL_LENGTH 30
 
 char* extract_symbol(const char line[]) {
     int index;
@@ -49,7 +50,7 @@ char* extract_symbol(const char line[]) {
 }
 
 int first_pass_through(char* argv, symbol_table* symbol_head) {
-    char line[MAX];
+    char line[MAX_LINE_LENGTH + 1];
     FILE *input_file;
     int temp_dc, temp_ic;
     char *symbol_name;
@@ -61,17 +62,16 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
     input_file = open_file(argv, ".am");
 
     /* Go through every line in the file */
-    while (fgets(line, MAX, input_file)) {
+    while (fgets(line, MAX_LINE_LENGTH, input_file)) {
         /* Check if it's a symbol declaration */
         symbol_name = extract_symbol(line);
 
         if (symbol_name != NULL) {
-            new_symbol = insert_symbol(symbol_head, symbol_name);
+            new_symbol = insert_symbol(symbol_head, symbol_name, temp_ic);
             if (symbol_head == NULL){
                 symbol_head = new_symbol;
                 printf("Symbol %s is the new head\n", new_symbol->symbol);
             }
-            new_symbol->value = temp_ic;
             free(symbol_name);
         }
     }

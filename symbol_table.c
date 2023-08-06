@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX 100
+#define MAX_LINE_LENGTH 80
+#define MAX_SYMBOL_LENGTH 30
 
 typedef struct symbol_table {
-    char symbol[MAX];
+    char symbol[MAX_SYMBOL_LENGTH + 1];
     int value;
     struct symbol_table* next;
 } symbol_table;
@@ -22,7 +23,7 @@ int symbol_exists(symbol_table* head, const char* symbol) {
 
 
 /* Function to add a new node to the symbol table */
-symbol_table* insert_symbol(symbol_table* head, const char* symbol) {
+symbol_table* insert_symbol(symbol_table* head, const char* symbol, int ic_value) {
     symbol_table* new_symbol;
     symbol_table* temp;
 
@@ -39,10 +40,11 @@ symbol_table* insert_symbol(symbol_table* head, const char* symbol) {
         free (new_symbol);
         return NULL;
     }
+
     /* Copy the symbol name into the allocated memory */
     strncpy(new_symbol->symbol, symbol, sizeof(new_symbol->symbol) - 1);
     new_symbol->symbol[sizeof(new_symbol->symbol) - 1] = '\0'; /* Ensure null-termination */
-    new_symbol->value = 0;
+    new_symbol->value = ic_value;
     new_symbol->next = NULL;
 
     if (head != NULL){
