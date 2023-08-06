@@ -22,4 +22,11 @@ FILE* open_file(char* file_name, char* file_type){
     return fopen(complete_file_name, "r");
 }
 
+FILE* create_output_file(char* file_name, char* file_type){
+    char complete_file_name[FILENAME_MAX];
+    strcpy(complete_file_name, file_name);
+    strcat(complete_file_name, file_type);
+    printf("Creating output file: %s\n", complete_file_name);
+    return fopen(complete_file_name, "r");
+}
 

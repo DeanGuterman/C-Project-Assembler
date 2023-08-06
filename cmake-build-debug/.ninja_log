@@ -32,3 +32,10 @@
 11	99	7130533028827494	CMakeFiles/assembler_project.dir/utils.c.obj	e3bac11620b15379
 6	103	7130533028857476	CMakeFiles/assembler_project.dir/first_pass_through.c.obj	2ce5fccac3812e72
 103	213	7130533029906868	assembler_project.exe	28e56322fd92ba2c
+10	98	7130576237526970	CMakeFiles/assembler_project.dir/first_pass_through.c.obj	2ce5fccac3812e72
+7	108	7130576237606925	CMakeFiles/assembler_project.dir/parse_macros.c.obj	f1083ccad01185a3
+2	109	7130576237606925	CMakeFiles/assembler_project.dir/assembler.c.obj	a920149f88347313
+98	171	7130576238276536	CMakeFiles/assembler_project.dir/utils.c.obj	e3bac11620b15379
+171	365	7130576240175452	assembler_project.exe	28e56322fd92ba2c
+2	85	7130578332629662	CMakeFiles/assembler_project.dir/parse_macros.c.obj	f1083ccad01185a3
+86	180	7130578333539037	assembler_project.exe	28e56322fd92ba2c
