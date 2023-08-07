@@ -228,7 +228,6 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
     temp_dc = 0;
     temp_ic = 100;
     line_number = 0;
-    data_or_string_value = 0;
     error_free = 1;
     input_file = open_file(argv, ".am");
 
