@@ -13,13 +13,17 @@ int first_pass_through(char* argv, symbol_table* symbol_head);
 
 int main(int argc, char* argv[]){
     int i;
+
     for (i = 1; i < argc; i++){
+        int error_free;
         symbol_table* symbol_head;
 
         symbol_head = insert_symbol(NULL, TEMP_SYMBOL_NAME, -1);
 
-        parse_macros(argv[i]);
-        first_pass_through(argv[i], symbol_head);
+        error_free = parse_macros(argv[i]);
+        if (error_free == 1) {
+            error_free = first_pass_through(argv[i], symbol_head);
+        }
 
         free_tables(symbol_head);
     }

@@ -135,6 +135,8 @@ int handle_data(char line[], int index, int line_number){
 int handle_data_or_string(char line[], int index, int line_number){
     int prompt_index;
     char prompt[MAX_LINE_LENGTH + 1];
+    int handle_string_value;
+    int handle_data_value;
 
     prompt_index = 0;
     /* If the line starts with a newline, return 0 indicating no prompt */
@@ -159,10 +161,18 @@ int handle_data_or_string(char line[], int index, int line_number){
 
     /* Compare the prompt with ".string" and ".data" */
     if (strcmp(".string", prompt) == 0){
-        return handle_string(line, index, line_number);
+        handle_string_value = handle_string(line, index, line_number);
+        if (handle_string_value == 0){
+            return -1;
+        }
+        else return handle_string_value;
     }
     if (strcmp(".data", prompt) == 0){
-        return handle_data(line, index, line_number);
+        handle_data_value = handle_data(line, index, line_number);
+        if (handle_data_value == 0){
+            return -1;
+        }
+        else return handle_data_value;
     }
 
     /* Return 0 if the prompt is not recognized */
@@ -178,12 +188,14 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
     int line_number;
     int index;
     int data_or_string_value;
+    int error_free;
 
     symbol_name = NULL;
     temp_dc = 0;
     temp_ic = 100;
     line_number = 0;
     data_or_string_value = 0;
+    error_free = 1;
     input_file = open_file(argv, ".am");
 
     /* Go through every line in the file */
@@ -205,7 +217,11 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
                 index++;
             }
             data_or_string_value = handle_data_or_string(line, index, line_number);
-            if (data_or_string_value != 0){
+            if (data_or_string_value == -1){
+                error_free = 0;
+                continue;
+            }
+            if (data_or_string_value > 0){
                 temp_dc += data_or_string_value;
                 temp_ic += data_or_string_value;
             }
@@ -214,5 +230,5 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
 
     }
     fclose(input_file);
-    return 1;
+    return error_free;
 }

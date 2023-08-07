@@ -48,6 +48,19 @@ Macro* handle_macro_start(char* line, Macro* macro_tail) {
     return new_macro;
 }
 
+int check_legal_macro_name(char name[], int line_number){
+    int i;
+    const char* reserved_names[] = {"mov", "cmp", "add", "sub", "not", "clr", "lea", "inc", "dec", "jmp", "bne", "red", "prn", "jsr", "rts", "stop", "data", "string", "entry", "extern", "@r0", "@r1", "@r2", "@r3", "@r4", "@r5", "@r6", "@r7"};
+
+    for ( i = 0; i < 28; i++) {
+        if (strcmp(name, reserved_names[i]) == 0) {
+            printf("Error in line %d illegal macro name: %s is a reserved name\n", line_number, name);
+            return 0;
+        }
+    }
+    return 1;
+}
+
 /* Append the given line to the content of the current macro */
 void append_to_macro(Macro* current_macro, char* line) {
     if (current_macro->content == NULL) {
@@ -106,24 +119,28 @@ int parse_macros(char* argv) {
     Macro* macro_tail;
     Macro* temp;
     int line_number;
+    int error_free;
 
     current_macro = NULL;
     inside_macro = 0;
     macro_tail = NULL;
     input_file = open_file(argv, ".as");
     line_number = 0;
+    error_free = 1;
 
     printf("Parsing macros from file: %s.as\n", argv);
     if (input_file == NULL) {
         printf("Error opening file: %s\n", argv);
-        return;
+        error_free = 0;
+        return error_free;
     }
 
     output_file = create_output_file(argv, ".am");
     if (output_file == NULL) {
         printf("Error creating output file: %s\n", argv);
         fclose(input_file);
-        return;
+        error_free = 0;
+        return error_free;
     }
 
     while (fgets(line, MAX_LINE_LENGTH + 1, input_file)) {
@@ -132,6 +149,7 @@ int parse_macros(char* argv) {
         /* Check if line length exceeds maximum line length */
         if (check_line_length(line) == 0){
             printf("Error: line %d length exceeds maximum line length of %d characters\n",line_number, MAX_LINE_LENGTH - 1);
+            error_free = 0;
             continue;
         }
         /* Trim trailing newline character */
@@ -150,6 +168,10 @@ int parse_macros(char* argv) {
         /* Check if it's a macro declaration */
         if (strncmp(trimmed_line, "mcro", 4) == 0) {
             current_macro = handle_macro_start(trimmed_line, macro_tail);
+            if (check_legal_macro_name(current_macro->name, line_number) == 0) {
+                error_free = 0;
+                continue;
+            }
             if (macro_tail == NULL) {
                 macro_tail = current_macro;
             }
@@ -186,6 +208,11 @@ int parse_macros(char* argv) {
     fclose(input_file);
     fclose(output_file);
 
-    printf("Macros parsed successfully! Output file: %s.am\n", argv);
-    return 1;
+    if (error_free) {
+        printf("Macros parsed successfully! Output file: %s.am\n", argv);
+    }
+    else {
+        printf("Errors occurred while parsing macros\n");
+    }
+    return error_free;
 }
