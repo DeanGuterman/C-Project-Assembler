@@ -13,6 +13,7 @@ typedef struct Macro {
 } Macro;
 
 int check_line_length(char line[]);
+int check_legal_macro_name(char name[], int line_number);
 Macro* handle_macro_start(char* line, Macro* macro_tail);
 void append_to_macro(Macro* current_macro, char* line);
 int handle_macro_call(char* line, Macro* macro_tail, FILE* output_file);

@@ -179,6 +179,39 @@ int handle_data_or_string(char line[], int index, int line_number){
     return 0;
 }
 
+int handle_entry_or_extern(char line[]){
+    int index;
+    int prompt_index;
+    char prompt[MAX_LINE_LENGTH + 1];
+
+    index = 0;
+    prompt_index = 0;
+    memset(prompt, '\0', sizeof(prompt));
+
+    /* Skip leading whitespace characters */
+    while(isspace(line[index])){
+        index++;
+    }
+
+    /* Extract the prompt */
+    while(!isspace(line[index]) && line[index] != '\n'){
+        prompt[prompt_index] = line[index];
+        index++;
+        prompt_index++;
+    }
+
+    /* Compare the prompt with ".entry" and ".extern" */
+    if (strcmp(".entry", prompt) == 0){
+        return 1;
+    }
+    if (strcmp(".extern", prompt) == 0){
+        return 2;
+    }
+
+    /* Return 0 if the prompt is not recognized */
+    return 0;
+}
+
 int first_pass_through(char* argv, symbol_table* symbol_head) {
     char line[MAX_LINE_LENGTH + 1];
     FILE *input_file;
@@ -189,6 +222,7 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
     int index;
     int data_or_string_value;
     int error_free;
+    int entry_or_extern_value;
 
     symbol_name = NULL;
     temp_dc = 0;
@@ -202,6 +236,10 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
     while (fgets(line, MAX_LINE_LENGTH + 1, input_file)) {
         line_number++;
         index = 0;
+        /* Check if it's a .data or .string prompt */
+        data_or_string_value = handle_data_or_string(line, index, line_number);
+        /* Check if it's an .entry or .extern prompt */
+        entry_or_extern_value = handle_entry_or_extern(line);
         /* Check if it's a symbol declaration */
         symbol_name = extract_symbol(line);
 
@@ -210,22 +248,51 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
             if (symbol_head == NULL){
                 symbol_head = new_symbol;
             }
+            /* Skip the symbol name */
             while(isspace(line[index])){
                 index++;
             }
             while(!isspace(line[index])){
                 index++;
             }
-            data_or_string_value = handle_data_or_string(line, index, line_number);
-            if (data_or_string_value == -1){
+
+            if (data_or_string_value == -1){ /* If there was an error in the .data or .string prompt */
                 error_free = 0;
                 continue;
             }
-            if (data_or_string_value > 0){
+            if (data_or_string_value > 0){ /* If it's a .data or .string prompt */
                 temp_dc += data_or_string_value;
                 temp_ic += data_or_string_value;
             }
+            else if(data_or_string_value == 0){
+                /*
+                 * SOME CODE GOES HERE, SOMETHING ABOUT CHECKING OP CODE AND STUFF
+                 */
+            }
             free(symbol_name);
+        }
+        else if (data_or_string_value == -1){ /* If there was an error in the .data or .string prompt */
+            error_free = 0;
+            continue;
+        }
+        else if (data_or_string_value > 0){ /* If it's a .data or .string prompt */
+            temp_dc += data_or_string_value;
+            temp_ic += data_or_string_value;
+        }
+        else if (entry_or_extern_value == 1){ /* If it's an .entry prompt */
+            /*
+             * CODE THAT DOES SOMETHING IF ITS AN ENTRY
+             */
+        }
+        else if(entry_or_extern_value == 2){ /* If it's an .extern prompt */
+            /*
+             * CODE THAT DOES SOMETHING IF ITS AN EXTERN
+             */
+        }
+        else{ /* If it's a command */
+            /*
+             * SOME CODE GOES HERE, SOMETHING ABOUT CHECKING OP CODE AND STUFF
+             */
         }
 
     }

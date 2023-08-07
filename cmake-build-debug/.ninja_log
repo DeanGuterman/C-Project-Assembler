@@ -69,3 +69,5 @@
 73	165	7131308841862390	assembler_project.exe	28e56322fd92ba2c
 1	72	7131309099095225	CMakeFiles/assembler_project.dir/assembler.c.obj	a920149f88347313
 72	167	7131309099974722	assembler_project.exe	28e56322fd92ba2c
+2	99	7131326027010453	CMakeFiles/assembler_project.dir/first_pass_through.c.obj	2ce5fccac3812e72
+99	232	7131326028049857	assembler_project.exe	28e56322fd92ba2c
