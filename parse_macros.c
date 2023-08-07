@@ -18,7 +18,6 @@ int check_line_length(char line[]){
             return 0;
         }
     }
-    printf("i = %d\n", i);
     return 1;
 }
 
@@ -133,7 +132,7 @@ int parse_macros(char* argv) {
         /* Check if line length exceeds maximum line length */
         if (check_line_length(line) == 0){
             printf("Error: line %d length exceeds maximum line length of %d characters\n",line_number, MAX_LINE_LENGTH - 1);
-            return 0;
+            continue;
         }
         /* Trim trailing newline character */
         line[strcspn(line, "\n")] = '\0';
