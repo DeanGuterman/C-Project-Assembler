@@ -11,7 +11,18 @@ typedef struct Macro {
     struct Macro* next;
 } Macro;
 
-/** Handle the start of a new macro */
+int check_line_length(char line[]){
+    int i;
+    for (i = 0; line[i] != '\0'; i++) {
+        if (i >= MAX_LINE_LENGTH - 1) {
+            return 0;
+        }
+    }
+    printf("i = %d\n", i);
+    return 1;
+}
+
+/* Handle the start of a new macro */
 Macro* handle_macro_start(char* line, Macro* macro_tail) {
     /* Create a new macro and add it to the linked list */
     Macro* new_macro;
@@ -38,7 +49,7 @@ Macro* handle_macro_start(char* line, Macro* macro_tail) {
     return new_macro;
 }
 
-/** Append the given line to the content of the current macro */
+/* Append the given line to the content of the current macro */
 void append_to_macro(Macro* current_macro, char* line) {
     if (current_macro->content == NULL) {
         size_t trimmed_len = strlen(line);
@@ -58,7 +69,7 @@ void append_to_macro(Macro* current_macro, char* line) {
     }
 }
 
-/** Handle a macro call in the given line */
+/* Handle a macro call in the given line */
 int handle_macro_call(char* line, Macro* macro_tail, FILE* output_file) {
     int macro_call_found;
     char* line_copy;
@@ -85,23 +96,25 @@ int handle_macro_call(char* line, Macro* macro_tail, FILE* output_file) {
     return macro_call_found;
 }
 
-/** Parse macros from .as file to .am file */
-void parse_macros(char* argv) {
+/* Parse macros from .as file to .am file */
+int parse_macros(char* argv) {
     FILE* input_file;
     FILE* output_file;
-    char line[MAX_LINE_LENGTH];
+    char line[MAX_LINE_LENGTH + 1];
     char* trimmed_line;
     Macro* current_macro;
     int inside_macro;
     Macro* macro_tail;
     Macro* temp;
+    int line_number;
 
     current_macro = NULL;
     inside_macro = 0;
     macro_tail = NULL;
     input_file = open_file(argv, ".as");
+    line_number = 0;
 
-    printf("Parsing macros from file: %s\n", argv);
+    printf("Parsing macros from file: %s.as\n", argv);
     if (input_file == NULL) {
         printf("Error opening file: %s\n", argv);
         return;
@@ -114,7 +127,14 @@ void parse_macros(char* argv) {
         return;
     }
 
-    while (fgets(line, sizeof(line), input_file)) {
+    while (fgets(line, MAX_LINE_LENGTH + 1, input_file)) {
+        line_number++;
+
+        /* Check if line length exceeds maximum line length */
+        if (check_line_length(line) == 0){
+            printf("Error: line %d length exceeds maximum line length of %d characters\n",line_number, MAX_LINE_LENGTH - 1);
+            return 0;
+        }
         /* Trim trailing newline character */
         line[strcspn(line, "\n")] = '\0';
 
@@ -167,5 +187,6 @@ void parse_macros(char* argv) {
     fclose(input_file);
     fclose(output_file);
 
-    printf("Macros parsed successfully! Output file: %s\n", argv);
+    printf("Macros parsed successfully! Output file: %s.am\n", argv);
+    return 1;
 }

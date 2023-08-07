@@ -5,7 +5,7 @@
 #include "symbol_table.h"
 
 #define TEMP_SYMBOL_NAME "@r0"
-#define MAX_LINE_LENGTH 80
+#define MAX_LINE_LENGTH 81
 #define MAX_SYMBOL_LENGTH 31
 
 struct symbol_table;

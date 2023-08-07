@@ -4,15 +4,12 @@ MAIN: mov @r3 ,LENGTH
 mcro m2
     sub @r7, LENGTH
     bne STR
-
-
-            ;
 endmcro
 LOOP: jmp L1
 prn -5
 bne W
 sub @r1, @r4
-mcro m1 
+mcro m1
     sub @r1, @r4
     bne END
 endmcro
