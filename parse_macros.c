@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "utils.h"
-#define MAX_LINE_LENGTH 80
+
 
 /* Structure to hold macro information */
 typedef struct Macro {

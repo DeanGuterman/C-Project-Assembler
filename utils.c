@@ -3,6 +3,7 @@
 #include <string.h>
 #include "symbol_table.h"
 
+
 void free_tables(symbol_table* symbol_head){
     printf("Freeing tables\n");
     while (symbol_head != NULL) {

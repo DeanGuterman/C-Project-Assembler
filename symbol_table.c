@@ -1,14 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX_LINE_LENGTH 80
-#define MAX_SYMBOL_LENGTH 30
+#include "utils.h"
 
-typedef struct symbol_table {
-    char symbol[MAX_SYMBOL_LENGTH + 1];
-    int value;
-    struct symbol_table* next;
-} symbol_table;
 
 /* Function to check if a symbol already exists in the symbol table */
 int symbol_exists(symbol_table* head, const char* symbol) {
