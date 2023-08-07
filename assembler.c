@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+/* system size is 1024, so ic+dc <= 924 as 100 first ones are saved */
 
 
 int parse_macros(char* argv);
