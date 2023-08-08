@@ -181,12 +181,10 @@ int handle_data_or_string(char line[], int index, int line_number){
 }
 
 /* extract a .extern symbol name and handle it */
-void handle_external_symbol(char line[], struct symbol_table* head,int current_ic, int line_number){
+void handle_external_symbol(char line[], struct symbol_table* head,int current_ic, int line_number, int index){
     char symbol_name[MAX_SYMBOL_LENGTH + 1];
-    int index;
     int symbol_index;
 
-    index = 0;
     symbol_index = 0;
     memset(symbol_name, '\0', sizeof(symbol_name));
 
@@ -211,12 +209,10 @@ void handle_external_symbol(char line[], struct symbol_table* head,int current_i
 }
 
 /* Check if it's a .entry or .extern prompt, and return a corresponding int value */
-int handle_entry_or_extern(char line[]){
-    int index;
+int handle_entry_or_extern(char line[], int index){
     int prompt_index;
     char prompt[MAX_LINE_LENGTH + 1];
 
-    index = 0;
     prompt_index = 0;
     memset(prompt, '\0', sizeof(prompt));
 
@@ -266,7 +262,9 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
         line_number++;
         index = 0;
         /* Check if it's an .entry or .extern prompt */
-        entry_or_extern_value = handle_entry_or_extern(line);
+        entry_or_extern_value = handle_entry_or_extern(line, index);
+        /* Check if it's a .data or .string prompt */
+        data_or_string_value = handle_data_or_string(line, index, line_number);
         /* Check if it's a symbol declaration */
         symbol_name = extract_symbol(line);
 
@@ -283,8 +281,11 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
                 index++;
             }
 
-            /* Check if it's a .data or .string prompt */
+            /* Check if the label is a .data or .string prompt */
             data_or_string_value = handle_data_or_string(line, index, line_number);
+
+            /* Check if the label is a .entry or .extern prompt */
+            entry_or_extern_value = handle_entry_or_extern(line, index);
 
             if (data_or_string_value == -1){ /* If there was an error in the .data or .string prompt */
                 error_free = 0;
@@ -294,18 +295,28 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
                 temp_dc += data_or_string_value;
                 temp_ic += data_or_string_value;
             }
+            else if(entry_or_extern_value == 1){ /* If it's an .entry prompt */
+                /*
+                 * CODE THAT DOES SOMETHING IF ITS AN ENTRY
+                 */
+            }
+            else if(entry_or_extern_value == 2){ /* If it's an .extern prompt */
+                handle_external_symbol(line, symbol_head,temp_ic, line_number, index);
+                symbol_head = delete_symbol(symbol_head, symbol_name); /* Since we have re-added the symbol as an external symbol, we can delete the original from the symbol table */
+                /*new_symbol->is_external = 1; DO THIS SOMEHOW IMPORTANTO!!!!!!!!!!!!!!!!!*/
+            }
+                /*
+                 * MIGHT HAVE TO HANDLE LABELS THAT ARE .entry or .extern HERE, UNSURE BUT THIS IS IMPORTANT!!!!!
+                 */
             else if(data_or_string_value == 0){ /* If it's not a .data or .string prompt */
                 /*
                  * SOME CODE GOES HERE, SOMETHING ABOUT CHECKING OP CODE AND STUFF
                  */
             }
-            /*
-             * MIGHT HAVE TO HANDLE LABELS THAT ARE .entry or .extern HERE, UNSURE BUT THIS IS IMPORTANT!!!!!
-             */
             free(symbol_name);
         }
 
-        else if ((data_or_string_value = handle_data_or_string(line, index, line_number)) != 0) {
+        else if (data_or_string_value != 0) {
             if (data_or_string_value == -1) { /* If there was an error in the .data or .string prompt */
                 error_free = 0;
                 continue;
@@ -319,7 +330,7 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
                  * CODE THAT DOES SOMETHING IF ITS AN ENTRY
                  */
         } else if (entry_or_extern_value == 2) { /* If it's a .extern prompt */
-                handle_external_symbol(line, symbol_head,temp_ic, line_number);
+                handle_external_symbol(line, symbol_head,temp_ic, line_number, index);
         }
         else{ /* If it's an instruction */
             /*

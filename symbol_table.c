@@ -24,6 +24,38 @@ char* get_symbol(symbol_table* head) {
     return head->symbol;
 }
 
+/* Function to search and delete a symbol in the symbol table */
+symbol_table* delete_symbol(symbol_table* head, const char* symbol) {
+    symbol_table* temp;
+    symbol_table* prev;
+    temp = head;
+    prev = NULL;
+
+    /* If the head is the symbol to be deleted */
+    if (strcmp(temp->symbol, symbol) == 0) {
+        head = temp->next;
+        free(temp);
+        return head;
+    }
+
+    /* Search for the symbol to be deleted */
+    while (temp != NULL && strcmp(temp->symbol, symbol) != 0) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    /* If the symbol was not found */
+    if (temp == NULL) {
+        return head;
+    }
+
+    /* If the symbol was found */
+    prev->next = temp->next;
+    free(temp);
+    return head;
+}
+
+
 /* Function to check if a symbol already exists in the symbol table */
 int symbol_exists(symbol_table* head, const char* symbol, int line_number) {
     while (head != NULL) {
