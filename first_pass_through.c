@@ -5,8 +5,8 @@
 #include "symbol_table.h"
 #include "utils.h"
 
-extern int error_free;
 extern int contains_extern;
+extern int error_free;
 
 char* extract_symbol(const char line[]) {
     int index;
@@ -290,11 +290,11 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
                 error_free = 0;
                 continue;
             }
-            if (data_or_string_value > 0){ /* If it's a .data or .string prompt */
+            else if (data_or_string_value > 0){ /* If it's a .data or .string prompt */
                 temp_dc += data_or_string_value;
                 temp_ic += data_or_string_value;
             }
-            else if(data_or_string_value == 0){
+            else if(data_or_string_value == 0){ /* If it's not a .data or .string prompt */
                 /*
                  * SOME CODE GOES HERE, SOMETHING ABOUT CHECKING OP CODE AND STUFF
                  */

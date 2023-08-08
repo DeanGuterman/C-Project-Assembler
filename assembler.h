@@ -9,8 +9,9 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+
 /* Function declarations */
 int parse_macros(char* argv);
-int first_pass_through(char* argv, symbol_table* symbol_head);
+int first_pass_through(char* argv, struct symbol_table* symbol_head);
 
 #endif

@@ -6,9 +6,6 @@
 #include "utils.h"
 
 
-extern int error_free;
-extern int contains_extern;
-
 /* Function to extract a symbol from a line */
 char* extract_symbol(const char line[]);
 

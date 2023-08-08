@@ -5,6 +5,8 @@
 #include "utils.h"
 
 extern int error_free;
+extern const char* reserved_names[];
+
 
 typedef struct symbol_table {
     char symbol[MAX_SYMBOL_LENGTH + 1];
@@ -38,7 +40,6 @@ int symbol_exists(symbol_table* head, const char* symbol, int line_number) {
 int check_symbol_legality(const char* symbol, int line_number){
     int i;
     int symbol_length;
-    extern char* reserved_names[];
 
     symbol_length = strlen(symbol);
 

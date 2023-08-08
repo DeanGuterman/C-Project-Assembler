@@ -4,6 +4,8 @@
 #include "utils.h"
 
 extern int error_free;
+extern const char* reserved_names[];
+
 
 /* Structure to hold macro information */
 typedef struct Macro {
@@ -51,7 +53,6 @@ Macro* handle_macro_start(char* line, Macro* macro_tail) {
 
 int check_legal_macro_name(char name[], int line_number){
     int i;
-    extern char* reserved_names[];
     for ( i = 0; i < 28; i++) {
         if (strcmp(name, reserved_names[i]) == 0) {
             printf("Error in line %d illegal macro name: %s is a reserved name\n", line_number, name);
