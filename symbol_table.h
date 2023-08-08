@@ -12,6 +12,11 @@ struct symbol_table* get_next_symbol(struct symbol_table* head);
 /* Function to return the symbol */
 char* get_symbol(struct symbol_table* head);
 
+/* Function to search a symbol in the symbol table */
+struct symbol_table* search_symbol(struct symbol_table* head, const char* symbol);
+
+void set_symbol_type(struct symbol_table* head, int type);
+
 /*Function to search and delete a symbol in the symbol table */
 struct symbol_table* delete_symbol(struct symbol_table* head, const char* symbol);
 

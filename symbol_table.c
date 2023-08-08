@@ -10,7 +10,9 @@ extern const char* reserved_names[];
 
 typedef struct symbol_table {
     char symbol[MAX_SYMBOL_LENGTH + 1];
-    int value;
+    int value; /* ic or dc value */
+    int type; /* 1 for data, 2 for code */
+    int is_extern_or_entry; /* 1 for external, 2 for entry*/
     struct symbol_table* next;
 } symbol_table;
 
@@ -22,6 +24,27 @@ symbol_table* get_next_symbol(symbol_table* head) {
 /* Function to return the symbol */
 char* get_symbol(symbol_table* head) {
     return head->symbol;
+}
+
+/* Function to search a symbol in the symbol table */
+symbol_table* search_symbol(symbol_table* head, const char* symbol) {
+    while (head != NULL) {
+        if (strcmp(head->symbol, symbol) == 0) {
+            return head;
+        }
+        head = head->next;
+    }
+    return NULL;
+}
+
+/* Function to set a symbol's type */
+void set_symbol_type(symbol_table* head, int type) {
+    head->type = type;
+}
+
+/* Function to set a symbol's is_extern_or_entry value */
+void set_symbol_is_extern_or_entry(symbol_table* head, int is_extern_or_entry) {
+    head->is_extern_or_entry = is_extern_or_entry;
 }
 
 /* Function to search and delete a symbol in the symbol table */
@@ -127,6 +150,8 @@ symbol_table* insert_symbol(symbol_table* head, const char* symbol, int ic_value
     strncpy(new_symbol->symbol, symbol, sizeof(new_symbol->symbol) - 1);
     new_symbol->symbol[sizeof(new_symbol->symbol) - 1] = '\0'; /* Ensure null-termination */
     new_symbol->value = ic_value;
+    new_symbol->type = -1;
+    new_symbol->is_extern_or_entry = -1;
     new_symbol->next = NULL;
 
     if (head != NULL){

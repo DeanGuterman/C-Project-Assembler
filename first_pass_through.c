@@ -181,7 +181,7 @@ int handle_data_or_string(char line[], int index, int line_number){
 }
 
 /* extract a .extern symbol name and handle it */
-void handle_external_symbol(char line[], struct symbol_table* head,int current_ic, int line_number, int index){
+void handle_external_symbol(char line[], struct symbol_table* head, int line_number, int index){
     char symbol_name[MAX_SYMBOL_LENGTH + 1];
     int symbol_index;
 
@@ -204,7 +204,7 @@ void handle_external_symbol(char line[], struct symbol_table* head,int current_i
         index++;
         symbol_index++;
     }
-    insert_symbol(head, symbol_name,current_ic ,line_number);
+    insert_symbol(head, symbol_name,-1 ,line_number);
     contains_extern = 1;
 }
 
@@ -295,19 +295,13 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
                 temp_dc += data_or_string_value;
                 temp_ic += data_or_string_value;
             }
-            else if(entry_or_extern_value == 1){ /* If it's an .entry prompt */
-                /*
-                 * CODE THAT DOES SOMETHING IF ITS AN ENTRY
-                 */
-            }
+
             else if(entry_or_extern_value == 2){ /* If it's an .extern prompt */
-                handle_external_symbol(line, symbol_head,temp_ic, line_number, index);
+                handle_external_symbol(line, symbol_head, line_number, index);
                 symbol_head = delete_symbol(symbol_head, symbol_name); /* Since we have re-added the symbol as an external symbol, we can delete the original from the symbol table */
-                /*new_symbol->is_external = 1; DO THIS SOMEHOW IMPORTANTO!!!!!!!!!!!!!!!!!*/
+                /*if (search_symbol(THIS THING) != null then change the type to external DO THIS SOMEHOW IMPORTANTO!!!!!!!!!!!!!!!!!CAN DO THIS IN THE HANDLE EXTERNAL SYMBOL FUNCTION*/
             }
-                /*
-                 * MIGHT HAVE TO HANDLE LABELS THAT ARE .entry or .extern HERE, UNSURE BUT THIS IS IMPORTANT!!!!!
-                 */
+
             else if(data_or_string_value == 0){ /* If it's not a .data or .string prompt */
                 /*
                  * SOME CODE GOES HERE, SOMETHING ABOUT CHECKING OP CODE AND STUFF
@@ -330,7 +324,7 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
                  * CODE THAT DOES SOMETHING IF ITS AN ENTRY
                  */
         } else if (entry_or_extern_value == 2) { /* If it's a .extern prompt */
-                handle_external_symbol(line, symbol_head,temp_ic, line_number, index);
+                handle_external_symbol(line, symbol_head, line_number, index);
         }
         else{ /* If it's an instruction */
             /*
