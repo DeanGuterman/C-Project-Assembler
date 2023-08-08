@@ -5,6 +5,23 @@
 #include "utils.h"
 
 extern int error_free;
+
+typedef struct symbol_table {
+    char symbol[MAX_SYMBOL_LENGTH + 1];
+    int value;
+    struct symbol_table* next;
+} symbol_table;
+
+/* Function to return the next symbol in the symbol table */
+symbol_table* get_next_symbol(symbol_table* head) {
+    return head->next;
+}
+
+/* Function to return the symbol */
+char* get_symbol(symbol_table* head) {
+    return head->symbol;
+}
+
 /* Function to check if a symbol already exists in the symbol table */
 int symbol_exists(symbol_table* head, const char* symbol, int line_number) {
     while (head != NULL) {

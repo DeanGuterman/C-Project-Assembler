@@ -14,8 +14,8 @@ int main(int argc, char* argv[]){
     int i;
 
     for (i = 1; i < argc; i++){
-        symbol_table* symbol_head;
-
+        struct symbol_table* symbol_head;
+        contains_extern = 0;
         error_free = 1;
         symbol_head = insert_symbol(NULL, TEMP_SYMBOL_NAME, -1, -1);
         parse_macros(argv[i]);

@@ -5,14 +5,16 @@
 
 int error_free;
 const char* reserved_names[] = {"mov", "cmp", "add", "sub", "not", "clr", "lea", "inc", "dec", "jmp", "bne", "red", "prn", "jsr", "rts", "stop", "data", "string", "entry", "extern", "@r0", "@r1", "@r2", "@r3", "@r4", "@r5", "@r6", "@r7"};
+int contains_extern;
+int contains_entry;
 
-void free_tables(symbol_table* symbol_head){
+void free_tables(struct symbol_table* symbol_head){
     printf("Freeing tables\n");
     while (symbol_head != NULL) {
-        symbol_table* temp;
+        struct symbol_table* temp;
         temp = symbol_head;
-        symbol_head = symbol_head->next;
-        printf("Freeing %s\n", temp->symbol);
+        symbol_head = get_next_symbol(symbol_head);
+        printf("Freeing %s\n", get_symbol(temp));
         free(temp);
     }
     free(symbol_head);

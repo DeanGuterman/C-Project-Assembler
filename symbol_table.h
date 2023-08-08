@@ -3,13 +3,12 @@
 #include "utils.h"
 
 
-typedef struct symbol_table {
-    char symbol[MAX_SYMBOL_LENGTH + 1];
-    int value;
-    struct symbol_table* next;
-} symbol_table;
+struct symbol_table;
 
-symbol_table* insert_symbol(symbol_table* head, const char* symbol, int ic_value, int line_number);
-int symbol_exists(symbol_table* head, const char* symbol, int line_number);
+struct symbol_table* get_next_symbol(struct symbol_table* head);
+struct symbol_table* insert_symbol(struct symbol_table* head, const char* symbol, int ic_value, int line_number);
+int symbol_exists(struct symbol_table* head, const char* symbol, int line_number);
+int check_symbol_legality(const char* symbol, int line_number);
+char* get_symbol(struct symbol_table* head);
 
 #endif

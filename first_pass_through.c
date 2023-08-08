@@ -6,6 +6,7 @@
 #include "utils.h"
 
 extern int error_free;
+extern int contains_extern;
 
 char* extract_symbol(const char line[]) {
     int index;
@@ -93,16 +94,16 @@ int handle_data(char line[], int index, int line_number){
     int data_counter;
     int comma_flag;
     int plus_minus_flag;
-    data_counter = 0;
-    comma_flag = 0;
+    data_counter = 1;
+    comma_flag = 1;
     plus_minus_flag = 0;
 
     /* Count the number of integers (data items) in the .data prompt */
     while(line[index] != '\0'){
         if(line[index] == 44){
-            /* Check for multiple consecutive commas */
+            /* Check for unnecessary commas */
             if (comma_flag == 1){
-                printf("Error: multiple consecutive commas in .data at line %d\n", line_number);
+                printf("Error: unnecessary commas in .data at line %d\n", line_number);
                 return 0;
             }
             else {
@@ -165,20 +166,51 @@ int handle_data_or_string(char line[], int index, int line_number){
         if (handle_string_value == 0){
             return -1;
         }
-        else return handle_string_value;
+        return handle_string_value;
     }
     if (strcmp(".data", prompt) == 0){
         handle_data_value = handle_data(line, index, line_number);
         if (handle_data_value == 0){
             return -1;
         }
-        else return handle_data_value;
+        return handle_data_value;
     }
 
     /* Return 0 if the prompt is not recognized */
     return 0;
 }
 
+/* extract a .extern symbol name and handle it */
+void handle_external_symbol(char line[], struct symbol_table* head,int current_ic, int line_number){
+    char symbol_name[MAX_SYMBOL_LENGTH + 1];
+    int index;
+    int symbol_index;
+
+    index = 0;
+    symbol_index = 0;
+    memset(symbol_name, '\0', sizeof(symbol_name));
+
+    /* Skip leading .extern call and whitespace characters */
+    while (isspace(line[index])){
+        index++;
+    }
+    while(!isspace(line[index]) && line[index] != '\n'){
+        index++;
+    }
+    while(isspace(line[index])){
+        index++;
+    }
+    /* Extract the symbol name */
+    while(!isspace(line[index]) && line[index] != '\n'){
+        symbol_name[symbol_index] = line[index];
+        index++;
+        symbol_index++;
+    }
+    insert_symbol(head, symbol_name,current_ic ,line_number);
+    contains_extern = 1;
+}
+
+/* Check if it's a .entry or .extern prompt, and return a corresponding int value */
 int handle_entry_or_extern(char line[]){
     int index;
     int prompt_index;
@@ -212,12 +244,12 @@ int handle_entry_or_extern(char line[]){
     return 0;
 }
 
-void first_pass_through(char* argv, symbol_table* symbol_head) {
+void first_pass_through(char* argv, struct symbol_table* symbol_head) {
     char line[MAX_LINE_LENGTH + 1];
     FILE *input_file;
     int temp_dc, temp_ic;
     char *symbol_name;
-    symbol_table *new_symbol;
+    struct symbol_table *new_symbol;
     int line_number;
     int index;
     int data_or_string_value;
@@ -233,8 +265,6 @@ void first_pass_through(char* argv, symbol_table* symbol_head) {
     while (fgets(line, MAX_LINE_LENGTH + 1, input_file)) {
         line_number++;
         index = 0;
-        /* Check if it's a .data or .string prompt */
-        data_or_string_value = handle_data_or_string(line, index, line_number);
         /* Check if it's an .entry or .extern prompt */
         entry_or_extern_value = handle_entry_or_extern(line);
         /* Check if it's a symbol declaration */
@@ -253,6 +283,9 @@ void first_pass_through(char* argv, symbol_table* symbol_head) {
                 index++;
             }
 
+            /* Check if it's a .data or .string prompt */
+            data_or_string_value = handle_data_or_string(line, index, line_number);
+
             if (data_or_string_value == -1){ /* If there was an error in the .data or .string prompt */
                 error_free = 0;
                 continue;
@@ -266,27 +299,29 @@ void first_pass_through(char* argv, symbol_table* symbol_head) {
                  * SOME CODE GOES HERE, SOMETHING ABOUT CHECKING OP CODE AND STUFF
                  */
             }
+            /*
+             * MIGHT HAVE TO HANDLE LABELS THAT ARE .entry or .extern HERE, UNSURE BUT THIS IS IMPORTANT!!!!!
+             */
             free(symbol_name);
         }
-        else if (data_or_string_value == -1){ /* If there was an error in the .data or .string prompt */
-            error_free = 0;
-            continue;
+
+        else if ((data_or_string_value = handle_data_or_string(line, index, line_number)) != 0) {
+            if (data_or_string_value == -1) { /* If there was an error in the .data or .string prompt */
+                error_free = 0;
+                continue;
+            } else if (data_or_string_value > 0) { /* If it's a .data or .string prompt */
+                temp_dc += data_or_string_value;
+                temp_ic += data_or_string_value;
+            }
         }
-        else if (data_or_string_value > 0){ /* If it's a .data or .string prompt */
-            temp_dc += data_or_string_value;
-            temp_ic += data_or_string_value;
+        else if (entry_or_extern_value == 1) { /* If it's a .entry prompt */
+                /*
+                 * CODE THAT DOES SOMETHING IF ITS AN ENTRY
+                 */
+        } else if (entry_or_extern_value == 2) { /* If it's a .extern prompt */
+                handle_external_symbol(line, symbol_head,temp_ic, line_number);
         }
-        else if (entry_or_extern_value == 1){ /* If it's an .entry prompt */
-            /*
-             * CODE THAT DOES SOMETHING IF ITS AN ENTRY
-             */
-        }
-        else if(entry_or_extern_value == 2){ /* If it's an .extern prompt */
-            /*
-             * CODE THAT DOES SOMETHING IF ITS AN EXTERN
-             */
-        }
-        else{ /* If it's a command */
+        else{ /* If it's an instruction */
             /*
              * SOME CODE GOES HERE, SOMETHING ABOUT CHECKING OP CODE AND STUFF
              */

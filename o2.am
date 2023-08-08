@@ -1,7 +1,6 @@
 .entry LENGTH
 .extern W
 MAIN: mov @r3 ,LENGTH
-@r3: xd
 LOOP: jmp L1
 prn -5
 bne W
