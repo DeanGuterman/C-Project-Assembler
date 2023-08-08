@@ -5,7 +5,7 @@
 #include "symbol_table.h"
 #include "utils.h"
 
-
+extern int error_free;
 
 char* extract_symbol(const char line[]) {
     int index;
@@ -212,7 +212,7 @@ int handle_entry_or_extern(char line[]){
     return 0;
 }
 
-int first_pass_through(char* argv, symbol_table* symbol_head) {
+void first_pass_through(char* argv, symbol_table* symbol_head) {
     char line[MAX_LINE_LENGTH + 1];
     FILE *input_file;
     int temp_dc, temp_ic;
@@ -221,14 +221,12 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
     int line_number;
     int index;
     int data_or_string_value;
-    int error_free;
     int entry_or_extern_value;
 
     symbol_name = NULL;
     temp_dc = 0;
     temp_ic = 100;
     line_number = 0;
-    error_free = 1;
     input_file = open_file(argv, ".am");
 
     /* Go through every line in the file */
@@ -243,7 +241,7 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
         symbol_name = extract_symbol(line);
 
         if (symbol_name != NULL) {
-            new_symbol = insert_symbol(symbol_head, symbol_name, temp_ic);
+            new_symbol = insert_symbol(symbol_head, symbol_name, temp_ic, line_number);
             if (symbol_head == NULL){
                 symbol_head = new_symbol;
             }
@@ -296,5 +294,4 @@ int first_pass_through(char* argv, symbol_table* symbol_head) {
 
     }
     fclose(input_file);
-    return error_free;
 }

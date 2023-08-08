@@ -9,7 +9,7 @@ typedef struct symbol_table {
     struct symbol_table* next;
 } symbol_table;
 
-symbol_table* insert_symbol(symbol_table* head, const char* symbol, int ic_value);
-int symbol_exists(symbol_table* head, const char* symbol);
+symbol_table* insert_symbol(symbol_table* head, const char* symbol, int ic_value, int line_number);
+int symbol_exists(symbol_table* head, const char* symbol, int line_number);
 
 #endif

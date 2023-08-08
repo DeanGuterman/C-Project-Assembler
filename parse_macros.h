@@ -12,6 +12,8 @@ typedef struct Macro {
     struct Macro* next;
 } Macro;
 
+extern int error_free;
+
 int check_line_length(char line[]);
 int check_legal_macro_name(char name[], int line_number);
 Macro* handle_macro_start(char* line, Macro* macro_tail);

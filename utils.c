@@ -3,6 +3,8 @@
 #include <string.h>
 #include "symbol_table.h"
 
+int error_free;
+const char* reserved_names[] = {"mov", "cmp", "add", "sub", "not", "clr", "lea", "inc", "dec", "jmp", "bne", "red", "prn", "jsr", "rts", "stop", "data", "string", "entry", "extern", "@r0", "@r1", "@r2", "@r3", "@r4", "@r5", "@r6", "@r7"};
 
 void free_tables(symbol_table* symbol_head){
     printf("Freeing tables\n");
@@ -29,6 +31,6 @@ FILE* create_output_file(char* file_name, char* file_type){
     strcpy(complete_file_name, file_name);
     strcat(complete_file_name, file_type);
     printf("Creating output file: %s\n", complete_file_name);
-    return fopen(complete_file_name, "r");
+    return fopen(complete_file_name, "w");
 }
 

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "utils.h"
 
+extern int error_free;
 
 /* Structure to hold macro information */
 typedef struct Macro {
@@ -50,8 +51,7 @@ Macro* handle_macro_start(char* line, Macro* macro_tail) {
 
 int check_legal_macro_name(char name[], int line_number){
     int i;
-    const char* reserved_names[] = {"mov", "cmp", "add", "sub", "not", "clr", "lea", "inc", "dec", "jmp", "bne", "red", "prn", "jsr", "rts", "stop", "data", "string", "entry", "extern", "@r0", "@r1", "@r2", "@r3", "@r4", "@r5", "@r6", "@r7"};
-
+    extern char* reserved_names[];
     for ( i = 0; i < 28; i++) {
         if (strcmp(name, reserved_names[i]) == 0) {
             printf("Error in line %d illegal macro name: %s is a reserved name\n", line_number, name);
@@ -61,15 +61,28 @@ int check_legal_macro_name(char name[], int line_number){
     return 1;
 }
 
+int check_if_name_exists(char name[], Macro* macro_tail, int line_number){
+    Macro* current_macro;
+    current_macro = macro_tail;
+    while (current_macro != NULL) {
+        if (strcmp(name, current_macro->name) == 0) {
+            printf("Error in line %d macro name already exists: %s\n", line_number, name);
+            return 0;
+        }
+        current_macro = current_macro->next;
+    }
+    return 1;
+}
+
 /* Append the given line to the content of the current macro */
 void append_to_macro(Macro* current_macro, char* line) {
-    if (current_macro->content == NULL) {
+    if (current_macro->content == NULL) { /* If the macro's content is empty, allocate memory for the new content */
         size_t trimmed_len = strlen(line);
         current_macro->content = (char*)malloc(trimmed_len + 1);
         if (current_macro->content != NULL) {
             strcpy(current_macro->content, line);
         }
-    } else {
+    } else { /* If the macro already has content, update and format the content */
         size_t content_len = strlen(current_macro->content);
         size_t line_len = strlen(line);
         char* new_content = (char*)malloc(content_len + line_len + 2); /* +2 for '\n' and '\0' */
@@ -109,7 +122,7 @@ int handle_macro_call(char* line, Macro* macro_tail, FILE* output_file) {
 }
 
 /* Parse macros from .as file to .am file */
-int parse_macros(char* argv) {
+void parse_macros(char* argv) {
     FILE* input_file;
     FILE* output_file;
     char line[MAX_LINE_LENGTH + 1];
@@ -119,20 +132,18 @@ int parse_macros(char* argv) {
     Macro* macro_tail;
     Macro* temp;
     int line_number;
-    int error_free;
 
     current_macro = NULL;
     inside_macro = 0;
     macro_tail = NULL;
     input_file = open_file(argv, ".as");
     line_number = 0;
-    error_free = 1;
 
     printf("Parsing macros from file: %s.as\n", argv);
     if (input_file == NULL) {
         printf("Error opening file: %s\n", argv);
         error_free = 0;
-        return error_free;
+        return;
     }
 
     output_file = create_output_file(argv, ".am");
@@ -140,7 +151,7 @@ int parse_macros(char* argv) {
         printf("Error creating output file: %s\n", argv);
         fclose(input_file);
         error_free = 0;
-        return error_free;
+        return;
     }
 
     while (fgets(line, MAX_LINE_LENGTH + 1, input_file)) {
@@ -169,6 +180,10 @@ int parse_macros(char* argv) {
         if (strncmp(trimmed_line, "mcro", 4) == 0) {
             current_macro = handle_macro_start(trimmed_line, macro_tail);
             if (check_legal_macro_name(current_macro->name, line_number) == 0) {
+                error_free = 0;
+                continue;
+            }
+            if (check_if_name_exists(current_macro->name, macro_tail, line_number) == 0) {
                 error_free = 0;
                 continue;
             }
@@ -214,5 +229,4 @@ int parse_macros(char* argv) {
     else {
         printf("Errors occurred while parsing macros\n");
     }
-    return error_free;
 }
