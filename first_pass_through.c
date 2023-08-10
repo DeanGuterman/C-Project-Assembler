@@ -183,9 +183,10 @@ int handle_data_or_string(char line[], int index, int line_number){
 }
 
 /* extract a .extern symbol name and handle it */
-int handle_external_or_entry_symbol(char line[], struct symbol_table* head, int index, int extern_or_entry){
+void handle_external_or_entry_symbol(char line[], struct symbol_table* head, int index, int extern_or_entry, int line_number){
     char symbol_name[MAX_SYMBOL_LENGTH + 1];
     int symbol_index;
+    struct symbol_table* symbol;
 
     symbol_index = 0;
     memset(symbol_name, '\0', sizeof(symbol_name));
@@ -206,22 +207,28 @@ int handle_external_or_entry_symbol(char line[], struct symbol_table* head, int 
             index++;
             symbol_index++;
     }
-    if (search_symbol(head, symbol_name) == NULL){
-        error_free = 0;
-        return 0;
-    }
-    set_symbol_external_or_entry(search_symbol(head, symbol_name), extern_or_entry); /* Search the symbol, and set it as external or entry */
     if (extern_or_entry == 1) {
         contains_extern = 1;
+        if (search_symbol(head, symbol_name) == NULL) {
+            set_symbol_external_or_entry(insert_symbol(head, symbol_name, 0, line_number), 1);
+        }
+        else set_symbol_external_or_entry(search_symbol(head, symbol_name), 1);
     }
     else if (extern_or_entry == 2){
         contains_entry = 1;
+        if (search_symbol(head, symbol_name) == NULL) {
+            symbol = insert_symbol(head, symbol_name, 0, line_number);
+            set_symbol_external_or_entry(symbol, 2);
+            set_symbol_pre_defined_entry(symbol, 1);
+        }
+        else {
+            set_symbol_external_or_entry(search_symbol(head, symbol_name), 2);
+        }
     }
-    return 1;
 }
 
 /* Check if it's a .entry or .extern prompt, and return a corresponding int value */
-int handle_entry_or_extern(char line[], int index){
+int classify_entry_or_extern(char line[], int index){
     int prompt_index;
     char prompt[MAX_LINE_LENGTH + 1];
 
@@ -274,7 +281,7 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
         line_number++;
         index = 0;
         /* Check if it's an .entry or .extern prompt */
-        entry_or_extern_value = handle_entry_or_extern(line, index);
+        entry_or_extern_value = classify_entry_or_extern(line, index);
         /* Check if it's a .data or .string prompt */
         data_or_string_value = handle_data_or_string(line, index, line_number);
         /* Check if it's a symbol declaration */
@@ -301,7 +308,7 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
             data_or_string_value = handle_data_or_string(line, index, line_number);
 
             /* Check if the label is a .entry or .extern prompt */
-            entry_or_extern_value = handle_entry_or_extern(line, index);
+            entry_or_extern_value = classify_entry_or_extern(line, index);
 
             if (data_or_string_value == -1){ /* If there was an error in the .data or .string prompt */
                 error_free = 0;
@@ -312,12 +319,16 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
                 temp_ic += data_or_string_value;
             }
 
-            else if(entry_or_extern_value == 2){ /* If it's an .extern prompt */
+            else if(entry_or_extern_value == 1){ /* If it's a .extern prompt */
+                if (get_symbol_external_or_entry(new_symbol) != -1){
+                    printf("Error: Symbol %s is already defined as an extern or entry at line %d\n", get_symbol(new_symbol), line_number);
+                    error_free = 0;
+                    continue;
+                }
                 set_symbol_external_or_entry(new_symbol, 1);
-                printf("Symbol %s is external\n", get_symbol(new_symbol));
             }
 
-            else if(data_or_string_value == 0){ /* If it's not a .data, .string, or  prompt */
+            else if(data_or_string_value == 0){ /* If it's not a .data, .string, .extern, or .entry  prompt */
                 /*
                  * SOME CODE GOES HERE, SOMETHING ABOUT CHECKING OP CODE AND STUFF
                  */
@@ -335,9 +346,9 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
             }
         }
         else if (entry_or_extern_value == 1) { /* If it's a .extern prompt */
-            handle_external_or_entry_symbol(line, symbol_head, index, 1);
+            handle_external_or_entry_symbol(line, symbol_head, index, 1, line_number);
         } else if (entry_or_extern_value == 2) { /* If it's a .entry prompt */
-                handle_external_or_entry_symbol(line, symbol_head, index, 2);
+            handle_external_or_entry_symbol(line, symbol_head, index, 2, line_number);
         }
         else{ /* If it's an instruction */
             /*
@@ -345,6 +356,14 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
              */
         }
 
+    }
+    /* Check all entries have suitable symbol declarations */
+    while(symbol_head != NULL){
+        if (get_symbol_external_or_entry(symbol_head) == 2 && get_symbol_pre_defined_entry(symbol_head) == 1){
+            printf("Error: Symbol %s is declared as entry but not defined\n", get_symbol(symbol_head));
+            error_free = 0;
+        }
+        symbol_head = get_next_symbol(symbol_head);
     }
     fclose(input_file);
 }

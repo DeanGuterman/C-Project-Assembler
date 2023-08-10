@@ -12,6 +12,8 @@ struct Macro;
 /* Check if line length exceeds the maximum allowed */
 int check_line_length(char line[]);
 
+int get_symbol_pre_defined_entry(struct symbol_table* node);
+
 /* Handle the start of a new macro */
 struct Macro* handle_macro_start(char* line, struct Macro* macro_tail);
 

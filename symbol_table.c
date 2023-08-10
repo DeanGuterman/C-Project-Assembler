@@ -13,6 +13,7 @@ typedef struct symbol_table {
     int value; /* ic or dc value */
     int type; /* 1 for data, 2 for code */
     int is_extern_or_entry; /* 1 for external, 2 for entry*/
+    int pre_defined_entry; /* 1 for pre-defined entry, 0 for not */
     struct symbol_table* next;
 } symbol_table;
 
@@ -59,11 +60,17 @@ int get_symbol_external_or_entry(symbol_table* node) {
 
 /* Function to set a symbol's type */
 void set_symbol_type(symbol_table* node, int type) {
+    if (node == NULL) {
+        return;
+    }
     node->type = type;
 }
 
 /* Function to set a symbol's is_extern_or_entry value */
 void set_symbol_is_extern_or_entry(symbol_table* node, int is_extern_or_entry) {
+    if (node == NULL) {
+        return;
+    }
     node->is_extern_or_entry = is_extern_or_entry;
 }
 
@@ -98,14 +105,33 @@ symbol_table* delete_symbol(symbol_table* head, const char* symbol) {
     return head;
 }
 
+void set_symbol_pre_defined_entry(symbol_table* node, int pre_defined_entry) {
+    if(node == NULL) {
+        return;
+    }
+    node->pre_defined_entry = pre_defined_entry;
+}
+
+int get_symbol_pre_defined_entry(symbol_table* node) {
+    if(node == NULL) {
+        return 0;
+    }
+    return node->pre_defined_entry;
+}
+
 
 /* Function to check if a symbol already exists in the symbol table */
 int symbol_exists(symbol_table* head, const char* symbol, int line_number) {
     while (head != NULL) {
         if (strcmp(head->symbol, symbol) == 0) {
-            printf("Error in line %d: Symbol %s already exists in the symbol table\n", line_number, symbol);
-            error_free = 0;
-            return 1; /* Symbol exists in the table */
+            if (head->pre_defined_entry == 1){
+                head->pre_defined_entry = 0;
+            }
+            else {
+                printf("Error in line %d: Symbol %s already exists in the symbol table\n", line_number, symbol);
+                error_free = 0;
+                return 1; /* Symbol exists in the table */
+            }
         }
         head = head->next;
     }

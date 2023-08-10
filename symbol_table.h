@@ -14,6 +14,8 @@ char* get_symbol(struct symbol_table* node);
 /* Function to search a symbol in the symbol table */
 struct symbol_table* search_symbol(struct symbol_table* head, const char* symbol);
 
+void set_symbol_pre_defined_entry(struct symbol_table* node, int pre_defined_entry);
+
 /* Function to set a symbol's external or entry value */
 void set_symbol_external_or_entry(struct symbol_table* node, int extern_or_entry);
 
