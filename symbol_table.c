@@ -17,13 +17,19 @@ typedef struct symbol_table {
 } symbol_table;
 
 /* Function to return the next symbol in the symbol table */
-symbol_table* get_next_symbol(symbol_table* head) {
-    return head->next;
+symbol_table* get_next_symbol(symbol_table* node) {
+    if(node == NULL) {
+        return NULL;
+    }
+    return node->next;
 }
 
 /* Function to return the symbol */
-char* get_symbol(symbol_table* head) {
-    return head->symbol;
+char* get_symbol(symbol_table* node) {
+    if(node == NULL) {
+        return NULL;
+    }
+    return node->symbol;
 }
 
 /* Function to search a symbol in the symbol table */
@@ -37,14 +43,28 @@ symbol_table* search_symbol(symbol_table* head, const char* symbol) {
     return NULL;
 }
 
+void set_symbol_external_or_entry(symbol_table* node, int extern_or_entry) {
+    if(node == NULL) {
+        return;
+    }
+    node->is_extern_or_entry = extern_or_entry;
+}
+
+int get_symbol_external_or_entry(symbol_table* node) {
+    if(node == NULL) {
+        return 0;
+    }
+    return node->is_extern_or_entry;
+}
+
 /* Function to set a symbol's type */
-void set_symbol_type(symbol_table* head, int type) {
-    head->type = type;
+void set_symbol_type(symbol_table* node, int type) {
+    node->type = type;
 }
 
 /* Function to set a symbol's is_extern_or_entry value */
-void set_symbol_is_extern_or_entry(symbol_table* head, int is_extern_or_entry) {
-    head->is_extern_or_entry = is_extern_or_entry;
+void set_symbol_is_extern_or_entry(symbol_table* node, int is_extern_or_entry) {
+    node->is_extern_or_entry = is_extern_or_entry;
 }
 
 /* Function to search and delete a symbol in the symbol table */
@@ -114,6 +134,11 @@ int check_symbol_legality(const char* symbol, int line_number){
     }
     /* Check if the symbol contains only letters and numbers */
     for (i = 0; i < symbol_length; i++){
+        if (i == 0 && !isalpha(symbol[i])){
+            printf("Error in line %d: Symbol %s must start with a letter\n", line_number, symbol);
+            error_free = 0;
+            return 0;
+        }
         if (!isalnum(symbol[i])){
             printf("Error in line %d: Symbol %s contains illegal characters\n", line_number, symbol);
             error_free = 0;
@@ -125,7 +150,7 @@ int check_symbol_legality(const char* symbol, int line_number){
 
 
 /* Function to add a new node to the symbol table */
-symbol_table* insert_symbol(symbol_table* head, const char* symbol, int ic_value, int line_number) {
+symbol_table* insert_symbol(symbol_table* head, const char* symbol, int value, int line_number) {
     symbol_table* new_symbol;
     symbol_table* temp;
 
@@ -149,7 +174,7 @@ symbol_table* insert_symbol(symbol_table* head, const char* symbol, int ic_value
     /* Copy the symbol name into the allocated memory */
     strncpy(new_symbol->symbol, symbol, sizeof(new_symbol->symbol) - 1);
     new_symbol->symbol[sizeof(new_symbol->symbol) - 1] = '\0'; /* Ensure null-termination */
-    new_symbol->value = ic_value;
+    new_symbol->value = value;
     new_symbol->type = -1;
     new_symbol->is_extern_or_entry = -1;
     new_symbol->next = NULL;

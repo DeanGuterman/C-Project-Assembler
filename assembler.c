@@ -8,11 +8,11 @@
 /*
  * CURRENT TO DO
  * FOLLOW THEIR ALGORITHM
- * CHANGE HANDLE_EXTERNAL TO HANDLE EVERY OPERAND INSTEAD OF JUST ONE, ALSO MAKE THEM MARKED AS EXTERNAL
  * IF THE FOUND SYMBOL IS CODE THE VALUE IS IC
  * ADD FUNCTION TO CHECK FOR INSTRUCTION NAME (IF IT EXISTS AND STUFF)
- * IF THE SYMBOL IS ENTRY, MARK IT AS ENTRY
+ * IF ENTRY, MARK AS ENTRY
  * ADD THE 2ND PASS-THROUGH
+ * .entry MEANS YOU CAN USE THIS LABEL IN ANOTHER FILE , MEANINGLESS IF IT'S ON A SYMBOL
  */
 
 
@@ -32,7 +32,6 @@ int main(int argc, char* argv[]){
         if (error_free == 1) {
             first_pass_through(argv[i], symbol_head);
         }
-
         free_tables(symbol_head);
     }
     return 0;

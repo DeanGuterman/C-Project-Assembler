@@ -9,6 +9,8 @@
 /* Function to extract a symbol from a line */
 char* extract_symbol(const char line[]);
 
+int has_spaces(const char* string);
+
 /* Function to handle a .string prompt and count characters */
 int handle_string(char line[], int index, int line_number);
 
