@@ -8,11 +8,11 @@ extern const char* reserved_names[];
 
 
 /* Structure to hold macro information */
-typedef struct Macro {
+typedef struct macro_table {
     char name[MAX_LINE_LENGTH];
     char* content;
-    struct Macro* next;
-} Macro;
+    struct macro_table* next;
+} macro_table;
 
 int check_line_length(char line[]){
     int i;
@@ -25,12 +25,12 @@ int check_line_length(char line[]){
 }
 
 /* Handle the start of a new macro */
-Macro* handle_macro_start(char* line, Macro* macro_tail) {
+macro_table* handle_macro_start(char* line, macro_table* macro_tail) {
     /* Create a new macro and add it to the linked list */
-    Macro* new_macro;
+    macro_table* new_macro;
     int len;
     int i;
-    new_macro = (Macro*)malloc(sizeof(Macro));
+    new_macro = (macro_table*)malloc(sizeof(macro_table));
     strncpy(new_macro->name, line + 5, sizeof(new_macro->name) - 1);
     new_macro->name[sizeof(new_macro->name) - 1] = '\0';
 
@@ -62,8 +62,8 @@ int check_legal_macro_name(char name[], int line_number){
     return 1;
 }
 
-int check_if_name_exists(char name[], Macro* macro_tail, int line_number){
-    Macro* current_macro;
+int check_if_name_exists(char name[], macro_table* macro_tail, int line_number){
+    macro_table* current_macro;
     current_macro = macro_tail;
     while (current_macro != NULL) {
         if (strcmp(name, current_macro->name) == 0) {
@@ -76,7 +76,7 @@ int check_if_name_exists(char name[], Macro* macro_tail, int line_number){
 }
 
 /* Append the given line to the content of the current macro */
-void append_to_macro(Macro* current_macro, char* line) {
+void append_to_macro(macro_table* current_macro, char* line) {
     if (current_macro->content == NULL) { /* If the macro's content is empty, allocate memory for the new content */
         size_t trimmed_len = strlen(line);
         current_macro->content = (char*)malloc(trimmed_len + 1);
@@ -96,14 +96,14 @@ void append_to_macro(Macro* current_macro, char* line) {
 }
 
 /* Handle a macro call in the given line */
-int handle_macro_call(char* line, Macro* current_macro, FILE* output_file, int line_number) {
+int handle_macro_call(char* line, macro_table* current_macro, FILE* output_file, int line_number) {
     int macro_call_found = 0;
     char* line_copy = strdup(line);
     char* token = strtok(line_copy, " ");
 
     while (token != NULL) {
         /* Check if the token matches a macro name */
-        Macro* current = current_macro;
+        macro_table* current = current_macro;
         while (current != NULL) {
             if (strcmp(current->name, token) == 0) {
                 macro_call_found = 1;
@@ -116,7 +116,7 @@ int handle_macro_call(char* line, Macro* current_macro, FILE* output_file, int l
         token = strtok(NULL, " ");
 
         if (macro_call_found && token != NULL) {
-            fprintf(stderr, "Error: Macro call in line %d is not the sole line statement\n", line_number);
+            fprintf(stderr, "Error: macro_table call in line %d is not the sole line statement\n", line_number);
             error_free = 0;
             break;
         }
@@ -133,10 +133,10 @@ void parse_macros(char* argv) {
     FILE* output_file;
     char line[MAX_LINE_LENGTH + 1];
     char* trimmed_line;
-    Macro* current_macro;
+    macro_table* current_macro;
     int inside_macro;
-    Macro* macro_tail;
-    Macro* temp;
+    macro_table* macro_tail;
+    macro_table* temp;
     int line_number;
 
 
@@ -231,7 +231,7 @@ void parse_macros(char* argv) {
     fclose(output_file);
 
     if (error_free) {
-        printf("Macros parsed successfully! Output file: %s.am\n", argv);
+        printf("macro_tables parsed successfully! Output file: %s.am\n", argv);
     }
     else {
         printf("Errors occurred while parsing macros\n");
