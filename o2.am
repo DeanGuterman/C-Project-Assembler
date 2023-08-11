@@ -4,7 +4,7 @@ MAIN: mov @r3 ,LENGTH
 LOOP: jmp L1
 prn -5
 bne W
-sub @r1, @r4
+sub @r1, 4
 sub @r7, LENGTH
 bne STR
 bne L3

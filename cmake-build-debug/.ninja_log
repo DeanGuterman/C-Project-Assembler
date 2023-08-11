@@ -83,3 +83,5 @@
 2	94	7134927235027049	CMakeFiles/assembler_project.dir/assembler.c.obj	a920149f88347313
 6	99	7134927235077022	CMakeFiles/assembler_project.dir/error_detection_pass.c.obj	af2622b656ff9f4
 99	201	7134927236086441	assembler_project.exe	c1faf1d1395297bc
+1	113	7134930799727197	CMakeFiles/assembler_project.dir/instruction_handling.c.obj	de87ccebe40c2d
+113	213	7134930800676818	assembler_project.exe	c1faf1d1395297bc

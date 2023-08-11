@@ -113,7 +113,9 @@ int check_two_operand(int line_number, int instruction_index, int num_of_tokens,
         return 3;
     }
     else {
-        printf("Error: line %d has one or more invalid arguments\n", line_number);
+        if(check_errors == 1) {
+            printf("Error: line %d has one or more invalid arguments\n", line_number);
+        }
         return 0;
     }
 }
