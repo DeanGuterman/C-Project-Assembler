@@ -57,3 +57,16 @@
 93	194	7134848548437610	assembler_project.exe	c1faf1d1395297bc
 2	92	7134849118208848	CMakeFiles/assembler_project.dir/parse_macros.c.obj	f1083ccad01185a3
 93	194	7134849119188279	assembler_project.exe	c1faf1d1395297bc
+0	107	7134906187611190	CMakeFiles/assembler_project.dir/assembler.c.obj	a920149f88347313
+15	124	7134906187781091	CMakeFiles/assembler_project.dir/first_pass_through.c.obj	2ce5fccac3812e72
+5	128	7134906187781091	CMakeFiles/assembler_project.dir/parse_macros.c.obj	f1083ccad01185a3
+107	218	7134906188740546	CMakeFiles/assembler_project.dir/instruction_handling.c.obj	de87ccebe40c2d
+128	222	7134906188760535	CMakeFiles/assembler_project.dir/utils.c.obj	e3bac11620b15379
+124	237	7134906188900458	CMakeFiles/assembler_project.dir/symbol_table.c.obj	64c8d17e22224277
+222	307	7134906189635104	CMakeFiles/assembler_project.dir/error_detection_pass.c.obj	af2622b656ff9f4
+218	312	7134906189685073	CMakeFiles/assembler_project.dir/processing_helpers.c.obj	db13ff321dae8925
+312	416	7134906190614568	assembler_project.exe	c1faf1d1395297bc
+1	75	7134906980350755	CMakeFiles/assembler_project.dir/error_detection_pass.c.obj	af2622b656ff9f4
+76	168	7134906981240409	assembler_project.exe	c1faf1d1395297bc
+2	173	7134910849880614	CMakeFiles/assembler_project.dir/assembler.c.obj	a920149f88347313
+173	427	7134910851749537	assembler_project.exe	c1faf1d1395297bc

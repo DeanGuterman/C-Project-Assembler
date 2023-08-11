@@ -6,7 +6,6 @@
 #include "instruction_handling.h"
 #include "first_pass_through.h"
 
-extern int error_free;
 
 void validate_symbol_instruction(char* line, int line_number, struct symbol_table* symbol_head){
     int data_or_string_value;
