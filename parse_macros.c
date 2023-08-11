@@ -96,18 +96,14 @@ void append_to_macro(Macro* current_macro, char* line) {
 }
 
 /* Handle a macro call in the given line */
-int handle_macro_call(char* line, Macro* macro_tail, FILE* output_file) {
-    int macro_call_found;
-    char* line_copy;
-    char* token;
-    line_copy = (char*)malloc(strlen(line) + 1);
-    macro_call_found = 0;
-    strcpy(line_copy, line);
-    token = strtok(line_copy, " ");
+int handle_macro_call(char* line, Macro* current_macro, FILE* output_file, int line_number) {
+    int macro_call_found = 0;
+    char* line_copy = strdup(line);
+    char* token = strtok(line_copy, " ");
+
     while (token != NULL) {
         /* Check if the token matches a macro name */
-        Macro* current;
-        current = macro_tail;
+        Macro* current = current_macro;
         while (current != NULL) {
             if (strcmp(current->name, token) == 0) {
                 macro_call_found = 1;
@@ -116,11 +112,20 @@ int handle_macro_call(char* line, Macro* macro_tail, FILE* output_file) {
             }
             current = current->next;
         }
+
         token = strtok(NULL, " ");
+
+        if (macro_call_found && token != NULL) {
+            fprintf(stderr, "Error: Macro call in line %d is not the sole line statement\n", line_number);
+            error_free = 0;
+            break;
+        }
     }
+
     free(line_copy);
     return macro_call_found;
 }
+
 
 /* Parse macros from .as file to .am file */
 void parse_macros(char* argv) {
@@ -133,6 +138,7 @@ void parse_macros(char* argv) {
     Macro* macro_tail;
     Macro* temp;
     int line_number;
+
 
     current_macro = NULL;
     inside_macro = 0;
@@ -204,7 +210,7 @@ void parse_macros(char* argv) {
         }
 
         else {
-            if (handle_macro_call(trimmed_line, macro_tail, output_file) == 0) {
+            if (handle_macro_call(trimmed_line, current_macro, output_file, line_number) == 0) {
                 /* Write the line to the output file */
                 fprintf(output_file, "%s\n", trimmed_line);
             }
