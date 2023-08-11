@@ -14,7 +14,7 @@ typedef struct macro_table {
     struct macro_table* next;
 } macro_table;
 
-int check_line_length(char line[]){
+int check_line_length(const char line[]){
     int i;
     for (i = 0; line[i] != '\0'; i++) {
         if (i >= MAX_LINE_LENGTH - 1) {
@@ -97,9 +97,13 @@ void append_to_macro(macro_table* current_macro, char* line) {
 
 /* Handle a macro call in the given line */
 int handle_macro_call(char* line, macro_table* current_macro, FILE* output_file, int line_number) {
-    int macro_call_found = 0;
-    char* line_copy = strdup(line);
-    char* token = strtok(line_copy, " ");
+    int macro_call_found;
+    char* line_copy;
+    char* token;
+
+    macro_call_found = 0;
+    line_copy = strdup(line);
+    token = strtok(line_copy, " ");
 
     while (token != NULL) {
         /* Check if the token matches a macro name */

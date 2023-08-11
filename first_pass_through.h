@@ -4,6 +4,7 @@
 
 #include "symbol_table.h"
 #include "utils.h"
+#include "instruction_handling.h"
 
 /* Extracts a symbol from a line */
 char* extract_symbol(const char line[]);
