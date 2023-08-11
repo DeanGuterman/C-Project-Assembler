@@ -133,7 +133,7 @@ void handle_non_symbol(struct symbol_table *symbol_head, char line[], int line_n
     }
 }
 
-void first_pass_through(char* argv, struct symbol_table* symbol_head) {
+void first_pass_through(char* argv, struct symbol_table* symbol_head, int *IC, int *DC) {
     char line[MAX_LINE_LENGTH + 1];
     FILE *input_file;
     int temp_dc, temp_ic;
@@ -161,6 +161,8 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
             handle_non_symbol(symbol_head, line, line_number, &temp_ic, &temp_dc);
         }
     }
+    *IC = temp_ic;
+    *DC = temp_dc;
 
     fclose(input_file);
 }
