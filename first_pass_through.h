@@ -5,26 +5,29 @@
 #include "symbol_table.h"
 #include "utils.h"
 
-
-/* Function to extract a symbol from a line */
+/* Extracts a symbol from a line */
 char* extract_symbol(const char line[]);
 
-int has_spaces(const char* string);
-
-/* Function to handle a .string prompt and count characters */
+/* Extracts the number of characters in a .string */
 int handle_string(char line[], int index, int line_number);
 
-/* Function to handle a .data prompt and count integers */
+/* Extracts the number of integers in a .data */
 int handle_data(char line[], int index, int line_number);
 
-/* Function to handle .data or .string prompts and return count */
+/* Check if a line contains a .data or .string prompt, and handle them */
 int handle_data_or_string(char line[], int index, int line_number);
 
-/* Function to handle an .extern symbol and add it to the symbol table */
-void handle_external_symbol(char line[], struct symbol_table* head, int current_ic, int line_number);
+/* Extracts an .extern symbol name and handles it */
+void handle_extern_or_entry_symbol(char line[], struct symbol_table* head, int index, int extern_or_entry, int line_number);
 
-/* Function to determine if a line contains an .entry or .extern prompt */
-int handle_entry_or_extern(char line[]);
+/* Classify if a line is a .entry or .extern prompt */
+int classify_extern_or_entry(char line[], int index);
+
+/* Handle a line with a symbol declaration */
+void handle_symbol(struct symbol_table *symbol_head, char line[], int index, int line_number, char symbol_name[MAX_SYMBOL_LENGTH + 1], int temp_ic, int temp_dc);
+
+/* Handle a line without a symbol declaration */
+void handle_non_symbol(struct symbol_table *symbol_head, char line[], int index, int line_number, int temp_ic, int temp_dc);
 
 /* First pass through the input file */
 void first_pass_through(char* argv, struct symbol_table* symbol_head);

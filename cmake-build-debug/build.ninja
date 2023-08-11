@@ -79,6 +79,12 @@ build CMakeFiles/assembler_project.dir/utils.c.obj: C_COMPILER__assembler_projec
   OBJECT_DIR = CMakeFiles\assembler_project.dir
   OBJECT_FILE_DIR = CMakeFiles\assembler_project.dir
 
+build CMakeFiles/assembler_project.dir/processing_helpers.c.obj: C_COMPILER__assembler_project_Debug C$:/Users/deang/CLionProjects/assembler-project/processing_helpers.c || cmake_object_order_depends_target_assembler_project
+  DEP_FILE = CMakeFiles\assembler_project.dir\processing_helpers.c.obj.d
+  FLAGS = -Wall -ansi -pedantic -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\assembler_project.dir
+  OBJECT_FILE_DIR = CMakeFiles\assembler_project.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target assembler_project
@@ -87,7 +93,7 @@ build CMakeFiles/assembler_project.dir/utils.c.obj: C_COMPILER__assembler_projec
 #############################################
 # Link the executable assembler_project.exe
 
-build assembler_project.exe: C_EXECUTABLE_LINKER__assembler_project_Debug CMakeFiles/assembler_project.dir/assembler.c.obj CMakeFiles/assembler_project.dir/parse_macros.c.obj CMakeFiles/assembler_project.dir/first_pass_through.c.obj CMakeFiles/assembler_project.dir/symbol_table.c.obj CMakeFiles/assembler_project.dir/utils.c.obj
+build assembler_project.exe: C_EXECUTABLE_LINKER__assembler_project_Debug CMakeFiles/assembler_project.dir/assembler.c.obj CMakeFiles/assembler_project.dir/parse_macros.c.obj CMakeFiles/assembler_project.dir/first_pass_through.c.obj CMakeFiles/assembler_project.dir/symbol_table.c.obj CMakeFiles/assembler_project.dir/utils.c.obj CMakeFiles/assembler_project.dir/processing_helpers.c.obj
   FLAGS = -Wall -ansi -pedantic -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\assembler_project.dir

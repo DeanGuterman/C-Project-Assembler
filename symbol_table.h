@@ -11,6 +11,8 @@ struct symbol_table* get_next_symbol(struct symbol_table* node);
 /* Function to return the symbol */
 char* get_symbol(struct symbol_table* node);
 
+int get_symbol_pre_defined_entry(struct symbol_table* node);
+
 /* Function to search a symbol in the symbol table */
 struct symbol_table* search_symbol(struct symbol_table* head, const char* symbol);
 

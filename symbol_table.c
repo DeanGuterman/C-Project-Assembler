@@ -203,6 +203,7 @@ symbol_table* insert_symbol(symbol_table* head, const char* symbol, int value, i
     new_symbol->value = value;
     new_symbol->type = -1;
     new_symbol->is_extern_or_entry = -1;
+    new_symbol->pre_defined_entry = 0;
     new_symbol->next = NULL;
 
     if (head != NULL){
