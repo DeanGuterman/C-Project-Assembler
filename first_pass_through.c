@@ -4,6 +4,7 @@
 #include "symbol_table.h"
 #include "utils.h"
 #include "processing_helpers.h"
+#include "instruction_handling.h"
 
 extern int contains_extern;
 extern int contains_entry;
@@ -94,9 +95,7 @@ void handle_symbol(struct symbol_table *symbol_head, char line[], int index, int
     }
 
     else if(data_or_string_value == 0){ /* If it's not a .data, .string, .extern, or .entry  prompt */
-        /*
-         * SOME CODE GOES HERE, SOMETHING ABOUT CHECKING OP CODE AND STUFF
-         */
+        tokenize_instruction(line, line_number, index);
     }
     free(symbol_name);
 }
@@ -124,9 +123,7 @@ void handle_non_symbol(struct symbol_table *symbol_head, char line[], int index,
         handle_extern_or_entry_symbol(line, symbol_head, index, 2, line_number);
     }
     else{ /* If it's an instruction */
-        /*
-         * SOME CODE GOES HERE, SOMETHING ABOUT CHECKING OP CODE AND STUFF
-         */
+        tokenize_instruction(line, line_number, index);
     }
 }
 
