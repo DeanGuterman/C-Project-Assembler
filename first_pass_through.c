@@ -53,11 +53,11 @@ char* extract_symbol(const char line[]) {
     return symbol_name;
 }
 
-void handle_symbol(struct symbol_table *symbol_head, char line[], int index, int line_number, char symbol_name[MAX_SYMBOL_LENGTH + 1], int temp_ic, int temp_dc){
+void handle_symbol(struct symbol_table *symbol_head, char line[], int index, int line_number, char symbol_name[MAX_SYMBOL_LENGTH + 1], int *temp_ic, int *temp_dc){
     struct symbol_table *new_symbol;
     int entry_or_extern_value;
     int data_or_string_value;
-    new_symbol = insert_symbol(symbol_head, symbol_name, temp_ic, line_number);
+    new_symbol = insert_symbol(symbol_head, symbol_name, *temp_ic, line_number);
     if (new_symbol == NULL) {
         error_free = 0;
         return;
@@ -81,8 +81,8 @@ void handle_symbol(struct symbol_table *symbol_head, char line[], int index, int
         return;
     }
     else if (data_or_string_value > 0){ /* If it's a .data or .string prompt */
-        temp_dc += data_or_string_value;
-        temp_ic += data_or_string_value;
+        *temp_dc += data_or_string_value;
+        *temp_ic += data_or_string_value;
     }
 
     else if(entry_or_extern_value == 1){ /* If it's a .extern prompt */
@@ -95,12 +95,12 @@ void handle_symbol(struct symbol_table *symbol_head, char line[], int index, int
     }
 
     else if(data_or_string_value == 0){ /* If it's not a .data, .string, .extern, or .entry  prompt */
-        temp_ic += get_instruction_line_amount(line, line_number, index);
+        *temp_ic += get_instruction_line_amount(line, line_number, index, symbol_head);
     }
     free(symbol_name);
 }
 
-void handle_non_symbol(struct symbol_table *symbol_head, char line[], int index, int line_number, int temp_ic, int temp_dc){
+void handle_non_symbol(struct symbol_table *symbol_head, char line[], int index, int line_number, int *temp_ic, int *temp_dc){
     int entry_or_extern_value;
     int data_or_string_value;
     /* Check if it's an .entry or .extern prompt */
@@ -113,8 +113,8 @@ void handle_non_symbol(struct symbol_table *symbol_head, char line[], int index,
             error_free = 0;
             return;
         } else if (data_or_string_value > 0) { /* If it's a .data or .string prompt */
-            temp_dc += data_or_string_value;
-            temp_ic += data_or_string_value;
+            *temp_dc += data_or_string_value;
+            *temp_ic += data_or_string_value;
         }
     }
     else if (entry_or_extern_value == 1) { /* If it's a .extern prompt */
@@ -123,7 +123,7 @@ void handle_non_symbol(struct symbol_table *symbol_head, char line[], int index,
         handle_extern_or_entry_symbol(line, symbol_head, index, 2, line_number);
     }
     else{ /* If it's an instruction */
-        get_instruction_line_amount(line, line_number, index);
+        *temp_ic += get_instruction_line_amount(line, line_number, index, symbol_head);
     }
 }
 
@@ -150,11 +150,11 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
         symbol_name = extract_symbol(line);
 
         if (symbol_name != NULL) {
-            handle_symbol(symbol_head, line, index, line_number, symbol_name, temp_ic, temp_dc);
+            handle_symbol(symbol_head, line, index, line_number, symbol_name, &temp_ic, &temp_dc);
         }
 
         else{
-            handle_non_symbol(symbol_head, line, index, line_number, temp_ic, temp_dc);
+            handle_non_symbol(symbol_head, line, index, line_number, &temp_ic, &temp_dc);
         }
     }
     /* Check all entries have suitable symbol declarations */
