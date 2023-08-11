@@ -7,6 +7,7 @@ int error_free;
 int contains_extern;
 int contains_entry;
 const char* reserved_names[] = RESERVED_NAMES;
+const char* instruction_names[] = INSTRUCTION_NAMES;
 
 void free_tables(struct symbol_table* symbol_head){
     printf("Freeing tables\n");

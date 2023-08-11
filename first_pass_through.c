@@ -95,7 +95,7 @@ void handle_symbol(struct symbol_table *symbol_head, char line[], int index, int
     }
 
     else if(data_or_string_value == 0){ /* If it's not a .data, .string, .extern, or .entry  prompt */
-        tokenize_instruction(line, line_number, index);
+        temp_ic += get_instruction_line_amount(line, line_number, index);
     }
     free(symbol_name);
 }
@@ -123,7 +123,7 @@ void handle_non_symbol(struct symbol_table *symbol_head, char line[], int index,
         handle_extern_or_entry_symbol(line, symbol_head, index, 2, line_number);
     }
     else{ /* If it's an instruction */
-        tokenize_instruction(line, line_number, index);
+        get_instruction_line_amount(line, line_number, index);
     }
 }
 
