@@ -43,9 +43,7 @@ void delete_whitespaces(char* token){
 int is_valid_register(char* token){
     int i;
     for (i = 0; i < 8; i++){
-        printf ("token: %s, register: %s\n", token, register_names[i]);
         if (strcmp(token, register_names[i]) == 0){
-            printf("this one matches!\n");
             return 1;
         }
     }
@@ -72,6 +70,7 @@ int is_valid_number(char* token){
         }
         token++;
     }
+    return 1;
 }
 
 int check_two_operand(int line_number, int instruction_index, int num_of_tokens, char* tokens[], struct symbol_table *symbol_head){
@@ -83,7 +82,15 @@ int check_two_operand(int line_number, int instruction_index, int num_of_tokens,
     /* delete whitespaces from the second and third token */
     delete_whitespaces(tokens[1]);
     delete_whitespaces(tokens[2]);
-    if (is_valid_register(tokens[1]) && is_valid_register(tokens[2])){
+    if (!strcmp(tokens[0], "lea")){
+        if (is_valid_symbol(tokens[1], symbol_head)){
+            if (is_valid_register(tokens[2]) || is_valid_symbol(tokens[2], symbol_head)){
+                return 3;
+            }
+        }
+        return 0;
+    }
+    else if (is_valid_register(tokens[1]) && is_valid_register(tokens[2])){
         return 2;
     }
     else if (is_valid_register(tokens[1]) && is_valid_symbol(tokens[2], symbol_head)){
@@ -92,8 +99,17 @@ int check_two_operand(int line_number, int instruction_index, int num_of_tokens,
     else if(is_valid_symbol(tokens[1], symbol_head) && is_valid_register(tokens[2])){
         return 3;
     }
+    else if(is_valid_number(tokens[1]) && is_valid_number(tokens[2]) && !strcmp(tokens[0], "cmp")){
+        return 3;
+    }
+    else if(is_valid_number(tokens[1]) && is_valid_symbol(tokens[2], symbol_head)){
+        return 3;
+    }
+    else if(is_valid_number(tokens[1]) && is_valid_register(tokens[2])){
+        return 3;
+    }
     else {
-        printf("Error: line %d has one or more invalid arguments, instruction '%s' only accepts labels and registers\n", line_number, instruction_names[instruction_index]);
+        printf("Error: line %d has one or more invalid arguments\n", line_number);
         return 0;
     }
 }
@@ -109,8 +125,11 @@ int check_one_operand(int line_number, int instruction_index, int num_of_tokens,
     if (is_valid_register(tokens[1]) || is_valid_symbol(tokens[1], symbol_head)){
         return 2;
     }
+    else if(is_valid_number(tokens[1]) && !strcmp(instruction_names[instruction_index], "prn")){
+        return 2;
+    }
     else{
-        printf("Error: line %d has an invalid argument, instruction '%s' only accepts labels and registers\n", line_number, instruction_names[instruction_index]);
+        printf("Error: line %d has an invalid argument\n", line_number);
         error_free = 0;
         return 0;
     }
@@ -118,14 +137,14 @@ int check_one_operand(int line_number, int instruction_index, int num_of_tokens,
 
 int check_zero_operand(int line_number, int instruction_index, int num_of_tokens){
     if (num_of_tokens != 1){
-        printf("Error: line %d has too many arguments, instruction '%s' should be argument-less\n", line_number, instruction_names[instruction_index]);
+        printf("Error: line %d has an inadequate amount of arguments, instruction '%s' should be argument-less\n", line_number, instruction_names[instruction_index]);
         error_free = 0;
         return 0;
     }
     else return 1;
 }
 
-int get_instruction_line_amount(char line[], int line_number, int index, struct symbol_table *symbol_head){
+int get_instruction_line_amount(char line[], int line_number, int index, struct symbol_table *symbol_head, int check_errors){
     /* instruction names variables */
     char line_copy[MAX_LINE_LENGTH];
     char* token;
@@ -149,12 +168,27 @@ int get_instruction_line_amount(char line[], int line_number, int index, struct 
     instruction_index = find_instruction_index(tokens[0], line_number);
 
     if(instruction_index >= 0 && instruction_index <= 5){
+        if (check_errors == 0){
+            if (check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head) == 2){
+                return 2;
+            }
+            else return 3;
+        }
+        else
         return check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head);
     }
     else if(instruction_index >= 6 && instruction_index <= 13){
+        if (check_errors == 0){
+            return 2;
+        }
+        else
         return check_one_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head);
     }
     else if (instruction_index >= 14){
+        if (check_errors == 0){
+            return 1;
+        }
+        else
         return check_zero_operand(line_number, instruction_index, num_of_tokens);
     }
     else return 0;

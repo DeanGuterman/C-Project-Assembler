@@ -53,10 +53,13 @@ char* extract_symbol(const char line[]) {
     return symbol_name;
 }
 
-void handle_symbol(struct symbol_table *symbol_head, char line[], int index, int line_number, char symbol_name[MAX_SYMBOL_LENGTH + 1], int *temp_ic, int *temp_dc){
+void handle_symbol(struct symbol_table *symbol_head, char line[], int line_number, char symbol_name[MAX_SYMBOL_LENGTH + 1], int *temp_ic, int *temp_dc){
     struct symbol_table *new_symbol;
     int entry_or_extern_value;
     int data_or_string_value;
+    int index;
+
+    index = 0;
     new_symbol = insert_symbol(symbol_head, symbol_name, *temp_ic, line_number);
     if (new_symbol == NULL) {
         error_free = 0;
@@ -95,14 +98,17 @@ void handle_symbol(struct symbol_table *symbol_head, char line[], int index, int
     }
 
     else if(data_or_string_value == 0){ /* If it's not a .data, .string, .extern, or .entry  prompt */
-        *temp_ic += get_instruction_line_amount(line, line_number, index, symbol_head);
+        *temp_ic += get_instruction_line_amount(line, line_number, index, symbol_head, 0);
     }
     free(symbol_name);
 }
 
-void handle_non_symbol(struct symbol_table *symbol_head, char line[], int index, int line_number, int *temp_ic, int *temp_dc){
+void handle_non_symbol(struct symbol_table *symbol_head, char line[], int line_number, int *temp_ic, int *temp_dc){
+    int index;
     int entry_or_extern_value;
     int data_or_string_value;
+
+    index = 0;
     /* Check if it's an .entry or .extern prompt */
     entry_or_extern_value = classify_extern_or_entry(line, index);
     /* Check if it's a .data or .string prompt */
@@ -123,7 +129,7 @@ void handle_non_symbol(struct symbol_table *symbol_head, char line[], int index,
         handle_extern_or_entry_symbol(line, symbol_head, index, 2, line_number);
     }
     else{ /* If it's an instruction */
-        *temp_ic += get_instruction_line_amount(line, line_number, index, symbol_head);
+        *temp_ic += get_instruction_line_amount(line, line_number, index, symbol_head, 0);
     }
 }
 
@@ -133,7 +139,6 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
     int temp_dc, temp_ic;
     char *symbol_name;
     int line_number;
-    int index;
 
     symbol_name = NULL;
     temp_dc = 0;
@@ -144,26 +149,18 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head) {
     /* Go through every line in the file */
     while (fgets(line, MAX_LINE_LENGTH + 1, input_file)) {
         line_number++;
-        index = 0;
 
         /* Check if it's a symbol declaration */
         symbol_name = extract_symbol(line);
 
         if (symbol_name != NULL) {
-            handle_symbol(symbol_head, line, index, line_number, symbol_name, &temp_ic, &temp_dc);
+            handle_symbol(symbol_head, line, line_number, symbol_name, &temp_ic, &temp_dc);
         }
 
         else{
-            handle_non_symbol(symbol_head, line, index, line_number, &temp_ic, &temp_dc);
+            handle_non_symbol(symbol_head, line, line_number, &temp_ic, &temp_dc);
         }
     }
-    /* Check all entries have suitable symbol declarations */
-    while(symbol_head != NULL){
-        if (get_symbol_external_or_entry(symbol_head) == 2 && get_symbol_pre_defined_entry(symbol_head) == 1){
-            printf("Error: Symbol %s is declared as entry but not defined\n", get_symbol(symbol_head));
-            error_free = 0;
-        }
-        symbol_head = get_next_symbol(symbol_head);
-    }
+
     fclose(input_file);
 }
