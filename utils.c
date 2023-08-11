@@ -16,7 +16,6 @@ void free_tables(struct symbol_table* symbol_head){
         struct symbol_table* temp;
         temp = symbol_head;
         symbol_head = get_next_symbol(symbol_head);
-        printf("Freeing %s\n", get_symbol(temp));
         free(temp);
     }
     free(symbol_head);

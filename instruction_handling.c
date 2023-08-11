@@ -73,7 +73,7 @@ int is_valid_number(char* token){
     return 1;
 }
 
-int check_two_operand(int line_number, int instruction_index, int num_of_tokens, char* tokens[], struct symbol_table *symbol_head){
+int check_two_operand(int line_number, int instruction_index, int num_of_tokens, char* tokens[], struct symbol_table *symbol_head, int check_errors){
     if (num_of_tokens != 3){
         printf("Error: line %d has an inadequate amount of arguments, instruction '%s' should have two arguments\n", line_number, instruction_names[instruction_index]);
         error_free = 0;
@@ -87,6 +87,10 @@ int check_two_operand(int line_number, int instruction_index, int num_of_tokens,
             if (is_valid_register(tokens[2]) || is_valid_symbol(tokens[2], symbol_head)){
                 return 3;
             }
+        }
+        if (check_errors == 1){
+            printf("Error: line %d one or more invalid arguments\n", line_number);
+            error_free = 0;
         }
         return 0;
     }
@@ -161,7 +165,7 @@ int get_instruction_line_amount(char line[], int line_number, int index, struct 
         token = strtok(NULL, ",");
     }
     if (num_of_tokens > 3){
-        printf("Error: line %d has too many arguments\n", line_number);
+        printf("Error: instruction at line %d has too many arguments\n", line_number);
         error_free = 0;
         return 0;
     }
@@ -169,13 +173,13 @@ int get_instruction_line_amount(char line[], int line_number, int index, struct 
 
     if(instruction_index >= 0 && instruction_index <= 5){
         if (check_errors == 0){
-            if (check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head) == 2){
+            if (check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, 0) == 2){
                 return 2;
             }
             else return 3;
         }
         else
-        return check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head);
+        return check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, 1);
     }
     else if(instruction_index >= 6 && instruction_index <= 13){
         if (check_errors == 0){

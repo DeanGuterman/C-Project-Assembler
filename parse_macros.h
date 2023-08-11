@@ -10,7 +10,7 @@
 struct macro_table;
 
 /* Check if line length exceeds the maximum allowed */
-int check_line_length(char line[]);
+int check_line_length(const char line[]);
 
 /* Handle the start of a new macro */
 struct macro_table* handle_macro_start(char* line, struct macro_table* macro_tail);

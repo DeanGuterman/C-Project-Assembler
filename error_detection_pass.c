@@ -72,6 +72,7 @@ void error_detection_pass (char* argv, struct symbol_table* symbol_head) {
         else{
             validate_non_symbol_instruction(line, line_number, symbol_head);
         }
+        free(symbol_name);
     }
     /* Check all entries have suitable symbol declarations */
     while(symbol_head != NULL){

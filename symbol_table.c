@@ -214,7 +214,6 @@ symbol_table* insert_symbol(symbol_table* head, const char* symbol, int value, i
         temp->next = new_symbol;
     }
 
-    printf("Symbol %s added to the symbol table\n", new_symbol->symbol);
     return new_symbol;
 }
 

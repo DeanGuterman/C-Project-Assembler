@@ -1,7 +1,9 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#include "parse_macros.h"
 #include "utils.h"
+
 
 extern int error_free;
 extern const char* reserved_names[];
@@ -102,7 +104,8 @@ int handle_macro_call(char* line, macro_table* current_macro, FILE* output_file,
     char* token;
 
     macro_call_found = 0;
-    line_copy = strdup(line);
+    line_copy = (char*)malloc(strlen(line) + 1);
+    strcpy(line_copy, line);
     token = strtok(line_copy, " ");
 
     while (token != NULL) {
@@ -150,7 +153,6 @@ void parse_macros(char* argv) {
     input_file = open_file(argv, ".as");
     line_number = 0;
 
-    printf("Parsing macros from file: %s.as\n", argv);
     if (input_file == NULL) {
         printf("Error opening file: %s\n", argv);
         error_free = 0;
@@ -225,7 +227,6 @@ void parse_macros(char* argv) {
     while (current_macro != NULL) {
         temp = current_macro;
         current_macro = current_macro->next;
-        printf("Freeing macro: %s\n", temp->name);
         free(temp->content); /* Free allocated content memory */
         free(temp);
     }
