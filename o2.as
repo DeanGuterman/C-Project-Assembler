@@ -8,7 +8,7 @@ endmcro
 LOOP: jmp L1
 prn -5
 bne W
-sub @r1, 4
+sub @r1, @r4
 mcro m1
     sub @r1, @r4
     bne END

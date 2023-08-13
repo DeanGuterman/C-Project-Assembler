@@ -24,11 +24,13 @@ void set_symbol_external_or_entry(struct symbol_table* node, int extern_or_entry
 /* Function to get a symbol's external or entry value */
 int get_symbol_external_or_entry(struct symbol_table* node);
 
+int set_symbol_value(struct symbol_table* node, int value);
+
 /* Function to set a symbol's type */
 void set_symbol_type(struct symbol_table* node, int type);
 
-/* Function to set a symbol's is_extern_or_entry value */
-void set_symbol_is_extern_or_entry(struct symbol_table* node, int is_extern_or_entry);
+
+int get_symbol_value(struct symbol_table* node);
 
 /* Function to search and delete a symbol in the symbol table */
 struct symbol_table* delete_symbol(struct symbol_table* head, const char* symbol);

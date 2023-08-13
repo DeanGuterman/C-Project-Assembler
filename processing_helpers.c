@@ -17,7 +17,7 @@ int handle_string(char line[], int index, int line_number){
     }
 
     /* Check if the .string prompt starts with a double quote */
-    if (line[index] != '\"'){
+    if (line[index] != 34){
         printf("Error: missing starting quotation marks in .string at line %d\n",line_number);
         return 0;
     }

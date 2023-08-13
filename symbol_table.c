@@ -33,6 +33,21 @@ char* get_symbol(symbol_table* node) {
     return node->symbol;
 }
 
+int get_symbol_value(symbol_table* node) {
+    if(node == NULL) {
+        return 0;
+    }
+    return node->value;
+}
+
+int set_symbol_value(symbol_table* node, int value) {
+    if(node == NULL) {
+        return 0;
+    }
+    node->value = value;
+    return 1;
+}
+
 /* Function to search a symbol in the symbol table */
 symbol_table* search_symbol(symbol_table* head, const char* symbol) {
     while (head != NULL) {
@@ -126,6 +141,7 @@ int symbol_exists(symbol_table* head, const char* symbol, int line_number) {
         if (strcmp(head->symbol, symbol) == 0) {
             if (head->pre_defined_entry == 1){
                 head->pre_defined_entry = 0;
+                return 2; /* Symbol exists in the table and is a pre-defined entry */
             }
             else {
                 printf("Error in line %d: Symbol %s already exists in the symbol table\n", line_number, symbol);
@@ -179,14 +195,24 @@ int check_symbol_legality(const char* symbol, int line_number){
 symbol_table* insert_symbol(symbol_table* head, const char* symbol, int value, int line_number) {
     symbol_table* new_symbol;
     symbol_table* temp;
+    int already_exists;
+
+    already_exists = symbol_exists(head, symbol, line_number);
 
     if (line_number != -1 && check_symbol_legality(symbol, line_number) == 0){
         return NULL;
     }
 
     /*If the symbol already exists, return NULL*/
-    if (symbol_exists(head, symbol, line_number)){
+    if (already_exists == 1){
         return NULL;
+    }
+
+    else if (already_exists == 2){
+        new_symbol = search_symbol(head, symbol);
+        set_symbol_value(new_symbol, 2);
+        set_symbol_external_or_entry(new_symbol, 2);
+        return new_symbol;
     }
 
     new_symbol = (symbol_table*)malloc(sizeof(symbol_table));
