@@ -8,5 +8,6 @@
 struct bitfield;
 
 int encode_string(const char line[], int index, struct bitfield *data_array[], int data_index);
+int encode_data(const char line[], int index, struct bitfield *data_array[], int data_index, int line_number);
 
 #endif

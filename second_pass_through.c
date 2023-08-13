@@ -32,6 +32,29 @@ struct bitfield *char_to_bitfield(char c) {
     return new_bitfield;
 }
 
+int twos_complement(int num){
+
+    unsigned int inverted_num;
+
+    inverted_num = ~num;
+    inverted_num += 1;
+    inverted_num &= ~(1 << (sizeof(num) * 8 - 1));
+
+    return inverted_num;
+}
+
+struct bitfield *num_to_bitfield(int num){
+    struct bitfield *new_bitfield;
+    int i;
+    new_bitfield = malloc(sizeof(struct bitfield));
+    new_bitfield->bits = 0;
+        for (i = 0; i < 12; i++) {
+            new_bitfield->bits |= ((num >> i) & 1) << i;
+        }
+
+    return new_bitfield;
+}
+
 void print_binary(unsigned int value) {
     int i;
 
@@ -51,7 +74,7 @@ void free_bitfield_array(struct bitfield *array[]){
 
 }
 
-void second_pass_through(char* argv, struct symbol_table* symbol_head){
+void second_pass_through(char* argv){
     FILE *input_file;
     char line[MAX_LINE_LENGTH + 1];
     int line_number;
@@ -105,14 +128,14 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head){
                 data_index = encode_string(line, index, data_array, data_index);
             }
             else if (data_or_string == 2){
-                /*instruction_index = encode_data*/
+                data_index = encode_data(line, index, data_array, data_index, line_number);
             }
         }
         else{
             /*instruction_index = encode_instruction*/
         }
     }
-
+    /*printf(" first in data array: %d\n", data_array[0]->bits);*/
     free_bitfield_array(instruction_array);
     free_bitfield_array(data_array);
     fclose(input_file);

@@ -7,8 +7,10 @@
 
 struct bitfield;
 
-void second_pass_through(char* argv, struct symbol_table* symbol_head);
+void second_pass_through(char* argv);
 struct bitfield *create_bitfield(void);
 struct bitfield *char_to_bitfield(char c);
+struct bitfield *num_to_bitfield(int num);
+int twos_complement(int num);
 
 #endif

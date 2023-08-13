@@ -47,7 +47,7 @@ int main(int argc, char* argv[]){
             first_pass_through(argv[i], symbol_head, &IC, &DC);
         }
         error_detection_pass(argv[i], symbol_head, IC, DC);
-        second_pass_through(argv[i], symbol_head);
+        second_pass_through(argv[i]);
         free_tables(symbol_head);
     }
     return 0;
