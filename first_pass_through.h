@@ -9,14 +9,11 @@
 /* Extracts a symbol from a line */
 char* extract_symbol(const char line[]);
 
-/* Extracts the number of characters in a .string */
-int handle_string(char line[], int index, int line_number);
 
-/* Extracts the number of integers in a .data */
-int handle_data(char line[], int index, int line_number);
 
-/* Check if a line contains a .data or .string prompt, and handle them */
-int handle_data_or_string(char line[], int index, int line_number);
+
+
+
 
 /* Extracts an .extern symbol name and handles it */
 void handle_extern_or_entry_symbol(char line[], struct symbol_table* head, int index, int extern_or_entry, int line_number);

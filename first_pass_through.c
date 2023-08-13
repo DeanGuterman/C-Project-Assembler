@@ -8,7 +8,6 @@
 
 extern int contains_extern;
 extern int contains_entry;
-extern int error_free;
 
 char* extract_symbol(const char line[]) {
     int index;
@@ -74,7 +73,7 @@ void handle_symbol(struct symbol_table *symbol_head, char line[], int line_numbe
     }
 
     /* Check if the label is a .data or .string prompt */
-    data_or_string_value = handle_data_or_string(line, index, line_number);
+    data_or_string_value = handle_data_or_string(line, index, line_number, 0);
 
     /* Check if the label is a .entry or .extern prompt */
     entry_or_extern_value = classify_extern_or_entry(line, index);
@@ -112,7 +111,7 @@ void handle_non_symbol(struct symbol_table *symbol_head, char line[], int line_n
     /* Check if it's an .entry or .extern prompt */
     entry_or_extern_value = classify_extern_or_entry(line, index);
     /* Check if it's a .data or .string prompt */
-    data_or_string_value = handle_data_or_string(line, index, line_number);
+    data_or_string_value = handle_data_or_string(line, index, line_number, 0);
 
     if (data_or_string_value != 0) {
         if (data_or_string_value == -1) { /* If there was an error in the .data or .string prompt */

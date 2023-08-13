@@ -22,7 +22,7 @@ void validate_symbol_instruction(char* line, int line_number, struct symbol_tabl
     }
 
     /* Check if the label is a .data or .string prompt */
-    data_or_string_value = handle_data_or_string(line, index, line_number);
+    data_or_string_value = handle_data_or_string(line, index, line_number, 1);
 
     /* Check if the label is a .entry or .extern prompt */
     entry_or_extern_value = classify_extern_or_entry(line, index);
@@ -42,7 +42,7 @@ void validate_non_symbol_instruction(char* line, int line_number, struct symbol_
     /* Check if it's an .entry or .extern prompt */
     entry_or_extern_value = classify_extern_or_entry(line, 0);
     /* Check if it's a .data or .string prompt */
-    data_or_string_value = handle_data_or_string(line, 0, line_number);
+    data_or_string_value = handle_data_or_string(line, 0, line_number, 1);
     if (data_or_string_value == 0 && entry_or_extern_value == 0){
         if (get_instruction_line_amount(line, line_number, 0, symbol_head, 1) == 0){
             error_free = 0;

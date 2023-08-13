@@ -8,13 +8,13 @@
 #include "utils.h"
 
 /* Extracts the number of chars in a .string */
-int handle_string(char line[], int index, int line_number);
+int handle_string(char line[], int index, int line_number, int check_errors);
 
 /* Extracts the number of integers in a .data */
-int handle_data(char line[], int index, int line_number);
+int handle_data(char line[], int index, int line_number, int check_errors);
 
 /* Check if a given line contains a .data or .string prompt, and handle them */
-int handle_data_or_string(char line[], int index, int line_number);
+int handle_data_or_string(char line[], int index, int line_number, int check_errors);
 
 /* Extracts a .extern symbol name and handles it */
 void handle_extern_or_entry_symbol(char line[], struct symbol_table* head, int index, int extern_or_entry, int line_number);

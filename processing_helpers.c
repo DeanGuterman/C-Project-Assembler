@@ -7,7 +7,7 @@ extern int contains_extern;
 extern int contains_entry;
 
 /* Extracts the number of chars in a .string */
-int handle_string(char line[], int index, int line_number){
+int handle_string(char line[], int index, int line_number, int check_errors){
     int char_counter;
     char_counter = 1;
 
@@ -18,7 +18,8 @@ int handle_string(char line[], int index, int line_number){
 
     /* Check if the .string prompt starts with a double quote */
     if (line[index] != 34){
-        printf("Error: missing starting quotation marks in .string at line %d\n",line_number);
+        if (check_errors)
+            printf("Error: missing starting quotation marks in .string at line %d\n",line_number);
         return 0;
     }
 
@@ -28,15 +29,27 @@ int handle_string(char line[], int index, int line_number){
         while (line[index] != '\"'){
             /* Check it's a printable character */
             if (line[index] < 32 || line[index] > 126){
-                printf("Error: non-printable character in .string at line %d\n", line_number);
+                if (check_errors)
+                    printf("Error: non-printable character in .string at line %d\n", line_number);
                 return 0;
             }
             /* Check for missing ending quotation marks within the .string */
             if (line[index] == '\n'){
-                printf("Error: missing ending quotation marks in .string at line %d\n",line_number);
+                if (check_errors)
+                    printf("Error: missing ending quotation marks in .string at line %d\n",line_number);
                 return 0;
             }
             char_counter++;
+            index++;
+        }
+
+        /* Check there are no chars after the ending quotation marks */
+        while (line[++index] != '\n'){
+            if (!isspace(line[index])){
+                if (check_errors)
+                    printf("Error: non-whitespace characters after ending quotation marks in .string at line %d\n", line_number);
+                return 0;
+            }
             index++;
         }
     }
@@ -46,50 +59,73 @@ int handle_string(char line[], int index, int line_number){
 }
 
 /* Extracts the number of integers in a .data */
-int handle_data(char line[], int index, int line_number){
+int handle_data(char line[], int index, int line_number, int check_errors){
     int data_counter;
     int comma_flag;
     int plus_minus_flag;
+    int whitespace_flag;
+
     data_counter = 1;
     comma_flag = 1;
     plus_minus_flag = 0;
+    whitespace_flag = 0;
 
-    /* Count the number of integers (data items) in the .data prompt */
-    while(line[index] != '\0'){
-        if(line[index] == 44){
-            /* Check for unnecessary commas */
+    while(isspace(line[index])){
+        index++;
+    }
+
+    while (line[index] != '\n'){
+        if (line[index] == 44){
             if (comma_flag == 1){
-                printf("Error: unnecessary commas in .data at line %d\n", line_number);
+                if (check_errors)
+                    printf("Error: unnecessary commas in .data at line %d\n", line_number);
                 return 0;
             }
             else {
                 comma_flag = 1;
                 plus_minus_flag = 0;
                 data_counter++;
+                whitespace_flag = 0;
             }
         }
         else if (line[index] == 43 || line[index] == 45){
-            /* Check for multiple consecutive plus or minus signs */
             if (plus_minus_flag == 1){
-                printf("Error: multiple consecutive plus or minus signs in .data at line %d\n", line_number);
+                if (check_errors)
+                    printf("Error: multiple consecutive plus or minus signs in .data at line %d\n", line_number);
                 return 0;
             }
             else {
                 plus_minus_flag = 1;
             }
         }
-        else if (isdigit(line[index]) ){
-            comma_flag = 0;
+        else if (isdigit(line[index])){
+            if (whitespace_flag == 1){
+                if (check_errors)
+                    printf("Error: missing commas in .data at line %d\n", line_number);
+                return 0;
+            }
+            else
+                comma_flag = 0;
+        }
+        else if (isspace(line[index])){
+            if (comma_flag == 1)
+                whitespace_flag = 1;
+        }
+        else {
+            if (check_errors)
+                printf("Error: non-digit characters in .data at line %d\n", line_number);
+            return 0;
         }
         index++;
     }
+
 
     /* Return the total number of integers (data items) found in the .data prompt */
     return data_counter;
 }
 
 /* Check if a given line contains a .data or .string prompt, and handle them */
-int handle_data_or_string(char line[], int index, int line_number){
+int handle_data_or_string(char line[], int index, int line_number, int check_errors){
     int prompt_index;
     char prompt[MAX_LINE_LENGTH + 1];
     int handle_string_value;
@@ -118,14 +154,14 @@ int handle_data_or_string(char line[], int index, int line_number){
 
     /* Compare the prompt with ".string" and ".data" */
     if (strcmp(".string", prompt) == 0){
-        handle_string_value = handle_string(line, index, line_number);
+        handle_string_value = handle_string(line, index, line_number, check_errors);
         if (handle_string_value == 0){
             return -1;
         }
         return handle_string_value;
     }
     if (strcmp(".data", prompt) == 0){
-        handle_data_value = handle_data(line, index, line_number);
+        handle_data_value = handle_data(line, index, line_number, check_errors);
         if (handle_data_value == 0){
             return -1;
         }
