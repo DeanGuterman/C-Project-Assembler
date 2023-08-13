@@ -4,6 +4,7 @@
 #include "first_pass_through.h"
 #include "processing_helpers.h"
 #include "encoding_functions.h"
+#include "utils.h"
 
 struct bitfield {
     unsigned int bits: 12;
@@ -40,6 +41,16 @@ void print_binary(unsigned int value) {
     printf("\n");
 }
 
+void free_bitfield_array(struct bitfield *array[]){
+    int i;
+    for (i = 0; i < 1024; i++){
+        if (array[i] != NULL) {
+            free(array[i]);
+        }
+    }
+
+}
+
 void second_pass_through(char* argv, struct symbol_table* symbol_head){
     FILE *input_file;
     char line[MAX_LINE_LENGTH + 1];
@@ -59,6 +70,8 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head){
     instruction_index = 0;
     data_index = 0;
     symbol_name = NULL;
+    memset(data_array, 0, sizeof(data_array));
+    memset(instruction_array, 0, sizeof(data_array));
 
 
     /* Go through every line in the file */
@@ -77,6 +90,7 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head){
             while(isspace(line[index])){
                 index++;
             }
+            free (symbol_name);
         }
 
         entry_or_extern = classify_extern_or_entry(line, index);
@@ -97,10 +111,9 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head){
         else{
             /*instruction_index = encode_instruction*/
         }
-        free (symbol_name);
     }
 
-
+    free_bitfield_array(instruction_array);
+    free_bitfield_array(data_array);
     fclose(input_file);
-
 }

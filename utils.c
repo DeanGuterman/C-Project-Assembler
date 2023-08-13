@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "symbol_table.h"
+#include "second_pass_through.h"
 
 int error_free;
 int contains_extern;
@@ -20,6 +21,7 @@ void free_tables(struct symbol_table* symbol_head){
     }
     free(symbol_head);
 }
+
 
 FILE* open_file(char* file_name, char* file_type){
     char complete_file_name[FILENAME_MAX];

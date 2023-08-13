@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "symbol_table.h"
+#include "second_pass_through.h"
 
 #define TEMP_SYMBOL_NAME "mov"
 #define MAX_LINE_LENGTH 81
@@ -17,6 +18,7 @@ struct symbol_table;
 
 /* Free symbol table */
 void free_tables(struct symbol_table* symbol_head);
+
 
 /* Open file for reading */
 FILE* open_file(char* file_name, char* file_type);
