@@ -58,7 +58,7 @@ int encode_data(const char line[], int index, struct bitfield *data_array[], int
             index++;
         }
 
-        if (line[index] == ','){
+        if (line[index] == ',' || line[index] == '\n'){
             if (is_valid_num(num)) {
                 if (modifier == -1){
                     num = twos_complement(num);
@@ -71,6 +71,8 @@ int encode_data(const char line[], int index, struct bitfield *data_array[], int
                 error_free = 0;
                 return data_index;
             }
+            if (line[index] == '\n')
+                return data_index;
             index++;
         }
     }

@@ -135,7 +135,6 @@ void second_pass_through(char* argv){
             /*instruction_index = encode_instruction*/
         }
     }
-    /*printf(" first in data array: %d\n", data_array[0]->bits);*/
     free_bitfield_array(instruction_array);
     free_bitfield_array(data_array);
     fclose(input_file);
