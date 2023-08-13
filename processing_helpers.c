@@ -94,6 +94,11 @@ int handle_data(char line[], int index, int line_number, int check_errors){
                     printf("Error: multiple consecutive plus or minus signs in .data at line %d\n", line_number);
                 return 0;
             }
+            if (!isdigit(line[index+1])){
+                if (check_errors)
+                    printf("Error: non-digit characters after plus or minus sign in .data at line %d\n", line_number);
+                return 0;
+            }
             else {
                 plus_minus_flag = 1;
             }
@@ -108,7 +113,7 @@ int handle_data(char line[], int index, int line_number, int check_errors){
                 comma_flag = 0;
         }
         else if (isspace(line[index])){
-            if (comma_flag == 1)
+            if (comma_flag == 0)
                 whitespace_flag = 1;
         }
         else {
@@ -118,7 +123,11 @@ int handle_data(char line[], int index, int line_number, int check_errors){
         }
         index++;
     }
-
+    if (line[index] == '\n' && comma_flag == 1){
+        if (check_errors)
+            printf("Error: unnecessary commas in .data at line %d\n", line_number);
+        return 0;
+    }
 
     /* Return the total number of integers (data items) found in the .data prompt */
     return data_counter;
