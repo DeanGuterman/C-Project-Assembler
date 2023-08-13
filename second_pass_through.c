@@ -3,8 +3,9 @@
 #include "symbol_table.h"
 #include "first_pass_through.h"
 #include "processing_helpers.h"
+#include "encoding_functions.h"
 
-struct bitfield {
+typedef struct bitfield {
     unsigned int bit_0 : 1;
     unsigned int bit_1 : 1;
     unsigned int bit_2 : 1;
@@ -17,24 +18,42 @@ struct bitfield {
     unsigned int bit_9 : 1;
     unsigned int bit_10 : 1;
     unsigned int bit_11 : 1;
-};
+} bitfield;
 
-void second_pass_through(char* argv, struct symbol_table* symbol_head, struct bitfield *IC_array[], struct bitfield *DC_array[]){
+void print_bitfield(struct bitfield *bitfield){
+    printf("%d", bitfield->bit_0);
+    printf("%d", bitfield->bit_1);
+    printf("%d", bitfield->bit_2);
+    printf("%d", bitfield->bit_3);
+    printf("%d", bitfield->bit_4);
+    printf("%d", bitfield->bit_5);
+    printf("%d", bitfield->bit_6);
+    printf("%d", bitfield->bit_7);
+    printf("%d", bitfield->bit_8);
+    printf("%d", bitfield->bit_9);
+    printf("%d", bitfield->bit_10);
+    printf("%d", bitfield->bit_11);
+    printf("\n");
+}
+
+void second_pass_through(char* argv, struct symbol_table* symbol_head){
     FILE *input_file;
     char line[MAX_LINE_LENGTH + 1];
     int line_number;
     int index;
-    int IC_index;
-    int DC_index;
+    int instruction_index;
+    int data_index;
     int entry_or_extern;
     int data_or_string;
     char *symbol_name;
+    struct bitfield *instruction_array[1024];
+    struct bitfield *data_array[1024];
 
     input_file = open_file(argv, ".am");
     line_number = 0;
     index = 0;
-    IC_index = 0;
-    DC_index = 0;
+    instruction_index = 0;
+    data_index = 0;
     symbol_name = NULL;
 
     /* Go through every line in the file */
@@ -64,15 +83,19 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head, struct bi
 
         if (data_or_string != 0){
             if (data_or_string == 1){
-
+                data_index = encode_string(line, index, data_array, data_index);
             }
             else if (data_or_string == 2){
-
+                /*instruction_index = encode_data*/
             }
+        }
+        else{
+            /*instruction_index = encode_instruction*/
         }
         free (symbol_name);
     }
 
 
     fclose(input_file);
+
 }

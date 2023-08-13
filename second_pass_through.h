@@ -7,6 +7,6 @@
 
 struct bitfield;
 
-void second_pass_through(char* argv, struct symbol_table* symbol_head, struct bitfield *IC_array[], struct bitfield *DC_array[]);
+void second_pass_through(char* argv, struct symbol_table* symbol_head);
 
 #endif

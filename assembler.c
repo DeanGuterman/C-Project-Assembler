@@ -35,8 +35,7 @@ int main(int argc, char* argv[]){
         struct symbol_table* symbol_head;
         extern int contains_extern;
         int IC, DC;
-        struct bitfield *IC_array[1024];
-        struct bitfield *DC_array[1024];
+
 
         IC = 0;
         DC = 0;
@@ -48,7 +47,7 @@ int main(int argc, char* argv[]){
             first_pass_through(argv[i], symbol_head, &IC, &DC);
         }
         error_detection_pass(argv[i], symbol_head, IC, DC);
-        second_pass_through(argv[i], symbol_head, IC_array, DC_array);
+        second_pass_through(argv[i], symbol_head);
         free_tables(symbol_head);
     }
     return 0;
