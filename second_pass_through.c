@@ -5,34 +5,38 @@
 #include "processing_helpers.h"
 #include "encoding_functions.h"
 
-typedef struct bitfield {
-    unsigned int bit_0 : 1;
-    unsigned int bit_1 : 1;
-    unsigned int bit_2 : 1;
-    unsigned int bit_3 : 1;
-    unsigned int bit_4 : 1;
-    unsigned int bit_5 : 1;
-    unsigned int bit_6 : 1;
-    unsigned int bit_7 : 1;
-    unsigned int bit_8 : 1;
-    unsigned int bit_9 : 1;
-    unsigned int bit_10 : 1;
-    unsigned int bit_11 : 1;
-} bitfield;
+struct bitfield {
+    unsigned int bits: 12;
+};
 
-void print_bitfield(struct bitfield *bitfield){
-    printf("%d", bitfield->bit_0);
-    printf("%d", bitfield->bit_1);
-    printf("%d", bitfield->bit_2);
-    printf("%d", bitfield->bit_3);
-    printf("%d", bitfield->bit_4);
-    printf("%d", bitfield->bit_5);
-    printf("%d", bitfield->bit_6);
-    printf("%d", bitfield->bit_7);
-    printf("%d", bitfield->bit_8);
-    printf("%d", bitfield->bit_9);
-    printf("%d", bitfield->bit_10);
-    printf("%d", bitfield->bit_11);
+
+/* function to create a bitfield */
+struct bitfield *create_bitfield(void){
+    struct bitfield *new_bitfield;
+    new_bitfield = malloc(sizeof(struct bitfield));
+    new_bitfield->bits = 0;
+    return new_bitfield;
+}
+
+struct bitfield *char_to_bitfield(char c) {
+    struct bitfield *new_bitfield;
+    int i;
+    new_bitfield = malloc(sizeof(struct bitfield));
+    new_bitfield->bits = 0;
+
+    for (i = 0; i < 12; i++) {
+        new_bitfield->bits |= ((c >> i) & 1) << i;
+    }
+
+    return new_bitfield;
+}
+
+void print_binary(unsigned int value) {
+    int i;
+
+    for (i = 11; i >= 0; i--) {
+        printf("%d", (value >> i) & 1);
+    }
     printf("\n");
 }
 
@@ -55,6 +59,7 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head){
     instruction_index = 0;
     data_index = 0;
     symbol_name = NULL;
+
 
     /* Go through every line in the file */
     while (fgets(line, MAX_LINE_LENGTH + 1, input_file)){

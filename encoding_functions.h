@@ -7,6 +7,6 @@
 
 struct bitfield;
 
-int encode_string(char line[], int index, struct bitfield *data_array[], int data_index);
+int encode_string(const char line[], int index, struct bitfield *data_array[], int data_index);
 
 #endif
