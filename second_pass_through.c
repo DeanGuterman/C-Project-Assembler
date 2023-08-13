@@ -28,18 +28,22 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head, struct bi
     int DC_index;
     int entry_or_extern;
     int data_or_string;
+    char *symbol_name;
 
     input_file = open_file(argv, ".am");
     line_number = 0;
     index = 0;
     IC_index = 0;
     DC_index = 0;
+    symbol_name = NULL;
 
     /* Go through every line in the file */
     while (fgets(line, MAX_LINE_LENGTH + 1, input_file)){
         line_number++;
         index = 0;
-        if (extract_symbol(line) != NULL){
+
+        symbol_name = extract_symbol(line);
+        if (symbol_name != NULL){
             while(isspace(line[index])){
                 index++;
             }
@@ -53,7 +57,6 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head, struct bi
 
         entry_or_extern = classify_extern_or_entry(line, index);
         data_or_string = classify_data_or_string(line, index);
-        printf("line: %s entry_or_extern: %d data_or_string: %d\n", line, entry_or_extern, data_or_string);
 
         if (entry_or_extern != 0){
             continue;
@@ -67,6 +70,7 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head, struct bi
 
             }
         }
+        free (symbol_name);
     }
 
 
