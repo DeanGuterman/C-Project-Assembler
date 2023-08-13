@@ -9,7 +9,7 @@ extern int error_free;
 extern const char* instruction_names[];
 extern const char* register_names[];
 
-int find_instruction_index(char* token_instruction, int line_number){
+int find_instruction_index(char* token_instruction, int line_number, int check_errors){
 
     int i;
     for (i = 0; i < 16; i++){
@@ -17,8 +17,10 @@ int find_instruction_index(char* token_instruction, int line_number){
             return i;
         }
     }
-    printf("Error: line %d has an invalid instruction name\n", line_number);
-    error_free = 0;
+    if(check_errors == 1) {
+        printf("Error: line %d has an invalid instruction name\n", line_number);
+        error_free = 0;
+    }
     return -1;
 }
 
@@ -75,8 +77,11 @@ int is_valid_number(char* token){
 
 int check_two_operand(int line_number, int instruction_index, int num_of_tokens, char* tokens[], struct symbol_table *symbol_head, int check_errors){
     if (num_of_tokens != 3){
-        printf("Error: line %d has an inadequate amount of arguments, instruction '%s' should have two arguments\n", line_number, instruction_names[instruction_index]);
-        error_free = 0;
+        if (check_errors == 1) {
+            printf("Error: line %d has an inadequate amount of arguments, instruction '%s' should have two arguments\n",
+                   line_number, instruction_names[instruction_index]);
+            error_free = 0;
+        }
         return 0;
     }
     /* delete whitespaces from the second and third token */
@@ -120,10 +125,13 @@ int check_two_operand(int line_number, int instruction_index, int num_of_tokens,
     }
 }
 
-int check_one_operand(int line_number, int instruction_index, int num_of_tokens, char* tokens[], struct symbol_table *symbol_head){
+int check_one_operand(int line_number, int instruction_index, int num_of_tokens, char* tokens[], struct symbol_table *symbol_head, int check_errors){
     if (num_of_tokens != 2){
-        printf("Error: line %d has an inadequate amount of arguments, instruction '%s' should have one argument\n", line_number, instruction_names[instruction_index]);
-        error_free = 0;
+        if(check_errors == 1) {
+            printf("Error: line %d has an inadequate amount of arguments, instruction '%s' should have one argument\n",
+                   line_number, instruction_names[instruction_index]);
+            error_free = 0;
+        }
         return 0;
     }
     /* delete whitespaces from the second token */
@@ -135,16 +143,21 @@ int check_one_operand(int line_number, int instruction_index, int num_of_tokens,
         return 2;
     }
     else{
-        printf("Error: line %d has an invalid argument\n", line_number);
-        error_free = 0;
+        if(check_errors == 1) {
+            printf("Error: line %d has an invalid argument\n", line_number);
+            error_free = 0;
+        }
         return 0;
     }
 }
 
-int check_zero_operand(int line_number, int instruction_index, int num_of_tokens){
+int check_zero_operand(int line_number, int instruction_index, int num_of_tokens, int check_errors){
     if (num_of_tokens != 1){
-        printf("Error: line %d has an inadequate amount of arguments, instruction '%s' should be argument-less\n", line_number, instruction_names[instruction_index]);
-        error_free = 0;
+        if (check_errors == 1) {
+            printf("Error: line %d has an inadequate amount of arguments, instruction '%s' should be argument-less\n",
+                   line_number, instruction_names[instruction_index]);
+            error_free = 0;
+        }
         return 0;
     }
     else return 1;
@@ -167,35 +180,37 @@ int get_instruction_line_amount(char line[], int line_number, int index, struct 
         token = strtok(NULL, ",");
     }
     if (num_of_tokens > 3){
-        printf("Error: instruction at line %d has too many arguments\n", line_number);
-        error_free = 0;
+        if (check_errors == 1) {
+            printf("Error: instruction at line %d has too many arguments\n", line_number);
+            error_free = 0;
+        }
         return 0;
     }
-    instruction_index = find_instruction_index(tokens[0], line_number);
+    instruction_index = find_instruction_index(tokens[0], line_number, check_errors);
 
     if(instruction_index >= 0 && instruction_index <= 5){
         if (check_errors == 0){
-            if (check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, 0) == 2){
+            if (check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, check_errors) == 2){
                 return 2;
             }
             else return 3;
         }
         else
-        return check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, 1);
+        return check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, check_errors);
     }
     else if(instruction_index >= 6 && instruction_index <= 13){
         if (check_errors == 0){
             return 2;
         }
         else
-        return check_one_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head);
+        return check_one_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, check_errors);
     }
     else if (instruction_index >= 14){
         if (check_errors == 0){
             return 1;
         }
         else
-        return check_zero_operand(line_number, instruction_index, num_of_tokens);
+        return check_zero_operand(line_number, instruction_index, num_of_tokens, check_errors);
     }
     else return 0;
 }

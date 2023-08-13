@@ -3,6 +3,7 @@
 #include "parse_macros.h"
 #include "first_pass_through.h"
 #include "error_detection_pass.h"
+#include "second_pass_through.h"
 #include <stdio.h>
 /* system size is 1024, so ic+dc <= 924 as 100 first ones are saved */
 
@@ -34,8 +35,11 @@ int main(int argc, char* argv[]){
         struct symbol_table* symbol_head;
         extern int contains_extern;
         int IC, DC;
+        struct bitfield *IC_array[1024];
+        struct bitfield *DC_array[1024];
 
-
+        IC = 0;
+        DC = 0;
         contains_extern = 0;
         error_free = 1;
         symbol_head = insert_symbol(NULL, TEMP_SYMBOL_NAME, -1, -1);
@@ -43,7 +47,8 @@ int main(int argc, char* argv[]){
         if (error_free == 1) {
             first_pass_through(argv[i], symbol_head, &IC, &DC);
         }
-        error_detection_pass(argv[i], symbol_head);
+        error_detection_pass(argv[i], symbol_head, IC, DC);
+        second_pass_through(argv[i], symbol_head, IC_array, DC_array);
         free_tables(symbol_head);
     }
     return 0;

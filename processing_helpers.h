@@ -13,6 +13,8 @@ int handle_string(char line[], int index, int line_number, int check_errors);
 /* Extracts the number of integers in a .data */
 int handle_data(char line[], int index, int line_number, int check_errors);
 
+int classify_data_or_string(char line[], int index);
+
 /* Check if a given line contains a .data or .string prompt, and handle them */
 int handle_data_or_string(char line[], int index, int line_number, int check_errors);
 

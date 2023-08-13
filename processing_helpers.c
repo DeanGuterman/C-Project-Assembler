@@ -133,12 +133,10 @@ int handle_data(char line[], int index, int line_number, int check_errors){
     return data_counter;
 }
 
-/* Check if a given line contains a .data or .string prompt, and handle them */
-int handle_data_or_string(char line[], int index, int line_number, int check_errors){
+int classify_data_or_string(char line[], int index){
     int prompt_index;
     char prompt[MAX_LINE_LENGTH + 1];
-    int handle_string_value;
-    int handle_data_value;
+
 
     prompt_index = 0;
     /* If the line starts with a newline, return 0 indicating no prompt */
@@ -163,14 +161,48 @@ int handle_data_or_string(char line[], int index, int line_number, int check_err
 
     /* Compare the prompt with ".string" and ".data" */
     if (strcmp(".string", prompt) == 0){
-        handle_string_value = handle_string(line, index, line_number, check_errors);
+        return 1;
+    }
+    if (strcmp(".data", prompt) == 0){
+        return 2;
+    }
+
+    /* Return 0 if the prompt is not recognized */
+    return 0;
+}
+
+/* Check if a given line contains a .data or .string prompt, and handle them */
+int handle_data_or_string(char line[], int index, int line_number, int check_errors){
+    int prompt_index;
+    int handle_string_value;
+    int handle_data_value;
+
+    prompt_index = index;
+
+
+    /* Skip leading whitespace characters */
+    while(isspace(line[prompt_index])){
+        prompt_index++;
+    }
+
+
+    /* Extract the prompt */
+    while(!isspace(line[prompt_index]) && line[prompt_index] != '\n'){
+
+        prompt_index++;
+
+    }
+
+    /* Compare the prompt with ".string" and ".data" */
+    if (classify_data_or_string(line, index) == 1){
+        handle_string_value = handle_string(line, prompt_index, line_number, check_errors);
         if (handle_string_value == 0){
             return -1;
         }
         return handle_string_value;
     }
-    if (strcmp(".data", prompt) == 0){
-        handle_data_value = handle_data(line, index, line_number, check_errors);
+    if (classify_data_or_string(line, index) == 2){
+        handle_data_value = handle_data(line, prompt_index, line_number, check_errors);
         if (handle_data_value == 0){
             return -1;
         }

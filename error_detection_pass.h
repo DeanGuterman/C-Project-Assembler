@@ -16,6 +16,6 @@ void validate_symbol_instruction(char* line, int line_number, struct symbol_tabl
 void validate_non_symbol_instruction(char* line, int line_number, struct symbol_table* symbol_head);
 
 /* Perform error detection pass */
-void error_detection_pass(char* argv, struct symbol_table* symbol_head);
+void error_detection_pass(char* argv, struct symbol_table* symbol_head, int IC, int DC);
 
 #endif

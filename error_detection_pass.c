@@ -51,7 +51,7 @@ void validate_non_symbol_instruction(char* line, int line_number, struct symbol_
     }
 }
 
-void error_detection_pass (char* argv, struct symbol_table* symbol_head) {
+void error_detection_pass (char* argv, struct symbol_table* symbol_head, int IC, int DC) {
     char line[MAX_LINE_LENGTH + 1];
     FILE *input_file;
     int line_number;
@@ -80,6 +80,11 @@ void error_detection_pass (char* argv, struct symbol_table* symbol_head) {
             error_free = 0;
         }
         symbol_head = get_next_symbol(symbol_head);
+    }
+
+    if (IC + DC + 100 > MAX_MEMORY_SIZE){
+        printf("Error: Program is too big for memory\n");
+        error_free = 0;
     }
     fclose(input_file);
 }

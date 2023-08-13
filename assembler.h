@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include "second_pass_through.h"
 
 
 /* Function declarations */
