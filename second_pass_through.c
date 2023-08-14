@@ -74,7 +74,7 @@ void free_bitfield_array(struct bitfield *array[]){
 
 }
 
-void second_pass_through(char* argv){
+void second_pass_through(char* argv, struct symbol_table *symbol_head){
     FILE *input_file;
     char line[MAX_LINE_LENGTH + 1];
     int line_number;
@@ -132,7 +132,7 @@ void second_pass_through(char* argv){
             }
         }
         else{
-            instruction_index = encode_instruction(line, index, instruction_array, instruction_index, line_number);
+            instruction_index = encode_instruction(line, index, instruction_array, instruction_index, line_number, symbol_head);
         }
     }
     free_bitfield_array(instruction_array);

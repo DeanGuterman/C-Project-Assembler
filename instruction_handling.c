@@ -5,9 +5,7 @@
 #include "utils.h"
 #include "instruction_handling.h"
 
-extern int error_free;
-extern const char* instruction_names[];
-extern const char* register_names[];
+
 
 int find_instruction_index(char* token_instruction, int line_number, int check_errors){
 

@@ -16,6 +16,34 @@ int is_valid_num(int num) {
     return 1;
 }
 
+struct bitfield *get_register_bitfield(char *token, int is_destination){
+
+}
+
+int encode_single_operand_instruction(char* tokens[], struct bitfield *instruction_array[], int current_instruction, int instruction_index, struct symbol_table *symbol_head){
+    struct bitfield *instruction_opcode;
+    struct bitfield *ARE;
+    struct bitfield *destination_method;
+    struct bitfield *operand;
+    struct symbol_table *current_symbol;
+
+    instruction_opcode = num_to_bitfield(current_instruction);
+    current_symbol = search_symbol(symbol_head, tokens[1]);
+
+    if (strncmp(tokens[1], "@", 1) == 0){
+        destination_method = num_to_bitfield(20);
+    }
+    else if(current_symbol != NULL){
+        destination_method = num_to_bitfield(12);
+    }
+    else if (strcmp(tokens[0], "prn") == 0){
+        destination_method = num_to_bitfield(4);
+    }
+
+    instruction_array[instruction_index] = instruction_opcode || destination_method;
+
+}
+
 int encode_zero_operand_instruction(char* tokens[], struct bitfield *instruction_array[], int current_instruction, int instruction_index){
     struct bitfield *instruction_opcode;
 
@@ -26,7 +54,7 @@ int encode_zero_operand_instruction(char* tokens[], struct bitfield *instruction
     return instruction_index;
 }
 
-int encode_instruction(const char line[], int index, struct bitfield *instruction_array[], int instruction_index, int line_number){
+int encode_instruction(const char line[], int index, struct bitfield *instruction_array[], int instruction_index, int line_number, struct symbol_table *symbol_head){
     char line_copy[MAX_LINE_LENGTH];
     char* token;
     char* tokens[3];
@@ -55,7 +83,7 @@ int encode_instruction(const char line[], int index, struct bitfield *instructio
         return instruction_index /*  encode_double_operand_instruction(tokens, instruction_array, current_instruction, instruction_index)*/;
     }
     else if(current_instruction >= 6 && current_instruction <= 13){
-        return instruction_index /*  encode_single_operand_instruction(tokens, instruction_array, current_instruction, instruction_index)*/;
+        return instruction_index /*  encode_single_operand_instruction(tokens, instruction_array, current_instruction, instruction_index, symbol_head)*/;
     }
     else if (current_instruction >= 14){
        return encode_zero_operand_instruction(tokens, instruction_array, current_instruction, instruction_index);

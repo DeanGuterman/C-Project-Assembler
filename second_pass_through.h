@@ -7,7 +7,7 @@
 
 struct bitfield;
 
-void second_pass_through(char* argv);
+void second_pass_through(char* argv, struct symbol_table *symbol_head);
 struct bitfield *create_bitfield(void);
 struct bitfield *char_to_bitfield(char c);
 struct bitfield *num_to_bitfield(int num);
