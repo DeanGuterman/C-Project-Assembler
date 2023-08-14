@@ -51,15 +51,14 @@ int encode_instruction(const char line[], int index, struct bitfield *instructio
 
     current_instruction = find_instruction_index(tokens[0], line_number, 0);
 
-
-    if(instruction_index >= 0 && instruction_index <= 5){
-        return /* + encode_double_operand_instruction(tokens, instruction_array, current_instruction, instruction_index)*/;
+    if(current_instruction >= 0 && current_instruction <= 5){
+        return instruction_index /*  encode_double_operand_instruction(tokens, instruction_array, current_instruction, instruction_index)*/;
     }
-    else if(instruction_index >= 6 && instruction_index <= 13){
-        return /* + encode_single_operand_instruction(tokens, instruction_array, current_instruction, instruction_index)*/;
+    else if(current_instruction >= 6 && current_instruction <= 13){
+        return instruction_index /*  encode_single_operand_instruction(tokens, instruction_array, current_instruction, instruction_index)*/;
     }
-    else if (instruction_index >= 14){
-       return /* + encode_zero_operand_instruction(tokens, instruction_array, current_instruction, instruction_index)*/;
+    else if (current_instruction >= 14){
+       return encode_zero_operand_instruction(tokens, instruction_array, current_instruction, instruction_index);
     }
 
     /*else*/ return instruction_index;
