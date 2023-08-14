@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "symbol_table.h"
 #include "utils.h"
+#include "symbol_table.h"
 #include "processing_helpers.h"
 #include "instruction_handling.h"
+#include "first_pass_through.h"
 
 extern int contains_extern;
 extern int contains_entry;

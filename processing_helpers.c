@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "utils.h"
+#include "processing_helpers.h"
 
 extern int contains_extern;
 extern int contains_entry;

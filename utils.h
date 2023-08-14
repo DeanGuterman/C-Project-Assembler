@@ -1,5 +1,4 @@
-#ifndef UTILS_H
-#define UTILS_H
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,4 +26,4 @@ FILE* open_file(char* file_name, char* file_type);
 /* Create output file for writing */
 FILE* create_output_file(char* file_name, char* file_type);
 
-#endif
+

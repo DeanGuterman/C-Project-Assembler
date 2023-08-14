@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "symbol_table.h"
+#include "utils.h"
 #include "second_pass_through.h"
 
 int error_free;

@@ -72,6 +72,10 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
     }
     instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(instruction_opcode) | get_bitfield_value(destination_method));
     instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(operand_address) | get_bitfield_value(ARE));
+    free(instruction_opcode);
+    free(destination_method);
+    free(operand_address);
+    free(ARE);
     return instruction_index;
 }
 

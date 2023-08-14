@@ -3,19 +3,20 @@
 #include <string.h>
 #include <ctype.h>
 #include "utils.h"
+#include "symbol_table.h"
 
 extern int error_free;
 extern const char* reserved_names[];
 
 
-typedef struct symbol_table {
+struct symbol_table {
     char symbol[MAX_SYMBOL_LENGTH + 1];
     int value; /* ic or dc value */
     int type; /* 1 for data, 2 for code */
     int is_extern_or_entry; /* 1 for external, 2 for entry*/
     int pre_defined_entry; /* 1 for pre-defined entry, 0 for not */
     struct symbol_table* next;
-} symbol_table;
+};
 
 /* Function to return the next symbol in the symbol table */
 symbol_table* get_next_symbol(symbol_table* node) {

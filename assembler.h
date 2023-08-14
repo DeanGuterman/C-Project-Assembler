@@ -12,7 +12,7 @@
 
 
 /* Function declarations */
-int parse_macros(char* argv);
-int first_pass_through(char* argv, struct symbol_table* symbol_head);
+void parse_macros(char* argv);
+void first_pass_through(char* argv, struct symbol_table* symbol_head, int *IC, int *DC);
 
 #endif

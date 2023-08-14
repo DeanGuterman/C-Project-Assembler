@@ -4,6 +4,7 @@
 #include "first_pass_through.h"
 #include "error_detection_pass.h"
 #include "second_pass_through.h"
+#include "assembler.h"
 #include <stdio.h>
 /* system size is 1024, so ic+dc <= 924 as 100 first ones are saved */
 

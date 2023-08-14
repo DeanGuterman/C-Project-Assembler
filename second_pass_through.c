@@ -1,10 +1,11 @@
 
-#include "second_pass_through.h"
 #include "symbol_table.h"
+#include "utils.h"
+#include "second_pass_through.h"
 #include "first_pass_through.h"
 #include "processing_helpers.h"
 #include "encoding_functions.h"
-#include "utils.h"
+
 
 struct bitfield {
     unsigned int bits: 12;
@@ -77,7 +78,7 @@ void free_bitfield_array(struct bitfield *array[]){
 
 }
 
-void second_pass_through(char* argv, struct symbol_table *symbol_head){
+void second_pass_through(char* argv, struct symbol_table* symbol_head){
     FILE *input_file;
     char line[MAX_LINE_LENGTH + 1];
     int line_number;

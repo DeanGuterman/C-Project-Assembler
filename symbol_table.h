@@ -3,7 +3,7 @@
 
 #include "utils.h"
 
-struct symbol_table; /* Forward declaration */
+typedef struct symbol_table symbol_table; /* Forward declaration */
 
 /* Function to return the next symbol in the symbol table */
 struct symbol_table* get_next_symbol(struct symbol_table* node);
