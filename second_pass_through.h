@@ -8,6 +8,7 @@
 struct bitfield;
 
 void second_pass_through(char* argv, struct symbol_table *symbol_head);
+unsigned int get_bitfield_value(struct bitfield *bitfield);
 struct bitfield *create_bitfield(void);
 struct bitfield *char_to_bitfield(char c);
 struct bitfield *num_to_bitfield(int num);

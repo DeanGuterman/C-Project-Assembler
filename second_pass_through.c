@@ -19,6 +19,10 @@ struct bitfield *create_bitfield(void){
     return new_bitfield;
 }
 
+unsigned int get_bitfield_value(struct bitfield *bitfield){
+    return bitfield->bits;
+}
+
 struct bitfield *char_to_bitfield(char c) {
     struct bitfield *new_bitfield;
     int i;
