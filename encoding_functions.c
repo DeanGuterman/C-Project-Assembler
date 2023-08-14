@@ -57,14 +57,10 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
         if (is_valid_operand_num(tokens[1]) == 1){
             destination_method = num_to_bitfield(4);
             operand_twos_complement = twos_complement(atoi(tokens[1]));
-
             if (atoi(tokens[1]) < 0){
-                operand_twos_complement |= (1<<9);
+                operand_twos_complement |= (1<<8);
             }
             operand_address = num_to_bitfield(operand_twos_complement<<2);
-            printf("operand address is %d\n", get_bitfield_value(operand_address));
-            printf("operand is %d\n", atoi(tokens[1]));
-            printf("operand twos complement is %d\n", operand_twos_complement);
 
             ARE = num_to_bitfield(0);
         }
@@ -74,12 +70,8 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
             return instruction_index;
         }
     }
-    instruction_array[instruction_index] = num_to_bitfield(get_bitfield_value(instruction_opcode) | get_bitfield_value(destination_method));
-    printf("instruction array at index %d is: %d\n", instruction_index, get_bitfield_value(instruction_array[instruction_index]));
-    instruction_index++;
-    instruction_array[instruction_index] = num_to_bitfield(get_bitfield_value(operand_address) | get_bitfield_value(ARE));
-    printf("instruction array at index %d is: %d\n", instruction_index, get_bitfield_value(instruction_array[instruction_index]));
-    instruction_index++;
+    instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(instruction_opcode) | get_bitfield_value(destination_method));
+    instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(operand_address) | get_bitfield_value(ARE));
     return instruction_index;
 }
 
@@ -128,7 +120,7 @@ int encode_instruction(const char line[], int index, struct bitfield *instructio
        return encode_zero_operand_instruction(tokens, instruction_array, current_instruction, instruction_index);
     }
 
-    /*else*/ return instruction_index;
+    return instruction_index;
 }
 
 int encode_string(const char line[], int index, struct bitfield * data_array[], int data_index) {
@@ -176,7 +168,9 @@ int encode_data(const char line[], int index, struct bitfield * data_array[], in
         if (line[index] == ',' || line[index] == '\n') {
             if (is_valid_num(num)) {
                 if (modifier == -1) {
+                    num *= -1;
                     num = twos_complement(num);
+                    num |= (1 << 11);
                 }
                 data_array[data_index] = num_to_bitfield(num);
                 data_index++;
