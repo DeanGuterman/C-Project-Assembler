@@ -19,10 +19,14 @@ int is_valid_num(int num) {
 int is_valid_operand_num(char num_string[]){
     int num;
     num = atoi(num_string);
+    if (num > 511 || num < -512){
+        return 0;
+    }
+    return 1;
 }
 
 
-int encode_single_operand_instruction(char* tokens[], struct bitfield *instruction_array[], int current_instruction, int instruction_index, struct symbol_table *symbol_head){
+int encode_single_operand_instruction(char* tokens[], struct bitfield *instruction_array[], int current_instruction, int instruction_index, struct symbol_table *symbol_head, int line_number){
     struct bitfield *instruction_opcode;
     struct bitfield *ARE;
     struct bitfield *destination_method;
@@ -46,8 +50,15 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
         }
     }
     else {
-        destination_method = num_to_bitfield(4);
-        ARE = num_to_bitfield(0);
+        if (is_valid_operand_num(tokens[1]) == 1){
+            destination_method = num_to_bitfield(4);
+            ARE = num_to_bitfield(0);
+        }
+        else{
+            printf("Error: invalid operand at line %d\n", line_number);
+            error_free = 0;
+            return instruction_index;
+        }
     }
     instruction_array[instruction_index] = num_to_bitfield(get_bitfield_value(instruction_opcode) | get_bitfield_value(destination_method));
 
@@ -94,7 +105,7 @@ int encode_instruction(const char line[], int index, struct bitfield *instructio
         return instruction_index /*  encode_double_operand_instruction(tokens, instruction_array, current_instruction, instruction_index)*/;
     }
     else if(current_instruction >= 6 && current_instruction <= 13){
-        return   encode_single_operand_instruction(tokens, instruction_array, current_instruction, instruction_index, symbol_head);
+        return   encode_single_operand_instruction(tokens, instruction_array, current_instruction, instruction_index, symbol_head, line_number);
     }
     else if (current_instruction >= 14){
        return encode_zero_operand_instruction(tokens, instruction_array, current_instruction, instruction_index);
