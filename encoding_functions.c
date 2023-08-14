@@ -16,6 +16,11 @@ int is_valid_num(int num) {
     return 1;
 }
 
+int is_valid_operand_num(char num_string[]){
+    int num;
+    num = atoi(num_string);
+}
+
 
 int encode_single_operand_instruction(char* tokens[], struct bitfield *instruction_array[], int current_instruction, int instruction_index, struct symbol_table *symbol_head){
     struct bitfield *instruction_opcode;
@@ -33,9 +38,16 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
     }
     else if(current_symbol != NULL){
         destination_method = num_to_bitfield(12);
+        if(get_symbol_external_or_entry(current_symbol) == 1){
+            ARE = num_to_bitfield(1);
+        }
+        else{
+            ARE = num_to_bitfield(2);
+        }
     }
     else {
         destination_method = num_to_bitfield(4);
+        ARE = num_to_bitfield(0);
     }
     instruction_array[instruction_index] = num_to_bitfield(get_bitfield_value(instruction_opcode) | get_bitfield_value(destination_method));
 
