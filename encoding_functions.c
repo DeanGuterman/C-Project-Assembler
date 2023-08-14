@@ -30,8 +30,9 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
     struct bitfield *instruction_opcode;
     struct bitfield *ARE;
     struct bitfield *destination_method;
-    struct bitfield *operand;
+    struct bitfield *operand_address;
     struct symbol_table *current_symbol;
+    int operand_twos_complement;
 
     current_instruction <<= 5;
     instruction_opcode = num_to_bitfield(current_instruction);
@@ -39,9 +40,12 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
 
     if (strncmp(tokens[1], "@", 1) == 0){
         destination_method = num_to_bitfield(20);
+        operand_address = num_to_bitfield(tokens[1][2]<<7);
+        ARE = num_to_bitfield(0);
     }
     else if(current_symbol != NULL){
         destination_method = num_to_bitfield(12);
+        operand_address = num_to_bitfield(get_symbol_value(current_symbol)<<2);
         if(get_symbol_external_or_entry(current_symbol) == 1){
             ARE = num_to_bitfield(1);
         }
@@ -52,6 +56,16 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
     else {
         if (is_valid_operand_num(tokens[1]) == 1){
             destination_method = num_to_bitfield(4);
+            operand_twos_complement = twos_complement(atoi(tokens[1]));
+
+            if (atoi(tokens[1]) < 0){
+                operand_twos_complement |= (1<<9);
+            }
+            operand_address = num_to_bitfield(operand_twos_complement<<2);
+            printf("operand address is %d\n", get_bitfield_value(operand_address));
+            printf("operand is %d\n", atoi(tokens[1]));
+            printf("operand twos complement is %d\n", operand_twos_complement);
+
             ARE = num_to_bitfield(0);
         }
         else{
@@ -61,7 +75,10 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
         }
     }
     instruction_array[instruction_index] = num_to_bitfield(get_bitfield_value(instruction_opcode) | get_bitfield_value(destination_method));
-
+    printf("instruction array at index %d is: %d\n", instruction_index, get_bitfield_value(instruction_array[instruction_index]));
+    instruction_index++;
+    instruction_array[instruction_index] = num_to_bitfield(get_bitfield_value(operand_address) | get_bitfield_value(ARE));
+    printf("instruction array at index %d is: %d\n", instruction_index, get_bitfield_value(instruction_array[instruction_index]));
     instruction_index++;
     return instruction_index;
 }

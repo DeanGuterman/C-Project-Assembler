@@ -37,25 +37,31 @@ struct bitfield *char_to_bitfield(char c) {
 }
 
 int twos_complement(int num){
+/* Check if the number is negative. */
+    if (num < 0) {
+        /* Get the 1's complement of the number. */
+        int ones_complement = ~num;
 
-    unsigned int inverted_num;
-
-    inverted_num = ~num;
-    inverted_num += 1;
-    inverted_num &= ~(1 << (sizeof(num) * 8 - 1));
-
-    return inverted_num;
+        /* Add 1 to the 1's complement. */
+        return ones_complement + 1;
+    } else {
+        /* The number is positive, so just return it. */
+        return num;
+    }
 }
 
 struct bitfield *num_to_bitfield(int num){
     struct bitfield *new_bitfield;
     int i;
+    if (num < 0){
+        num = twos_complement(num);
+        printf("num is %d\n", num);
+    }
     new_bitfield = malloc(sizeof(struct bitfield));
     new_bitfield->bits = 0;
         for (i = 0; i < 12; i++) {
             new_bitfield->bits |= ((num >> i) & 1) << i;
         }
-
     return new_bitfield;
 }
 
