@@ -19,6 +19,7 @@ struct symbol_table;
 /* Free symbol table */
 void free_tables(struct symbol_table* symbol_head);
 
+int get_instruction_decimal_code(char* instruction_name);
 
 /* Open file for reading */
 FILE* open_file(char* file_name, char* file_type);

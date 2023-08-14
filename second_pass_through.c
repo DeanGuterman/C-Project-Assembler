@@ -132,7 +132,7 @@ void second_pass_through(char* argv){
             }
         }
         else{
-            /*instruction_index = encode_instruction*/
+            instruction_index = encode_instruction(line, index, instruction_array, instruction_index, line_number);
         }
     }
     free_bitfield_array(instruction_array);

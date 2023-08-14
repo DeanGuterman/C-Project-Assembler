@@ -19,3 +19,17 @@
 84	179	7136570731063806	assembler_project.exe	27fefee9ca5fd60a
 2	86	7136570892238013	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
 86	185	7136570893177299	assembler_project.exe	27fefee9ca5fd60a
+4	392	7137171207112328	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
+393	776	7137171210930215	assembler_project.exe	27fefee9ca5fd60a
+2	92	7137171282875112	CMakeFiles/assembler_project.dir/encoding_functions.c.obj	2f4d77c6fc987489
+92	212	7137171283964481	assembler_project.exe	27fefee9ca5fd60a
+2	154	7137192970853833	CMakeFiles/assembler_project.dir/encoding_functions.c.obj	2f4d77c6fc987489
+8	154	7137192970853833	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
+155	272	7137192971993181	assembler_project.exe	27fefee9ca5fd60a
+3	99	7137193242680904	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
+100	194	7137193243570560	assembler_project.exe	27fefee9ca5fd60a
+9	108	7137193673592128	CMakeFiles/assembler_project.dir/encoding_functions.c.obj	2f4d77c6fc987489
+3	109	7137193673592128	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
+109	202	7137193674471619	assembler_project.exe	27fefee9ca5fd60a
+2	93	7137194537548181	CMakeFiles/assembler_project.dir/encoding_functions.c.obj	2f4d77c6fc987489
+93	192	7137194538497640	assembler_project.exe	27fefee9ca5fd60a

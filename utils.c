@@ -22,6 +22,15 @@ void free_tables(struct symbol_table* symbol_head){
     free(symbol_head);
 }
 
+int get_instruction_decimal_code(char* instruction_name){
+    int i;
+    for (i = 0; i < 16; i++){
+        if (strcmp(instruction_name, instruction_names[i]) == 0){
+            return i;
+        }
+    }
+    return -1;
+}
 
 FILE* open_file(char* file_name, char* file_type){
     char complete_file_name[FILENAME_MAX];
