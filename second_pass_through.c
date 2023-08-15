@@ -139,7 +139,7 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head){
             instruction_index = encode_instruction(line, index, instruction_array, instruction_index, line_number, symbol_head);
         }
     }
-    printf("instruction array index 1 is %d\n", instruction_array[1]->bits);
+    printf("instruction array index 9 is %d\n", instruction_array[10]->bits);
     free_bitfield_array(instruction_array);
     free_bitfield_array(data_array);
     fclose(input_file);

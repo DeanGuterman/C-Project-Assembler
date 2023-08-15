@@ -49,7 +49,8 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
     if (strncmp(tokens[1], "@", 1) == 0) {
         /* Handle direct addressing */
         source_method = num_to_bitfield(5 << 9);
-        source_operand_address = num_to_bitfield(tokens[1][2] << 7);
+        source_operand_address = num_to_bitfield((tokens[1][2] - '0') << 7);
+        printf("source operand address is: %d\n", get_bitfield_value(source_operand_address));
         source_ARE = num_to_bitfield(0);
     } else if (source_symbol != NULL) {
         /* Handle symbol addressing */
@@ -88,9 +89,9 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
         destination_method = num_to_bitfield(20);
         if (strncmp(tokens[1], "@", 1) == 0) {
             print_third_line = 0;
-            destination_operand_address = num_to_bitfield(tokens[2][2] << 2);
+            destination_operand_address = num_to_bitfield((tokens[2][2] - '0' )<< 2);
         } else {
-            destination_operand_address = num_to_bitfield(tokens[2][2] << 7);
+            destination_operand_address = num_to_bitfield((tokens[2][2] - '0' ) << 7);
             destination_ARE = num_to_bitfield(0);
         }
     } else if(destination_symbol != NULL){
