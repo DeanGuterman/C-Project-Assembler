@@ -7,6 +7,7 @@
 #include "first_pass_through.h"
 #include "processing_helpers.h"
 #include "encoding_functions.h"
+#include "create_obj_files.h"
 
 struct bitfield;
 

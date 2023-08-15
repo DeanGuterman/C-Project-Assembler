@@ -11,3 +11,9 @@
 162	289	7138108408512857	CMakeFiles/assembler_project.dir/instruction_handling.c.obj	de87ccebe40c2d
 387	469	7138108410351803	CMakeFiles/assembler_project.dir/error_detection_pass.c.obj	af2622b656ff9f4
 1	110	7138254970349892	CMakeFiles/assembler_project.dir/encoding_functions.c.obj	2f4d77c6fc987489
+2	193	7138280424901718	CMakeFiles/assembler_project.dir/assembler.c.obj	a920149f88347313
+7	222	7138280425181562	CMakeFiles/assembler_project.dir/parse_macros.c.obj	f1083ccad01185a3
+12	234	7138280425221541	CMakeFiles/assembler_project.dir/encoding_functions.c.obj	2f4d77c6fc987489
+194	299	7138280425961115	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
+222	306	7138280426091041	CMakeFiles/assembler_project.dir/create_obj_files.c.obj	3cfbccaeb891191f
+306	508	7138280427650144	assembler_project.exe	dd66ce63c5e1a3a6

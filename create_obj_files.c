@@ -1,7 +1,7 @@
 
-#include "create_obj_files.h"
-#include "symbol_table.h"
 #include "second_pass_through.h"
+#include "symbol_table.h"
+#include "create_obj_files.h"
 
 const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -19,9 +19,10 @@ char* encode_base64(struct bitfield *bf) {
     return encoded;
 }
 
-void create_obj_file(char argv[], struct bitfield *instruction_array, struct bitfield *data_array, int instruction_limit, int data_limit){
+void create_obj_file(char argv[], struct bitfield *instruction_array[], struct bitfield *data_array[], int instruction_limit, int data_limit){
     FILE* obj_file;
     int i;
+    char *converted_to_base64;
 
     obj_file = create_output_file(argv, ".ob");
     if (obj_file == NULL) {
@@ -32,11 +33,15 @@ void create_obj_file(char argv[], struct bitfield *instruction_array, struct bit
     fprintf(obj_file, "%d %d\n", instruction_limit, data_limit);
 
     for ( i = 0; i < instruction_limit; i++){
-
+        converted_to_base64 = encode_base64(instruction_array[i]);
+        fprintf(obj_file, "%s\n", converted_to_base64);
+        free(converted_to_base64);
     }
+
+    fclose(obj_file);
 }
 
-void create_output_files(char argv[], struct symbol_table *symbol_head, struct bitfield *instruction_array, struct bitfield *data_array, int instruction_limit, int data_limit){
+void create_output_files(char argv[], struct symbol_table *symbol_head, struct bitfield *instruction_array[], struct bitfield *data_array[], int instruction_limit, int data_limit){
     create_obj_file(argv, instruction_array, data_array, instruction_limit, data_limit);
 }
 

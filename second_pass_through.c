@@ -5,6 +5,7 @@
 #include "first_pass_through.h"
 #include "processing_helpers.h"
 #include "encoding_functions.h"
+#include "create_obj_files.h"
 
 
 struct bitfield {
@@ -98,7 +99,7 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head){
     data_index = 0;
     symbol_name = NULL;
     memset(data_array, 0, sizeof(data_array));
-    memset(instruction_array, 0, sizeof(data_array));
+    memset(instruction_array, 0, sizeof(instruction_array));
 
 
     /* Go through every line in the file */
