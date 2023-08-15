@@ -231,10 +231,7 @@ void parse_macros(char* argv) {
     fclose(input_file);
     fclose(output_file);
 
-    if (error_free) {
-        printf("macro_tables parsed successfully! Output file: %s.am\n", argv);
-    }
-    else {
+    if (!error_free) {
         printf("Errors occurred while parsing macros\n");
     }
 }

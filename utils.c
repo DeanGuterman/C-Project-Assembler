@@ -5,7 +5,6 @@
 #include "utils.h"
 
 void free_tables(struct symbol_table* symbol_head){
-    printf("Freeing tables\n");
     while (symbol_head != NULL) {
         struct symbol_table* temp;
         temp = symbol_head;
@@ -29,7 +28,6 @@ FILE* open_file(char* file_name, char* file_type){
     char complete_file_name[FILENAME_MAX];
     strcpy(complete_file_name, file_name);
     strcat(complete_file_name, file_type);
-    printf("Going through file: %s\n", complete_file_name);
     return fopen(complete_file_name, "r");
 }
 
@@ -37,7 +35,6 @@ FILE* create_output_file(char* file_name, char* file_type){
     char complete_file_name[FILENAME_MAX];
     strcpy(complete_file_name, file_name);
     strcat(complete_file_name, file_type);
-    printf("Creating output file: %s\n", complete_file_name);
     return fopen(complete_file_name, "w");
 }
 

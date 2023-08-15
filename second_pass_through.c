@@ -72,6 +72,7 @@ void free_bitfield_array(struct bitfield *array[]){
     int i;
     for (i = 0; i < 1024; i++){
         if (array[i] != NULL) {
+            printf("current bitfield index is %d and content is %d\n", i, array[i]->bits);
             free(array[i]);
         }
     }
@@ -139,7 +140,6 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head){
             instruction_index = encode_instruction(line, index, instruction_array, instruction_index, line_number, symbol_head);
         }
     }
-    printf("instruction array index 9 is %d\n", instruction_array[10]->bits);
     free_bitfield_array(instruction_array);
     free_bitfield_array(data_array);
     fclose(input_file);
