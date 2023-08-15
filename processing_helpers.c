@@ -213,7 +213,7 @@ int handle_data_or_string(char line[], int index, int line_number, int check_err
 }
 
 /* extract a .extern symbol name and handle it */
-void handle_extern_or_entry_symbol(char line[], struct symbol_table* head, int index, int extern_or_entry, int line_number){
+void handle_extern_or_entry_symbol(char line[], struct symbol_table* head, int index, int extern_or_entry, int line_number, int dc){
     char symbol_name[MAX_SYMBOL_LENGTH + 1];
     int symbol_index;
     struct symbol_table* symbol;
@@ -245,7 +245,6 @@ void handle_extern_or_entry_symbol(char line[], struct symbol_table* head, int i
         else {
             set_symbol_external_or_entry(search_symbol(head, symbol_name), 1);
         }
-        set_symbol_value(search_symbol(head, symbol_name), 0);
     }
     else if (extern_or_entry == 2){
         contains_entry = 1;

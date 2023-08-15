@@ -5,7 +5,7 @@
 #include "first_pass_through.h"
 #include "processing_helpers.h"
 #include "encoding_functions.h"
-#include "create_obj_files.h"
+#include "create_output_files.h"
 
 
 struct bitfield {
@@ -73,7 +73,7 @@ void free_bitfield_array(struct bitfield *array[]){
     int i;
     for (i = 0; i < 1024; i++){
         if (array[i] != NULL) {
-            printf ("current index: %d current value: %d\n", i, get_bitfield_value(array[i]));
+            print_binary(get_bitfield_value(array[i]));
             free(array[i]);
         }
     }

@@ -31,8 +31,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
     int source_operand_twos_complement, destination_operand_twos_complement, print_third_line;
 
     /* Shift the current_instruction to the left by 5 bits */
-    current_instruction <<= 5;
-    instruction_opcode = num_to_bitfield(current_instruction);
+    instruction_opcode = num_to_bitfield(current_instruction << 5);
     print_third_line = 1;
     destination_ARE = NULL;
 
@@ -53,6 +52,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
         /* Check if the symbol is external or entry */
         if (get_symbol_external_or_entry(source_symbol) == 1) {
             source_ARE = num_to_bitfield(1);
+            source_operand_address = num_to_bitfield(0);
         } else {
             source_ARE = num_to_bitfield(2);
         }
@@ -95,6 +95,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
         /* Check if the symbol is external or entry */
         if (get_symbol_external_or_entry(destination_symbol) == 1) {
             destination_ARE = num_to_bitfield(1);
+            destination_operand_address = num_to_bitfield(0);
         } else {
             destination_ARE = num_to_bitfield(2);
         }
@@ -166,6 +167,7 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
         /* Check if the symbol is external or entry */
         if (get_symbol_external_or_entry(current_symbol) == 1) {
             ARE = num_to_bitfield(1);
+            operand_address = num_to_bitfield(0);
         } else {
             ARE = num_to_bitfield(2);
         }
@@ -206,7 +208,7 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
 int encode_zero_operand_instruction(char* tokens[], struct bitfield *instruction_array[], int current_instruction, int instruction_index){
     struct bitfield *instruction_opcode;
 
-    instruction_opcode = num_to_bitfield(current_instruction);
+    instruction_opcode = num_to_bitfield(current_instruction << 5);
     instruction_array[instruction_index] = instruction_opcode;
     instruction_index++;
 

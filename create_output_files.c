@@ -1,7 +1,7 @@
 
 #include "second_pass_through.h"
 #include "symbol_table.h"
-#include "create_obj_files.h"
+#include "create_output_files.h"
 
 const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -48,5 +48,6 @@ void create_obj_file(char argv[], struct bitfield *instruction_array[], struct b
 
 void create_output_files(char argv[], struct symbol_table *symbol_head, struct bitfield *instruction_array[], struct bitfield *data_array[], int instruction_limit, int data_limit){
     create_obj_file(argv, instruction_array, data_array, instruction_limit, data_limit);
+    /*create_ent_file(argv, symbol_head);*/
 }
 

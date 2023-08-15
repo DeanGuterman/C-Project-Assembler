@@ -134,7 +134,7 @@ int get_symbol_pre_defined_entry(symbol_table* node) {
 
 
 /* Function to check if a symbol already exists in the symbol table */
-int symbol_exists(symbol_table* head, const char* symbol, int line_number) {
+int symbol_exists(symbol_table* head, const char* symbol, int line_number, int value) {
     while (head != NULL) {
         if (strcmp(head->symbol, symbol) == 0) {
             if (head->pre_defined_entry == 1){
@@ -195,7 +195,7 @@ symbol_table* insert_symbol(symbol_table* head, const char* symbol, int value, i
     symbol_table* temp;
     int already_exists;
 
-    already_exists = symbol_exists(head, symbol, line_number);
+    already_exists = symbol_exists(head, symbol, line_number, value);
 
     if (line_number != -1 && check_symbol_legality(symbol, line_number) == 0){
         return NULL;
@@ -208,7 +208,7 @@ symbol_table* insert_symbol(symbol_table* head, const char* symbol, int value, i
 
     else if (already_exists == 2){
         new_symbol = search_symbol(head, symbol);
-        set_symbol_value(new_symbol, 2);
+        set_symbol_value(new_symbol, value);
         set_symbol_external_or_entry(new_symbol, 2);
         return new_symbol;
     }

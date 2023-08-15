@@ -1,7 +1,7 @@
 
 
-#ifndef ASSEMBLER_PROJECT_CREATE_OBJ_FILES_H
-#define ASSEMBLER_PROJECT_CREATE_OBJ_FILES_H
+#ifndef ASSEMBLER_PROJECT_CREATE_OUTPUT_FILES_H
+#define ASSEMBLER_PROJECT_CREATE_OUTPUT_FILES_H
 #include "second_pass_through.h"
 #include "symbol_table.h"
 

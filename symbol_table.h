@@ -40,7 +40,7 @@ int get_symbol_value(struct symbol_table* node);
 struct symbol_table* delete_symbol(struct symbol_table* head, const char* symbol);
 
 /* Function to check if a symbol already exists in the symbol table */
-int symbol_exists(struct symbol_table* head, const char* symbol, int line_number);
+int symbol_exists(struct symbol_table* head, const char* symbol, int line_number, int value);
 
 /* Function to check the legality of a symbol */
 int check_symbol_legality(const char* symbol, int line_number);

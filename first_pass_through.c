@@ -121,9 +121,9 @@ void handle_non_symbol(struct symbol_table *symbol_head, char line[], int line_n
         }
     }
     else if (entry_or_extern_value == 1) { /* If it's a .extern prompt */
-        handle_extern_or_entry_symbol(line, symbol_head, index, 1, line_number);
+        handle_extern_or_entry_symbol(line, symbol_head, index, 1, line_number, *temp_dc);
     } else if (entry_or_extern_value == 2) { /* If it's a .entry prompt */
-        handle_extern_or_entry_symbol(line, symbol_head, index, 2, line_number);
+        handle_extern_or_entry_symbol(line, symbol_head, index, 2, line_number, *temp_dc);
     }
     else{ /* If it's an instruction */
         *temp_ic += get_instruction_line_amount(line, line_number, index, symbol_head, 0);
