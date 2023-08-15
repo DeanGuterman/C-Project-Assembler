@@ -1,6 +1,10 @@
 #ifndef SYMBOL_TABLE_H
 #define SYMBOL_TABLE_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 #include "utils.h"
 
 typedef struct symbol_table symbol_table; /* Forward declaration */

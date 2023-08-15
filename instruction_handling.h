@@ -6,9 +6,6 @@
 #include <ctype.h>
 #include "utils.h"
 
-extern int error_free;
-extern const char* instruction_names[];
-extern const char* register_names[];
 
 /* Find the index of an instruction in the instruction names array */
 int find_instruction_index(char* token_instruction, int line_number, int check_errors);

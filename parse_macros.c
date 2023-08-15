@@ -1,12 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "parse_macros.h"
 #include "utils.h"
-
-
-extern int error_free;
-extern const char* reserved_names[];
+#include "parse_macros.h"
 
 
 /* Structure to hold macro information */

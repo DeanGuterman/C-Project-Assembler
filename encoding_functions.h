@@ -3,7 +3,15 @@
 #ifndef ASSEMBLER_PROJECT_ENCODING_FUNCTIONS_H
 #define ASSEMBLER_PROJECT_ENCODING_FUNCTIONS_H
 
+#include <ctype.h>
+
+#include "encoding_functions.h"
+
 #include "second_pass_through.h"
+
+#include "utils.h"
+
+#include "instruction_handling.h"
 
 struct bitfield;
 

@@ -7,8 +7,6 @@
 #include "instruction_handling.h"
 #include "first_pass_through.h"
 
-extern int contains_extern;
-extern int contains_entry;
 
 char* extract_symbol(const char line[]) {
     int index;
@@ -100,7 +98,6 @@ void handle_symbol(struct symbol_table *symbol_head, char line[], int line_numbe
     else if(data_or_string_value == 0){ /* If it's not a .data, .string, .extern, or .entry  prompt */
         *temp_ic += get_instruction_line_amount(line, line_number, index, symbol_head, 0);
     }
-    free(symbol_name);
 }
 
 void handle_non_symbol(struct symbol_table *symbol_head, char line[], int line_number, int *temp_ic, int *temp_dc){

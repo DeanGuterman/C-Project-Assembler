@@ -2,16 +2,16 @@
 #ifndef FIRST_PASS_THROUGH_H
 #define FIRST_PASS_THROUGH_H
 
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 #include "utils.h"
+#include "symbol_table.h"
+#include "processing_helpers.h"
+#include "instruction_handling.h"
 
 /* Extracts a symbol from a line */
 char* extract_symbol(const char line[]);
-
-
-
-
-
 
 
 /* Handle a line with a symbol declaration */

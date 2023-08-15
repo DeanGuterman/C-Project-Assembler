@@ -4,8 +4,6 @@
 #include "utils.h"
 #include "processing_helpers.h"
 
-extern int contains_extern;
-extern int contains_entry;
 
 /* Extracts the number of chars in a .string */
 int handle_string(char line[], int index, int line_number, int check_errors){

@@ -1,9 +1,10 @@
-
+#ifndef UTILS_H
+#define UTILS_H
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "symbol_table.h"
-#include "second_pass_through.h"
 
 #define TEMP_SYMBOL_NAME "mov"
 #define MAX_LINE_LENGTH 81
@@ -14,6 +15,12 @@
 #define REGISTER_NAMES {"@r0", "@r1", "@r2", "@r3", "@r4","@r5", "@r6", "@r7"}
 
 struct symbol_table;
+extern int error_free;
+extern int contains_extern;
+extern int contains_entry;
+extern char* reserved_names[];
+extern char* instruction_names[];
+extern char* register_names[];
 
 /* Free symbol table */
 void free_tables(struct symbol_table* symbol_head);
@@ -26,4 +33,4 @@ FILE* open_file(char* file_name, char* file_type);
 /* Create output file for writing */
 FILE* create_output_file(char* file_name, char* file_type);
 
-
+#endif

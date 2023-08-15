@@ -5,9 +5,6 @@
 #include "utils.h"
 #include "symbol_table.h"
 
-extern int error_free;
-extern const char* reserved_names[];
-
 
 struct symbol_table {
     char symbol[MAX_SYMBOL_LENGTH + 1];

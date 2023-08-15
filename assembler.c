@@ -1,3 +1,5 @@
+
+#include <stdio.h>
 #include "symbol_table.h"
 #include "utils.h"
 #include "parse_macros.h"
@@ -5,7 +7,7 @@
 #include "error_detection_pass.h"
 #include "second_pass_through.h"
 #include "assembler.h"
-#include <stdio.h>
+
 /* system size is 1024, so ic+dc <= 924 as 100 first ones are saved */
 
 /*
@@ -29,21 +31,29 @@
  * CURRENT TO DO IS JUST TO DO WORDS WITH 2 OPERANDS AND THEN PRINT EVERYTHING (ALSO SOMETHING ABOUT CHECKING IF ENTRYS WERE USED)
  */
 
-
+int contains_extern;
+int contains_entry;
+int error_free;
 
 int main(int argc, char* argv[]){
     int i;
 
+    if(argc < 2){
+        printf("Error: no files were given to the assembler\n");
+        return 0;
+    }
+
     for (i = 1; i < argc; i++){
         struct symbol_table* symbol_head;
-        extern int contains_extern;
         int IC, DC;
 
 
         IC = 0;
         DC = 0;
         contains_extern = 0;
+        contains_entry = 0;
         error_free = 1;
+
         symbol_head = insert_symbol(NULL, TEMP_SYMBOL_NAME, -1, -1);
         parse_macros(argv[i]);
         if (error_free == 1) {

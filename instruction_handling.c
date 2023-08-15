@@ -5,6 +5,10 @@
 #include "utils.h"
 #include "instruction_handling.h"
 
+char* reserved_names[] = RESERVED_NAMES;
+char* instruction_names[] = INSTRUCTION_NAMES;
+char* register_names[] = REGISTER_NAMES;
+
 
 
 int find_instruction_index(char* token_instruction, int line_number, int check_errors){

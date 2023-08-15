@@ -4,7 +4,6 @@
 #define ASSEMBLER_PROJECT_SECOND_PASS_THROUGH_H
 #include "symbol_table.h"
 #include "utils.h"
-#include "second_pass_through.h"
 #include "first_pass_through.h"
 #include "processing_helpers.h"
 #include "encoding_functions.h"

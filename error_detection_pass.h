@@ -3,8 +3,8 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include "error_detection_pass.h"
 #include "utils.h"
-#include "processing_helpers.h"
 #include "instruction_handling.h"
 #include "first_pass_through.h"
 
