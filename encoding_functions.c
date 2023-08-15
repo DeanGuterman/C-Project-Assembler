@@ -48,7 +48,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
     /* Check if the operand starts with '@' */
     if (strncmp(tokens[1], "@", 1) == 0) {
         /* Handle direct addressing */
-        source_method = num_to_bitfield(20);
+        source_method = num_to_bitfield(5 << 9);
         source_operand_address = num_to_bitfield(tokens[1][2] << 7);
         source_ARE = num_to_bitfield(0);
     } else if (source_symbol != NULL) {
@@ -85,19 +85,17 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
     destination_symbol = search_symbol(symbol_head, tokens[2]);
 
     if (strncmp(tokens[2], "@", 1) == 0) {
+        destination_method = num_to_bitfield(20);
         if (strncmp(tokens[1], "@", 1) == 0) {
             print_third_line = 0;
-            destination_operand_address = num_to_bitfield(
-                    get_bitfield_value(destination_operand_address) | (tokens[2][2] << 2));
+            destination_operand_address = num_to_bitfield(tokens[2][2] << 2);
         } else {
-            /* Handle direct addressing */
-            destination_method = num_to_bitfield(20);
-            destination_operand_address = num_to_bitfield(tokens[1][2] << 7);
+            destination_operand_address = num_to_bitfield(tokens[2][2] << 7);
             destination_ARE = num_to_bitfield(0);
         }
     } else if(destination_symbol != NULL){
         /* Handle symbol addressing */
-        destination_method = num_to_bitfield(12);
+        destination_method = num_to_bitfield(3 << 2);
         destination_operand_address = num_to_bitfield(get_symbol_value(destination_symbol) << 2);
 
         /* Check if the symbol is external or entry */
@@ -126,8 +124,19 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
         }
     }
 
+    /*printf("instruction opcode: %d\nsource method: %d\ndestination method: %d\n", get_bitfield_value(instruction_opcode), get_bitfield_value(source_method), get_bitfield_value(destination_method));*/
     /* Store instruction components in instruction_array */
-    instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(instruction_opcode) | get_bitfield_value(source_method));
+    instruction_array[instruction_index++] = num_to_bitfield(
+            get_bitfield_value(instruction_opcode) | get_bitfield_value(source_method) | get_bitfield_value(destination_method));
+    if (print_third_line == 1){
+        printf("source operand address is: %d\n source ARE is: %d\n", get_bitfield_value(source_operand_address), get_bitfield_value(source_ARE));
+        instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(source_operand_address) | get_bitfield_value(source_ARE));
+        instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(destination_operand_address) | get_bitfield_value(destination_ARE));
+    }
+    else {
+        instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(source_operand_address) | get_bitfield_value(destination_operand_address) | get_bitfield_value(source_ARE));
+    }
+    return instruction_index;
 }
 
 
@@ -233,7 +242,7 @@ int encode_instruction(const char line[], int index, struct bitfield *instructio
     current_instruction = find_instruction_index(tokens[0], line_number, 0);
 
     if(current_instruction >= 0 && current_instruction <= 5){
-        return instruction_index /*  encode_double_operand_instruction(tokens, instruction_array, current_instruction, instruction_index)*/;
+        return encode_double_operand_instruction(tokens, instruction_array, current_instruction, instruction_index, symbol_head, line_number);
     }
     else if(current_instruction >= 6 && current_instruction <= 13){
         return   encode_single_operand_instruction(tokens, instruction_array, current_instruction, instruction_index, symbol_head, line_number);
