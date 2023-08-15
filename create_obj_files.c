@@ -37,6 +37,11 @@ void create_obj_file(char argv[], struct bitfield *instruction_array[], struct b
         fprintf(obj_file, "%s\n", converted_to_base64);
         free(converted_to_base64);
     }
+    for(i = 0; i < data_limit; i++){
+        converted_to_base64 = encode_base64(data_array[i]);
+        fprintf(obj_file, "%s\n", converted_to_base64);
+        free(converted_to_base64);
+    }
 
     fclose(obj_file);
 }

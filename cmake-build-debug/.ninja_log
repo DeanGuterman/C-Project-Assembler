@@ -17,3 +17,5 @@
 194	299	7138280425961115	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
 222	306	7138280426091041	CMakeFiles/assembler_project.dir/create_obj_files.c.obj	3cfbccaeb891191f
 306	508	7138280427650144	assembler_project.exe	dd66ce63c5e1a3a6
+3	126	7138281823314752	CMakeFiles/assembler_project.dir/create_obj_files.c.obj	3cfbccaeb891191f
+127	277	7138281824803882	assembler_project.exe	dd66ce63c5e1a3a6
