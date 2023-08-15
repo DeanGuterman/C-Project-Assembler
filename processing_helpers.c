@@ -242,7 +242,10 @@ void handle_extern_or_entry_symbol(char line[], struct symbol_table* head, int i
         if (search_symbol(head, symbol_name) == NULL) {
             set_symbol_external_or_entry(insert_symbol(head, symbol_name, 0, line_number), 1);
         }
-        else set_symbol_external_or_entry(search_symbol(head, symbol_name), 1);
+        else {
+            set_symbol_external_or_entry(search_symbol(head, symbol_name), 1);
+        }
+        set_symbol_value(search_symbol(head, symbol_name), 0);
     }
     else if (extern_or_entry == 2){
         contains_entry = 1;

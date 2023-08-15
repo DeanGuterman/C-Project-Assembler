@@ -80,6 +80,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
     if (strncmp(tokens[2], "@", 1) == 0) {
         destination_method = num_to_bitfield(20);
         if (strncmp(tokens[1], "@", 1) == 0) {
+            printf("current instruction: %d\n", current_instruction);
             print_third_line = 0;
             destination_operand_address = num_to_bitfield((tokens[2][2] - '0' )<< 2);
         } else {

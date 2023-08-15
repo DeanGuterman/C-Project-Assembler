@@ -19,3 +19,9 @@
 306	508	7138280427650144	assembler_project.exe	dd66ce63c5e1a3a6
 3	126	7138281823314752	CMakeFiles/assembler_project.dir/create_obj_files.c.obj	3cfbccaeb891191f
 127	277	7138281824803882	assembler_project.exe	dd66ce63c5e1a3a6
+1	92	7138282625675945	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
+92	205	7138282626715342	assembler_project.exe	dd66ce63c5e1a3a6
+1	96	7138284485645262	CMakeFiles/assembler_project.dir/processing_helpers.c.obj	db13ff321dae8925
+97	200	7138284486634695	assembler_project.exe	dd66ce63c5e1a3a6
+2	202	7138286214160235	CMakeFiles/assembler_project.dir/encoding_functions.c.obj	2f4d77c6fc987489
+202	318	7138286215289587	assembler_project.exe	dd66ce63c5e1a3a6

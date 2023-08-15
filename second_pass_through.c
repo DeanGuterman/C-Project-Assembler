@@ -73,6 +73,7 @@ void free_bitfield_array(struct bitfield *array[]){
     int i;
     for (i = 0; i < 1024; i++){
         if (array[i] != NULL) {
+            printf ("current index: %d current value: %d\n", i, get_bitfield_value(array[i]));
             free(array[i]);
         }
     }
