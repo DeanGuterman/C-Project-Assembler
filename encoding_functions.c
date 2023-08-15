@@ -34,6 +34,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
     current_instruction <<= 5;
     instruction_opcode = num_to_bitfield(current_instruction);
     print_third_line = 1;
+    destination_ARE = NULL;
 
     source_symbol = search_symbol(symbol_head, tokens[1]);
     destination_symbol = search_symbol(symbol_head, tokens[2]);
@@ -126,6 +127,13 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
         instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(source_operand_address) | get_bitfield_value(destination_operand_address) | get_bitfield_value(source_ARE));
     }
 
+    free(instruction_opcode);
+    free(source_method);
+    free(source_operand_address);
+    free(source_ARE);
+    free(destination_method);
+    free(destination_operand_address);
+    free(destination_ARE);
     return instruction_index;
 }
 
