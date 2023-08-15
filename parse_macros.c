@@ -157,7 +157,7 @@ void parse_macros(char* argv) {
 
     output_file = create_output_file(argv, ".am");
     if (output_file == NULL) {
-        printf("Error creating output file: %s\n", argv);
+        printf("Error creating .am file: %s\n", argv);
         fclose(input_file);
         error_free = 0;
         return;
