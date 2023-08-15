@@ -5,8 +5,6 @@
 
 #include <ctype.h>
 
-#include "encoding_functions.h"
-
 #include "second_pass_through.h"
 
 #include "utils.h"

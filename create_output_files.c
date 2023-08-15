@@ -1,7 +1,10 @@
 
-#include "second_pass_through.h"
-#include "symbol_table.h"
 #include "create_output_files.h"
+
+#include "second_pass_through.h"
+
+#include "symbol_table.h"
+
 
 const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 

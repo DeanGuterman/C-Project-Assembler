@@ -1,9 +1,11 @@
 
 
-#ifndef ASSEMBLER_PROJECT_CREATE_OUTPUT_FILES_H
-#define ASSEMBLER_PROJECT_CREATE_OUTPUT_FILES_H
+#ifndef CREATE_OUTPUT_FILES_H
+#define CREATE_OUTPUT_FILES_H
 #include "second_pass_through.h"
 #include "symbol_table.h"
+
+struct bitfield;
 
 char* encode_base64(struct bitfield *bf);
 void create_obj_file(char argv[], struct bitfield *instruction_array[], struct bitfield *data_array[], int instruction_limit, int data_limit);
