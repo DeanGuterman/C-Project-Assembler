@@ -25,6 +25,112 @@ int is_valid_operand_num(char num_string[]){
     return 1;
 }
 
+int encode_double_operand_instruction(char * tokens[], struct bitfield * instruction_array[], int current_instruction, int instruction_index, struct symbol_table * symbol_head, int line_number) {
+    struct bitfield *instruction_opcode;
+    struct bitfield *source_ARE;
+    struct bitfield *destination_ARE;
+    struct bitfield *source_method;
+    struct bitfield *destination_method;
+    struct bitfield *source_operand_address;
+    struct bitfield *destination_operand_address;
+    struct symbol_table *source_symbol;
+    struct symbol_table *destination_symbol;
+    int source_operand_twos_complement;
+    int destination_operand_twos_complement;
+    int print_third_line;
+
+    current_instruction <<= 5;
+    instruction_opcode = num_to_bitfield(current_instruction);
+    print_third_line = 1;
+
+    source_symbol = search_symbol(symbol_head, tokens[1]);
+
+    /* Check if the operand starts with '@' */
+    if (strncmp(tokens[1], "@", 1) == 0) {
+        /* Handle direct addressing */
+        source_method = num_to_bitfield(20);
+        source_operand_address = num_to_bitfield(tokens[1][2] << 7);
+        source_ARE = num_to_bitfield(0);
+    } else if (source_symbol != NULL) {
+        /* Handle symbol addressing */
+        source_method = num_to_bitfield(12);
+        source_operand_address = num_to_bitfield(get_symbol_value(source_symbol) << 2);
+
+        /* Check if the symbol is external or entry */
+        if (get_symbol_external_or_entry(source_symbol) == 1) {
+            source_ARE = num_to_bitfield(1);
+        } else {
+            source_ARE = num_to_bitfield(2);
+        }
+    } else {
+        /* Handle numeric operand */
+        if (is_valid_operand_num(tokens[1]) == 1) {
+            source_method = num_to_bitfield(4);
+            source_operand_twos_complement = twos_complement(atoi(tokens[1]));
+
+            /* Check if the operand is negative */
+            if (atoi(tokens[1]) < 0) {
+                source_operand_twos_complement |= (1 << 8);
+            }
+            source_operand_address = num_to_bitfield(source_operand_twos_complement << 2);
+            source_ARE = num_to_bitfield(0);
+        } else {
+            /* Invalid operand, print error message and set error flag */
+            printf("Error: invalid operand at line %d\n", line_number);
+            error_free = 0;
+            return instruction_index;
+        }
+    }
+
+    destination_symbol = search_symbol(symbol_head, tokens[2]);
+
+    if (strncmp(tokens[2], "@", 1) == 0) {
+        if (strncmp(tokens[1], "@", 1) == 0) {
+            print_third_line = 0;
+            destination_operand_address = num_to_bitfield(
+                    get_bitfield_value(destination_operand_address) | (tokens[2][2] << 2));
+        } else {
+            /* Handle direct addressing */
+            destination_method = num_to_bitfield(20);
+            destination_operand_address = num_to_bitfield(tokens[1][2] << 7);
+            destination_ARE = num_to_bitfield(0);
+        }
+    } else if(destination_symbol != NULL){
+        /* Handle symbol addressing */
+        destination_method = num_to_bitfield(12);
+        destination_operand_address = num_to_bitfield(get_symbol_value(destination_symbol) << 2);
+
+        /* Check if the symbol is external or entry */
+        if (get_symbol_external_or_entry(destination_symbol) == 1) {
+            destination_ARE = num_to_bitfield(1);
+        } else {
+            destination_ARE = num_to_bitfield(2);
+    }
+    } else {
+        /* Handle numeric operand */
+        if (is_valid_operand_num(tokens[2]) == 1) {
+            destination_method = num_to_bitfield(4);
+            destination_operand_twos_complement = twos_complement(atoi(tokens[2]));
+
+            /* Check if the operand is negative */
+            if (atoi(tokens[2]) < 0) {
+                destination_operand_twos_complement |= (1 << 8);
+            }
+            destination_operand_address = num_to_bitfield(destination_operand_twos_complement << 2);
+            destination_ARE = num_to_bitfield(0);
+        } else {
+            /* Invalid operand, print error message and set error flag */
+            printf("Error: invalid operand at line %d\n", line_number);
+            error_free = 0;
+            return instruction_index;
+        }
+    }
+
+    /* Store instruction components in instruction_array */
+    instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(instruction_opcode) | get_bitfield_value(source_method));
+}
+
+
 
 int encode_single_operand_instruction(char* tokens[], struct bitfield *instruction_array[], int current_instruction, int instruction_index, struct symbol_table *symbol_head, int line_number){
     struct bitfield *instruction_opcode;
@@ -34,48 +140,60 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
     struct symbol_table *current_symbol;
     int operand_twos_complement;
 
+    /* Shift the current_instruction to left by 5 bits */
     current_instruction <<= 5;
     instruction_opcode = num_to_bitfield(current_instruction);
+
+    /* Search for the current symbol in the symbol table */
     current_symbol = search_symbol(symbol_head, tokens[1]);
 
-    if (strncmp(tokens[1], "@", 1) == 0){
+    /* Check if the operand starts with '@' */
+    if (strncmp(tokens[1], "@", 1) == 0) {
+        /* Handle direct addressing */
         destination_method = num_to_bitfield(20);
-        operand_address = num_to_bitfield(tokens[1][2]<<7);
+        operand_address = num_to_bitfield(tokens[1][2] << 7);
         ARE = num_to_bitfield(0);
-    }
-    else if(current_symbol != NULL){
+    } else if (current_symbol != NULL) {
+        /* Handle symbol addressing */
         destination_method = num_to_bitfield(12);
-        operand_address = num_to_bitfield(get_symbol_value(current_symbol)<<2);
-        if(get_symbol_external_or_entry(current_symbol) == 1){
+        operand_address = num_to_bitfield(get_symbol_value(current_symbol) << 2);
+
+        /* Check if the symbol is external or entry */
+        if (get_symbol_external_or_entry(current_symbol) == 1) {
             ARE = num_to_bitfield(1);
-        }
-        else{
+        } else {
             ARE = num_to_bitfield(2);
         }
-    }
-    else {
-        if (is_valid_operand_num(tokens[1]) == 1){
+    } else {
+        /* Handle numeric operand */
+        if (is_valid_operand_num(tokens[1]) == 1) {
             destination_method = num_to_bitfield(4);
             operand_twos_complement = twos_complement(atoi(tokens[1]));
-            if (atoi(tokens[1]) < 0){
-                operand_twos_complement |= (1<<8);
-            }
-            operand_address = num_to_bitfield(operand_twos_complement<<2);
 
+            /* Check if the operand is negative */
+            if (atoi(tokens[1]) < 0) {
+                operand_twos_complement |= (1 << 8);
+            }
+            operand_address = num_to_bitfield(operand_twos_complement << 2);
             ARE = num_to_bitfield(0);
-        }
-        else{
+        } else {
+            /* Invalid operand, print error message and set error flag */
             printf("Error: invalid operand at line %d\n", line_number);
             error_free = 0;
             return instruction_index;
         }
     }
+
+    /* Store instruction components in instruction_array */
     instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(instruction_opcode) | get_bitfield_value(destination_method));
     instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(operand_address) | get_bitfield_value(ARE));
+
+    /* Free dynamically allocated memory */
     free(instruction_opcode);
     free(destination_method);
     free(operand_address);
     free(ARE);
+
     return instruction_index;
 }
 
