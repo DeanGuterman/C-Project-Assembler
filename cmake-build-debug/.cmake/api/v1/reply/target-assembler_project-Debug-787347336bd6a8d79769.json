@@ -237,12 +237,12 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "create_obj_files.c",
+			"path" : "create_output_files.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "create_obj_files.h",
+			"path" : "create_output_files.h",
 			"sourceGroupIndex" : 1
 		}
 	],

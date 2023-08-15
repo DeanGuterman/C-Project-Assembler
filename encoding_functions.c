@@ -167,6 +167,7 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
         /* Check if the symbol is external or entry */
         if (get_symbol_external_or_entry(current_symbol) == 1) {
             ARE = num_to_bitfield(1);
+            free(operand_address);
             operand_address = num_to_bitfield(0);
         } else {
             ARE = num_to_bitfield(2);

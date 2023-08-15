@@ -152,6 +152,7 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head, int *IC, i
 
         if (symbol_name != NULL) {
             handle_symbol(symbol_head, line, line_number, symbol_name, &temp_ic, &temp_dc);
+            free(symbol_name);
         }
 
         else{
