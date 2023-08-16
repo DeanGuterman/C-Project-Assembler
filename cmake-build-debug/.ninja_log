@@ -40,3 +40,10 @@
 109	276	7139068012635181	assembler_project.exe	e090258e678954da
 2	88	7139070016801165	CMakeFiles/assembler_project.dir/instruction_handling.c.obj	de87ccebe40c2d
 89	188	7139070017720738	assembler_project.exe	e090258e678954da
+2	90	7139076856714982	CMakeFiles/assembler_project.dir/create_output_files.c.obj	20dfc451d51f5bac
+90	200	7139076857774374	assembler_project.exe	e090258e678954da
+2	106	7139077618252970	CMakeFiles/assembler_project.dir/assembler.c.obj	a920149f88347313
+10	110	7139077618292947	CMakeFiles/assembler_project.dir/encoding_functions.c.obj	2f4d77c6fc987489
+7	114	7139077618312941	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
+106	182	7139077619012688	CMakeFiles/assembler_project.dir/create_output_files.c.obj	20dfc451d51f5bac
+182	292	7139077620041938	assembler_project.exe	e090258e678954da
