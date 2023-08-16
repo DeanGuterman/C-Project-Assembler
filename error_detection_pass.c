@@ -83,6 +83,9 @@ void error_detection_pass (char* argv, struct symbol_table* symbol_head, int IC,
             printf("Error: Symbol %s is declared as entry but not defined\n", get_symbol(symbol_head));
             error_free = 0;
         }
+        if (get_symbol_type(symbol_head) == 1){
+            set_symbol_value(symbol_head, get_symbol_value(symbol_head) + IC);
+        }
         symbol_head = get_next_symbol(symbol_head);
     }
 

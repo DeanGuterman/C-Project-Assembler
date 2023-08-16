@@ -33,6 +33,8 @@ int set_symbol_value(struct symbol_table* node, int value);
 /* Function to set a symbol's type */
 void set_symbol_type(struct symbol_table* node, int type);
 
+int get_symbol_type(symbol_table* node);
+
 
 int get_symbol_value(struct symbol_table* node);
 

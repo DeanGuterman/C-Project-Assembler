@@ -9,7 +9,7 @@
 struct symbol_table {
     char symbol[MAX_SYMBOL_LENGTH + 1];
     int value; /* ic or dc value */
-    int type; /* 1 for data, 2 for code */
+    int type; /*0 for instruction, 1 for data */
     int is_extern_or_entry; /* 1 for external, 2 for entry*/
     int pre_defined_entry; /* 1 for pre-defined entry, 0 for not */
     struct symbol_table* next;
@@ -79,6 +79,13 @@ void set_symbol_type(symbol_table* node, int type) {
     node->type = type;
 }
 
+int get_symbol_type(symbol_table* node) {
+    if (node == NULL) {
+        return 0;
+    }
+    return node->type;
+}
+
 /* Function to set a symbol's is_extern_or_entry value */
 void set_symbol_is_extern_or_entry(symbol_table* node, int is_extern_or_entry) {
     if (node == NULL) {
@@ -117,6 +124,7 @@ symbol_table* delete_symbol(symbol_table* head, const char* symbol) {
     free(temp);
     return head;
 }
+
 
 void set_symbol_pre_defined_entry(symbol_table* node, int pre_defined_entry) {
     if(node == NULL) {
@@ -228,6 +236,7 @@ symbol_table* insert_symbol(symbol_table* head, const char* symbol, int value, i
     new_symbol->type = -1;
     new_symbol->is_extern_or_entry = -1;
     new_symbol->pre_defined_entry = 0;
+    new_symbol->type = 0;
     new_symbol->next = NULL;
 
     if (head != NULL){
