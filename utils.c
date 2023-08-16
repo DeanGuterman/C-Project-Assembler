@@ -8,6 +8,7 @@ void free_tables(struct symbol_table* symbol_head){
     while (symbol_head != NULL) {
         struct symbol_table* temp;
         temp = symbol_head;
+        printf("freeing symbol %s value is %d\n", get_symbol(temp), get_symbol_value(temp));
         symbol_head = get_next_symbol(symbol_head);
         free(temp);
     }
