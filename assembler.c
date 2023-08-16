@@ -9,6 +9,20 @@
 /*
  * Coded by Dean Guterman for the Open University
  *
+ * This program reads assembly files and outputs object, extern, and entry files
+ *
+ * The program is divided into several parts:
+ * First is the macro parsing part, in which macros are stored in a linked list and parsed (minor error checking occurs here, too)
+ * Second is the first pass through the file, in which the symbol table is created
+ * Third is the error detection pass, in which most of the error_checking heavy duty is done
+ * Fourth is the second pass through the file, in which the instructions and data are encoded
+ * Then, if no errors were found, the output files are created
+ *
+ * Every decision I have made that is related to how the instructions can be interpreted is based on the course booklet
+ * Memory leaks were checked using valgrind
+ *
+ * On a personal note, in contrast to some other assignments in other courses, I actually found this assignment to be quite enjoyable!
+ * Thanks for reading, and I hope you enjoy my code!
  */
 
 
