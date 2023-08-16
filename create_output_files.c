@@ -49,8 +49,33 @@ void create_obj_file(char argv[], struct bitfield *instruction_array[], struct b
     fclose(obj_file);
 }
 
+void create_ent_file(char argv[], struct symbol_table *symbol_head){
+    FILE* ent_file;
+    struct symbol_table *current_symbol;
+
+    current_symbol = symbol_head;
+
+
+    ent_file = create_output_file(argv, ".ent");
+    if (ent_file == NULL) {
+        printf("Error creating entry file: %s\n", argv);
+        return;
+    }
+
+    while (current_symbol != NULL){
+        if (get_symbol_external_or_entry(current_symbol) == 2){
+            fprintf(ent_file, "%s %d\n", get_symbol(current_symbol), get_symbol_value(current_symbol));
+        }
+        current_symbol = get_next_symbol(current_symbol);
+    }
+
+    free(current_symbol);
+    fclose(ent_file);
+}
+
 void create_output_files(char argv[], struct symbol_table *symbol_head, struct bitfield *instruction_array[], struct bitfield *data_array[], int instruction_limit, int data_limit){
     create_obj_file(argv, instruction_array, data_array, instruction_limit, data_limit);
-    /*create_ent_file(argv, symbol_head);*/
+    if (contains_entry)
+        create_ent_file(argv, symbol_head);
 }
 
