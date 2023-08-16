@@ -74,6 +74,7 @@ void free_bitfield_array(struct bitfield *array[]){
     for (i = 0; i < 1024; i++){
         if (array[i] != NULL) {
             /*print current bitfield in binary*/
+            printf("bitfield %d: ", i);
             print_binary(get_bitfield_value(array[i]));
             free(array[i]);
         }
