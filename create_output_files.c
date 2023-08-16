@@ -82,19 +82,29 @@ void create_ent_file(char argv[], struct symbol_table *symbol_head){
 void create_ext_file(char argv[]){
     FILE* ext_file;
     int i;
+    int create_file;
 
-    ext_file = create_output_file(argv, ".ext");
-    if (ext_file == NULL) {
-        printf("Error creating extern file: %s\n", argv);
-        return;
-    }
+    create_file = 0;
+
     for (i = 0; i < MAX_MEMORY_SIZE; i++){
-        if (extern_list[i] != NULL){
-            if (extern_list[i][0] != '\0')
-            fprintf(ext_file, "%s %d\n", extern_list[i], i);
+        if (extern_list[i][0] != '\0'){
+            create_file = 1;
         }
     }
-    fclose(ext_file);
+    if (create_file == 1) {
+        ext_file = create_output_file(argv, ".ext");
+        if (ext_file == NULL) {
+            printf("Error creating extern file: %s\n", argv);
+            return;
+        }
+        for (i = 0; i < MAX_MEMORY_SIZE; i++) {
+            if (extern_list[i] != NULL) {
+                if (extern_list[i][0] != '\0')
+                    fprintf(ext_file, "%s %d\n", extern_list[i], i);
+            }
+        }
+        fclose(ext_file);
+    }
 }
 
 void create_output_files(char argv[], struct symbol_table *symbol_head, struct bitfield *instruction_array[], struct bitfield *data_array[], int instruction_limit, int data_limit){

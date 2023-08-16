@@ -104,6 +104,9 @@ int check_two_operand(int line_number, int instruction_index, int num_of_tokens,
     else if (is_valid_register(tokens[1]) && is_valid_register(tokens[2])){
         return 2;
     }
+    else if(is_valid_symbol(tokens[1], symbol_head) && is_valid_symbol(tokens[2], symbol_head)){
+        return 3;
+    }
     else if (is_valid_register(tokens[1]) && is_valid_symbol(tokens[2], symbol_head)){
         return 3;
     }

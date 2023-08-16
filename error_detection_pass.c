@@ -77,7 +77,7 @@ void error_detection_pass (char* argv, struct symbol_table* symbol_head, int IC,
         }
         free(symbol_name);
     }
-    /* Check all entries have suitable symbol declarations */
+    /* Check all entries have suitable symbol declarations, and update the data symbols' value */
     while(symbol_head != NULL){
         if (get_symbol_external_or_entry(symbol_head) == 2 && get_symbol_pre_defined_entry(symbol_head) == 1){
             printf("Error: Symbol %s is declared as entry but not defined\n", get_symbol(symbol_head));

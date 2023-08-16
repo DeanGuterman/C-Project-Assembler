@@ -26,3 +26,17 @@
 311	405	7139060295942941	CMakeFiles/assembler_project.dir/create_output_files.c.obj	20dfc451d51f5bac
 316	416	7139060296082858	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
 416	513	7139060297002332	assembler_project.exe	e090258e678954da
+2	81	7139061837330417	CMakeFiles/assembler_project.dir/error_detection_pass.c.obj	af2622b656ff9f4
+81	177	7139061838249887	assembler_project.exe	e090258e678954da
+2	87	7139065299197888	CMakeFiles/assembler_project.dir/create_output_files.c.obj	20dfc451d51f5bac
+88	196	7139065300247286	assembler_project.exe	e090258e678954da
+2	84	7139065569639583	CMakeFiles/assembler_project.dir/create_output_files.c.obj	20dfc451d51f5bac
+85	202	7139065570768775	assembler_project.exe	e090258e678954da
+2	90	7139066159893014	CMakeFiles/assembler_project.dir/create_output_files.c.obj	20dfc451d51f5bac
+90	197	7139066160922419	assembler_project.exe	e090258e678954da
+2	80	7139067882793604	CMakeFiles/assembler_project.dir/utils.c.obj	e3bac11620b15379
+80	185	7139067883813026	assembler_project.exe	e090258e678954da
+2	109	7139068011006106	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
+109	276	7139068012635181	assembler_project.exe	e090258e678954da
+2	88	7139070016801165	CMakeFiles/assembler_project.dir/instruction_handling.c.obj	de87ccebe40c2d
+89	188	7139070017720738	assembler_project.exe	e090258e678954da
