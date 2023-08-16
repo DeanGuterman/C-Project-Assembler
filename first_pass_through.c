@@ -88,7 +88,6 @@ void handle_symbol(struct symbol_table *symbol_head, char line[], int line_numbe
     else if (data_or_string_value > 0){ /* If it's a .data or .string prompt */
         set_symbol_value(new_symbol, *temp_dc);
         *temp_dc += data_or_string_value;
-        *temp_ic += data_or_string_value;
     }
 
     else if(entry_or_extern_value == 1){ /* If it's a .extern prompt */
