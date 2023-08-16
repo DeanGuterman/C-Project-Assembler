@@ -19,7 +19,7 @@ int classify_data_or_string(char line[], int index);
 int handle_data_or_string(char line[], int index, int line_number, int check_errors);
 
 /* Extracts a .extern symbol name and handles it */
-void handle_extern_or_entry_symbol(char line[], struct symbol_table* head, int index, int extern_or_entry, int line_number, int dc);
+void handle_extern_or_entry_symbol(char line[], struct symbol_table* head, int index, int extern_or_entry, int line_number);
 
 /* Check if it's a .entry or .extern prompt, and return a corresponding int value */
 int classify_extern_or_entry(char line[], int index);

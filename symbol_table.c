@@ -23,7 +23,7 @@ symbol_table* get_next_symbol(symbol_table* node) {
     return node->next;
 }
 
-/* Function to return the symbol */
+/* Function to return a symbol */
 char* get_symbol(symbol_table* node) {
     if(node == NULL) {
         return NULL;
@@ -31,6 +31,7 @@ char* get_symbol(symbol_table* node) {
     return node->symbol;
 }
 
+/* Function to get a symbol's value */
 int get_symbol_value(symbol_table* node) {
     if(node == NULL) {
         return 0;
@@ -38,6 +39,7 @@ int get_symbol_value(symbol_table* node) {
     return node->value;
 }
 
+/* Function to set a symbol's value */
 int set_symbol_value(symbol_table* node, int value) {
     if(node == NULL) {
         return 0;
@@ -57,6 +59,7 @@ symbol_table* search_symbol(symbol_table* head, const char* symbol) {
     return NULL;
 }
 
+/* Function to set a symbol's external or entry value */
 void set_symbol_external_or_entry(symbol_table* node, int extern_or_entry) {
     if(node == NULL) {
         return;
@@ -64,6 +67,7 @@ void set_symbol_external_or_entry(symbol_table* node, int extern_or_entry) {
     node->is_extern_or_entry = extern_or_entry;
 }
 
+/* Function to get a symbol's external or entry value */
 int get_symbol_external_or_entry(symbol_table* node) {
     if(node == NULL) {
         return 0;
@@ -79,6 +83,7 @@ void set_symbol_type(symbol_table* node, int type) {
     node->type = type;
 }
 
+/* Function to get a symbol's type */
 int get_symbol_type(symbol_table* node) {
     if (node == NULL) {
         return 0;
@@ -86,46 +91,7 @@ int get_symbol_type(symbol_table* node) {
     return node->type;
 }
 
-/* Function to set a symbol's is_extern_or_entry value */
-void set_symbol_is_extern_or_entry(symbol_table* node, int is_extern_or_entry) {
-    if (node == NULL) {
-        return;
-    }
-    node->is_extern_or_entry = is_extern_or_entry;
-}
-
-/* Function to search and delete a symbol in the symbol table */
-symbol_table* delete_symbol(symbol_table* head, const char* symbol) {
-    symbol_table* temp;
-    symbol_table* prev;
-    temp = head;
-    prev = NULL;
-
-    /* If the head is the symbol to be deleted */
-    if (strcmp(temp->symbol, symbol) == 0) {
-        head = temp->next;
-        free(temp);
-        return head;
-    }
-
-    /* Search for the symbol to be deleted */
-    while (temp != NULL && strcmp(temp->symbol, symbol) != 0) {
-        prev = temp;
-        temp = temp->next;
-    }
-
-    /* If the symbol was not found */
-    if (temp == NULL) {
-        return head;
-    }
-
-    /* If the symbol was found */
-    prev->next = temp->next;
-    free(temp);
-    return head;
-}
-
-
+/* Function to set a symbol's pre-defined entry value */
 void set_symbol_pre_defined_entry(symbol_table* node, int pre_defined_entry) {
     if(node == NULL) {
         return;
@@ -133,13 +99,13 @@ void set_symbol_pre_defined_entry(symbol_table* node, int pre_defined_entry) {
     node->pre_defined_entry = pre_defined_entry;
 }
 
+/* Function to get a symbol's pre-defined entry value */
 int get_symbol_pre_defined_entry(symbol_table* node) {
     if(node == NULL) {
         return 0;
     }
     return node->pre_defined_entry;
 }
-
 
 /* Function to check if a symbol already exists in the symbol table */
 int symbol_exists(symbol_table* head, const char* symbol, int line_number, int value) {
@@ -195,7 +161,6 @@ int check_symbol_legality(const char* symbol, int line_number){
     }
     return 1;
 }
-
 
 /* Function to add a new node to the symbol table */
 symbol_table* insert_symbol(symbol_table* head, const char* symbol, int value, int line_number) {

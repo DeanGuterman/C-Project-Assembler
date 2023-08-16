@@ -7,7 +7,7 @@
 #include "instruction_handling.h"
 #include "first_pass_through.h"
 
-
+/* Extracts a symbol from a line */
 char* extract_symbol(const char line[]) {
     int index;
     int symbol_index;
@@ -51,6 +51,7 @@ char* extract_symbol(const char line[]) {
     return symbol_name;
 }
 
+/* Handle a line with a symbol declaration */
 void handle_symbol(struct symbol_table *symbol_head, char line[], int line_number, char symbol_name[MAX_SYMBOL_LENGTH + 1], int *temp_ic, int *temp_dc){
     struct symbol_table *new_symbol;
     int entry_or_extern_value;
@@ -105,6 +106,7 @@ void handle_symbol(struct symbol_table *symbol_head, char line[], int line_numbe
     }
 }
 
+/* Handle a line without a symbol declaration */
 void handle_non_symbol(struct symbol_table *symbol_head, char line[], int line_number, int *temp_ic, int *temp_dc){
     int index;
     int entry_or_extern_value;
@@ -126,9 +128,9 @@ void handle_non_symbol(struct symbol_table *symbol_head, char line[], int line_n
         }
     }
     else if (entry_or_extern_value == 1) { /* If it's a .extern prompt */
-        handle_extern_or_entry_symbol(line, symbol_head, index, 1, line_number, *temp_dc);
+        handle_extern_or_entry_symbol(line, symbol_head, index, 1, line_number);
     } else if (entry_or_extern_value == 2) { /* If it's a .entry prompt */
-        handle_extern_or_entry_symbol(line, symbol_head, index, 2, line_number, *temp_dc);
+        handle_extern_or_entry_symbol(line, symbol_head, index, 2, line_number);
     }
     else{ /* If it's an instruction */
         *temp_ic += get_instruction_line_amount(line, line_number, index, symbol_head, 0);
@@ -164,6 +166,7 @@ void first_pass_through(char* argv, struct symbol_table* symbol_head, int *IC, i
             handle_non_symbol(symbol_head, line, line_number, &temp_ic, &temp_dc);
         }
     }
+    /* Set the final values of IC and DC */
     *IC = temp_ic;
     *DC = temp_dc;
 

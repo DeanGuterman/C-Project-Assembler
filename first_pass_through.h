@@ -13,7 +13,6 @@
 /* Extracts a symbol from a line */
 char* extract_symbol(const char line[]);
 
-
 /* Handle a line with a symbol declaration */
 void handle_symbol(struct symbol_table *symbol_head, char line[], int line_number, char symbol_name[MAX_SYMBOL_LENGTH + 1], int *temp_ic, int *temp_dc);
 

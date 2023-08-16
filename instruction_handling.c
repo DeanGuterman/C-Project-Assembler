@@ -89,6 +89,8 @@ int check_two_operand(int line_number, int instruction_index, int num_of_tokens,
     /* delete whitespaces from the second and third token */
     delete_whitespaces(tokens[1]);
     delete_whitespaces(tokens[2]);
+
+    /* Check if the operands are valid */
     if (!strcmp(tokens[0], "lea")){
         if (is_valid_symbol(tokens[1], symbol_head)){
             if (is_valid_register(tokens[2]) || is_valid_symbol(tokens[2], symbol_head)){
@@ -102,7 +104,7 @@ int check_two_operand(int line_number, int instruction_index, int num_of_tokens,
         return 0;
     }
     else if (is_valid_register(tokens[1]) && is_valid_register(tokens[2])){
-        return 2;
+        return 2; /*In this case, both operands are registers*/
     }
     else if(is_valid_symbol(tokens[1], symbol_head) && is_valid_symbol(tokens[2], symbol_head)){
         return 3;
@@ -141,6 +143,8 @@ int check_one_operand(int line_number, int instruction_index, int num_of_tokens,
     }
     /* delete whitespaces from the second token */
     delete_whitespaces(tokens[1]);
+
+    /* Check if the operand is valid */
     if (is_valid_register(tokens[1])){
         return 2;
     }
@@ -171,59 +175,65 @@ int check_zero_operand(int line_number, int instruction_index, int num_of_tokens
     else return 1;
 }
 
-int get_instruction_line_amount(char line[], int line_number, int index, struct symbol_table *symbol_head, int check_errors){
-    /* instruction names variables */
+int get_instruction_line_amount(char line[], int line_number, int index, struct symbol_table *symbol_head, int check_errors) {
     char line_copy[MAX_LINE_LENGTH];
     char* token;
     char* tokens[3];
     int num_of_tokens;
     int instruction_index;
 
+    /* Copy the line content starting from the given index */
     strcpy(line_copy, line + index);
+
+    /* Tokenize the line to count the number of operands */
     token = strtok(line_copy, " \t\n");
     num_of_tokens = 0;
-    while (token != NULL){
+    while (token != NULL) {
         tokens[num_of_tokens] = token;
         num_of_tokens++;
         token = strtok(NULL, ",");
     }
-    if (num_of_tokens > 3){
+
+    /* Check for excessive number of operands */
+    if (num_of_tokens > 3) {
         if (check_errors == 1) {
             printf("Error: instruction at line %d has too many arguments\n", line_number);
             error_free = 0;
         }
         return 0;
     }
+
+    /* Find the index of the instruction in the instruction list */
     instruction_index = find_instruction_index(tokens[0], line_number, check_errors);
 
-
-    if(instruction_index >= 0 && instruction_index <= 4){
+    /* Determine the number of operands based on the instruction type */
+    if (instruction_index >= 0 && instruction_index <= 4) {
         if (instruction_index == 4)
             instruction_index = 6;
-        if (check_errors == 0){
-            if (check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, check_errors) == 2){
+        if (check_errors == 0) {
+            if (check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, check_errors) == 2) {
                 return 2;
+            } else {
+                return 3;
             }
-            else return 3;
+        } else {
+            return check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, check_errors);
         }
-        else
-        return check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, check_errors);
-    }
-    else if(instruction_index >= 5 && instruction_index <= 13){
+    } else if (instruction_index >= 5 && instruction_index <= 13) {
         if (instruction_index == 6)
             instruction_index = 4;
-        if (check_errors == 0){
+        if (check_errors == 0) {
             return 2;
+        } else {
+            return check_one_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, check_errors);
         }
-        else
-        return check_one_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, check_errors);
-    }
-    else if (instruction_index >= 14){
-        if (check_errors == 0){
+    } else if (instruction_index >= 14) {
+        if (check_errors == 0) {
             return 1;
+        } else {
+            return check_zero_operand(line_number, instruction_index, num_of_tokens, check_errors);
         }
-        else
-        return check_zero_operand(line_number, instruction_index, num_of_tokens, check_errors);
+    } else {
+        return 0;
     }
-    else return 0;
 }

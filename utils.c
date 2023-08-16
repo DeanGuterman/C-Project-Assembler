@@ -4,6 +4,7 @@
 #include "symbol_table.h"
 #include "utils.h"
 
+/* Free symbol table */
 void free_tables(struct symbol_table* symbol_head){
     while (symbol_head != NULL) {
         struct symbol_table* temp;
@@ -14,16 +15,7 @@ void free_tables(struct symbol_table* symbol_head){
     free(symbol_head);
 }
 
-int get_instruction_decimal_code(char* instruction_name){
-    int i;
-    for (i = 0; i < 16; i++){
-        if (strcmp(instruction_name, instruction_names[i]) == 0){
-            return i;
-        }
-    }
-    return -1;
-}
-
+/* Open pre-existing file */
 FILE* open_file(char* file_name, char* file_type){
     char complete_file_name[FILENAME_MAX];
     strcpy(complete_file_name, file_name);
@@ -31,6 +23,7 @@ FILE* open_file(char* file_name, char* file_type){
     return fopen(complete_file_name, "r");
 }
 
+/* Create output file */
 FILE* create_output_file(char* file_name, char* file_type){
     char complete_file_name[FILENAME_MAX];
     strcpy(complete_file_name, file_name);

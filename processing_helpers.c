@@ -64,30 +64,30 @@ int handle_data(char line[], int index, int line_number, int check_errors){
     int plus_minus_flag;
     int whitespace_flag;
 
-    data_counter = 1;
-    comma_flag = 1;
-    plus_minus_flag = 0;
-    whitespace_flag = 0;
+    data_counter = 1; /* Initializing data counter */
+    comma_flag = 1; /* Flag to track comma presence */
+    plus_minus_flag = 0; /* Flag to track consecutive plus or minus signs */
+    whitespace_flag = 0; /* Flag to track whitespace presence */
 
     while(isspace(line[index])){
-        index++;
+        index++; /* Move index past leading whitespaces */
     }
 
     while (line[index] != '\n'){
-        if (line[index] == 44){
+        if (line[index] == 44){ /* Check for comma (ASCII code for comma) */
             if (comma_flag == 1){
                 if (check_errors)
                     printf("Error: unnecessary commas in .data at line %d\n", line_number);
                 return 0;
             }
             else {
-                comma_flag = 1;
+                comma_flag = 1; /* Set comma_flag for next data item */
                 plus_minus_flag = 0;
-                data_counter++;
+                data_counter++; /* Count the data item */
                 whitespace_flag = 0;
             }
         }
-        else if (line[index] == 43 || line[index] == 45){
+        else if (line[index] == 43 || line[index] == 45){ /* Check for plus (+) or minus (-) signs */
             if (plus_minus_flag == 1){
                 if (check_errors)
                     printf("Error: multiple consecutive plus or minus signs in .data at line %d\n", line_number);
@@ -99,21 +99,21 @@ int handle_data(char line[], int index, int line_number, int check_errors){
                 return 0;
             }
             else {
-                plus_minus_flag = 1;
+                plus_minus_flag = 1; /* Set plus_minus_flag after plus/minus sign */
             }
         }
-        else if (isdigit(line[index])){
+        else if (isdigit(line[index])){ /* Check for digits */
             if (whitespace_flag == 1){
                 if (check_errors)
                     printf("Error: missing commas in .data at line %d\n", line_number);
                 return 0;
             }
             else
-                comma_flag = 0;
+                comma_flag = 0; /* Reset comma_flag when digits are encountered */
         }
-        else if (isspace(line[index])){
+        else if (isspace(line[index])){ /* Check for whitespaces */
             if (comma_flag == 0)
-                whitespace_flag = 1;
+                whitespace_flag = 1; /* Set whitespace_flag if no comma encountered yet */
         }
         else {
             if (check_errors)
@@ -131,6 +131,7 @@ int handle_data(char line[], int index, int line_number, int check_errors){
     /* Return the total number of integers (data items) found in the .data prompt */
     return data_counter;
 }
+
 
 int classify_data_or_string(char line[], int index){
     int prompt_index;
@@ -208,7 +209,7 @@ int handle_data_or_string(char line[], int index, int line_number, int check_err
 }
 
 /* extract a .extern symbol name and handle it */
-void handle_extern_or_entry_symbol(char line[], struct symbol_table* head, int index, int extern_or_entry, int line_number, int dc){
+void handle_extern_or_entry_symbol(char line[], struct symbol_table* head, int index, int extern_or_entry, int line_number){
     char symbol_name[MAX_SYMBOL_LENGTH + 1];
     int symbol_index;
     struct symbol_table* symbol;

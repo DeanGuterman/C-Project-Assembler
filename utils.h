@@ -6,6 +6,7 @@
 #include <string.h>
 #include "symbol_table.h"
 
+/*Macro definitions*/
 #define TEMP_SYMBOL_NAME "mov"
 #define MAX_LINE_LENGTH 81
 #define MAX_SYMBOL_LENGTH 31
@@ -14,6 +15,7 @@
 #define INSTRUCTION_NAMES {"mov", "cmp", "add", "sub", "lea", "clr", "not", "inc", "dec", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"}
 #define REGISTER_NAMES {"@r0", "@r1", "@r2", "@r3", "@r4","@r5", "@r6", "@r7"}
 
+/* Global variables */
 struct symbol_table;
 extern int error_free;
 extern int contains_extern;
@@ -25,12 +27,10 @@ extern char* register_names[];
 /* Free symbol table */
 void free_tables(struct symbol_table* symbol_head);
 
-int get_instruction_decimal_code(char* instruction_name);
-
-/* Open file for reading */
+/* Open pre-existing file */
 FILE* open_file(char* file_name, char* file_type);
 
-/* Create output file for writing */
+/* Create output file */
 FILE* create_output_file(char* file_name, char* file_type);
 
 #endif

@@ -11,21 +11,34 @@
 #include "create_output_files.h"
 
 
+/* Check if a given integer is within a valid range */
 int is_valid_num(int num) {
     if (num > 2047 || num < -2048) {
+        /* Return 0 to indicate that the number is not valid */
         return 0;
     }
+
+    /* Return 1 to indicate that the number is valid */
     return 1;
 }
 
-int is_valid_operand_num(char num_string[]){
+/* Check if a given string can be converted to a valid operand number within the specified range */
+int is_valid_operand_num(char num_string[]) {
     int num;
+
+    /* Convert the string to an integer */
     num = atoi(num_string);
-    if (num > 511 || num < -512){
+
+    /* Check if the integer is within the valid range */
+    if (num > 511 || num < -512) {
+        /* Return 0 to indicate that the operand is not valid */
         return 0;
     }
+
+    /* Return 1 to indicate that the operand is valid */
     return 1;
 }
+
 
 /* Encode a double-operand instruction */
 int encode_double_operand_instruction(char * tokens[], struct bitfield * instruction_array[], int current_instruction, int instruction_index, struct symbol_table * symbol_head, int line_number) {
@@ -230,7 +243,8 @@ int encode_zero_operand_instruction(struct bitfield *instruction_array[], int cu
     return instruction_index;
 }
 
-int encode_instruction(const char line[], int index, struct bitfield *instruction_array[], int instruction_index, int line_number, struct symbol_table *symbol_head){
+/* Encode a given instruction based on the input line and parameters */
+int encode_instruction(const char line[], int index, struct bitfield *instruction_array[], int instruction_index, int line_number, struct symbol_table *symbol_head) {
     char line_copy[MAX_LINE_LENGTH];
     char* token;
     char* tokens[3];
@@ -238,80 +252,105 @@ int encode_instruction(const char line[], int index, struct bitfield *instructio
     int current_instruction;
     int i;
 
-
+    /* Create a copy of the line starting from the specified index */
     strcpy(line_copy, line + index);
+
+    /* Tokenize the copied line using whitespace and newline characters as delimiters */
     token = strtok(line_copy, " \t\n");
     num_of_tokens = 0;
 
-    while (token != NULL){
+    /* Store tokens in an array */
+    while (token != NULL) {
         tokens[num_of_tokens] = token;
         num_of_tokens++;
         token = strtok(NULL, ",");
     }
 
-    for (i = 0; i < num_of_tokens; i++){
+    /* Remove whitespaces from each token */
+    for (i = 0; i < num_of_tokens; i++) {
         delete_whitespaces(tokens[i]);
     }
 
+    /* Find the index of the current instruction in the instruction set */
     current_instruction = find_instruction_index(tokens[0], line_number, 0);
 
-    if(current_instruction >= 0 && current_instruction <= 4){
+    if (current_instruction >= 0 && current_instruction <= 4) {
         if (current_instruction == 4)
             current_instruction = 6;
+        /* Encode a double operand instruction */
         return encode_double_operand_instruction(tokens, instruction_array, current_instruction, instruction_index, symbol_head, line_number);
     }
-    else if(current_instruction >= 5 && current_instruction <= 13){
+    else if (current_instruction >= 5 && current_instruction <= 13) {
         if (current_instruction == 6)
             current_instruction = 4;
-        return   encode_single_operand_instruction(tokens, instruction_array, current_instruction, instruction_index, symbol_head, line_number);
+        /* Encode a single operand instruction */
+        return encode_single_operand_instruction(tokens, instruction_array, current_instruction, instruction_index, symbol_head, line_number);
     }
-    else if (current_instruction >= 14){
-       return encode_zero_operand_instruction(instruction_array, current_instruction, instruction_index);
+    else if (current_instruction >= 14) {
+        /* Encode a zero operand instruction */
+        return encode_zero_operand_instruction(instruction_array, current_instruction, instruction_index);
     }
 
+    /* Return the instruction index */
     return instruction_index;
 }
 
+
+/* Encode a string literal into the data array */
 int encode_string(const char line[], int index, struct bitfield * data_array[], int data_index) {
+    /* Skip characters until the opening double-quote is encountered */
     while (line[index] != '"') {
         index++;
     }
 
-    index++;
+    index++; /* Skip the opening double-quote */
+
+    /* Process characters within the string */
     while (line[index] != '"') {
+        /* Convert the current character to a bitfield and store it in the data array */
         data_array[data_index] = char_to_bitfield(line[index]);
         index++;
         data_index++;
     }
+
+    /* Append a null terminator to represent the end of the string */
     data_array[data_index] = char_to_bitfield('\0');
     data_index++;
+
+    /* Return the updated data index */
     return data_index;
 }
 
+
+/* Encode data values from a given line into the data array */
 int encode_data(const char line[], int index, struct bitfield * data_array[], int data_index, int line_number) {
     int modifier;
     int num;
+
+    /* Loop until the end of the line is reached */
     while (line[index] != '\n') {
         num = 0;
+
+        /* Skip whitespace characters */
         while (isspace(line[index])) {
             index++;
         }
+
+        /* Determine if a modifier is present */
         if (line[index] == '-') {
             modifier = -1;
             index++;
         } else if (line[index] == '+') {
             modifier = 1;
             index++;
-        } else if (!isdigit(line[index])){
+        } else if (!isdigit(line[index])) {
             index++;
-            continue;
+            continue;  /* Skip characters that are not digits or modifiers */
+        } else {
+            modifier = 1;  /* Default modifier if not specified */
         }
-        else {
-            modifier = 1;
-        }
 
-
-
+        /* Parse the numeric value */
         while (line[index] != '\n' && line[index] != ',') {
             if (isdigit(line[index])) {
                 num = num * 10 + (line[index] - '0');
@@ -319,25 +358,34 @@ int encode_data(const char line[], int index, struct bitfield * data_array[], in
             index++;
         }
 
+        /* Process the parsed value */
         if (line[index] == ',' || line[index] == '\n') {
             if (is_valid_num(num)) {
+                /* Apply modifier and two's complement if necessary */
                 if (modifier == -1) {
                     num *= -1;
                     num = twos_complement(num);
                     num |= (1 << 11);
                 }
+                /* Store the encoded numeric value in the data array */
                 data_array[data_index] = num_to_bitfield(num);
                 data_index++;
             } else {
+                /* Print an error message for invalid numbers */
                 printf("Error: invalid number in .data instruction at line %d\n", line_number);
                 error_free = 0;
                 return data_index;
             }
+
+            /* Check if the end of the line has been reached */
             if (line[index] == '\n')
                 return data_index;
-            index++;
+
+            index++;  /* Move past the comma separator */
         }
     }
 
+    /* Return the updated data index */
     return data_index;
 }
+
