@@ -15,7 +15,7 @@ int find_instruction_index(char* token_instruction, int line_number, int check_e
 
     int i;
     for (i = 0; i < 16; i++){
-        if (strcmp(token_instruction, instruction_names[i]) == 0){
+        if (strncmp(token_instruction, instruction_names[i], 4) == 0){
             return i;
         }
     }

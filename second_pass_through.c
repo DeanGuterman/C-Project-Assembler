@@ -134,7 +134,7 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head) {
         create_output_files(argv, symbol_head, instruction_array, data_array, instruction_index, data_index);
     }
     else {
-        printf("Error: cannot create output files due to errors in the input file\n");
+        printf("Cannot create output files due to errors in the input file\n\n");
     }
 
     /* Free memory and close the input file */

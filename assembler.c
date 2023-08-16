@@ -6,6 +6,13 @@
 #include "error_detection_pass.h"
 #include "second_pass_through.h"
 
+/*
+ * Coded by Dean Guterman for the Open University
+ *
+ */
+
+
+
 /* Global variables */
 int contains_extern;
 int contains_entry;

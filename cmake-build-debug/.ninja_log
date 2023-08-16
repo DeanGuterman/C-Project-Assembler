@@ -85,3 +85,17 @@
 113	218	7139201126347252	assembler_project.exe	e090258e678954da
 2	88	7139201188362476	CMakeFiles/assembler_project.dir/instruction_handling.c.obj	de87ccebe40c2d
 89	185	7139201189271954	assembler_project.exe	e090258e678954da
+2	84	7139204309012261	CMakeFiles/assembler_project.dir/instruction_handling.c.obj	de87ccebe40c2d
+85	181	7139204309911748	assembler_project.exe	e090258e678954da
+1	90	7139207221643261	CMakeFiles/assembler_project.dir/parse_macros.c.obj	f1083ccad01185a3
+90	188	7139207222582700	assembler_project.exe	e090258e678954da
+2	83	7139208826771645	CMakeFiles/assembler_project.dir/parse_macros.c.obj	f1083ccad01185a3
+83	179	7139208827691123	assembler_project.exe	e090258e678954da
+1	89	7139211225355524	CMakeFiles/assembler_project.dir/parse_macros.c.obj	f1083ccad01185a3
+90	199	7139211226404915	assembler_project.exe	e090258e678954da
+1	93	7139212048573427	CMakeFiles/assembler_project.dir/parse_macros.c.obj	f1083ccad01185a3
+93	205	7139212049632719	assembler_project.exe	e090258e678954da
+2	104	7139213998718286	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
+104	213	7139213999767521	assembler_project.exe	e090258e678954da
+2	83	7139214836066738	CMakeFiles/assembler_project.dir/second_pass_through.c.obj	1c0f81c2a3d244cd
+84	188	7139214837036062	assembler_project.exe	e090258e678954da

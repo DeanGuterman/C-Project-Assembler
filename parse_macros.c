@@ -163,7 +163,7 @@ void parse_macros(char* argv) {
         return;
     }
 
-    while (fgets(line, MAX_LINE_LENGTH + 1, input_file)) {
+    while (fgets(line, MAX_LINE_LENGTH + 1, input_file) != NULL) {
         line_number++;
 
         /* Check if line length exceeds maximum line length */
@@ -173,12 +173,12 @@ void parse_macros(char* argv) {
             continue;
         }
         /* Trim trailing newline character */
-        line[strcspn(line, "\n")] = '\0';
+        line[strcspn(line, "\r\n")] = '\0';
 
         /* Trim leading whitespace */
         trimmed_line = line;
-        while (*trimmed_line == ' ' || *trimmed_line == '\t') {
-            ++trimmed_line;
+        while (isspace(*trimmed_line)) {
+            trimmed_line++;
         }
 
         if (strlen(line) == 0 || line[0] == ';') {
