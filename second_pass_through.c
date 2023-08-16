@@ -132,10 +132,12 @@ void second_pass_through(char* argv, struct symbol_table* symbol_head) {
             instruction_index = encode_instruction(line, index, instruction_array, instruction_index, line_number, symbol_head);
         }
     }
-
     /* If error-free, create output files */
     if (error_free) {
         create_output_files(argv, symbol_head, instruction_array, data_array, instruction_index, data_index);
+    }
+    else {
+        printf("Error: cannot create output files due to errors in the input file\n");
     }
 
     /* Free memory and close the input file */

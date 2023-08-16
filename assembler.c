@@ -24,6 +24,7 @@ int main(int argc, char* argv[]) {
 
     /* Process each input file */
     for (i = 1; i < argc; i++) {
+        printf("Processing file %s\n", argv[i]);
         struct symbol_table* symbol_head;
         int IC, DC;
 
@@ -43,13 +44,13 @@ int main(int argc, char* argv[]) {
         /* If no errors in macro parsing, proceed with the first pass */
         if (error_free == 1) {
             first_pass_through(argv[i], symbol_head, &IC, &DC);
+
+            /* Perform error detection pass */
+            error_detection_pass(argv[i], symbol_head, IC, DC);
+
+            /* Perform second pass */
+            second_pass_through(argv[i], symbol_head);
         }
-
-        /* Perform error detection pass */
-        error_detection_pass(argv[i], symbol_head, IC, DC);
-
-        /* Perform second pass */
-        second_pass_through(argv[i], symbol_head);
 
         /* Free memory used by the symbol table */
         free_tables(symbol_head);

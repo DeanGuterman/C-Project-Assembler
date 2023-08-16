@@ -116,7 +116,7 @@ int symbol_exists(symbol_table* head, const char* symbol, int line_number, int v
                 return 2; /* Symbol exists in the table and is a pre-defined entry */
             }
             else {
-                printf("Error in line %d: Symbol %s already exists in the symbol table\n", line_number, symbol);
+                printf("Error: line %d symbol %s already exists in the symbol table\n", line_number, symbol);
                 error_free = 0;
                 return 1; /* Symbol exists in the table */
             }

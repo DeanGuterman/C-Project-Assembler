@@ -46,6 +46,11 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
     struct symbol_table *source_symbol, *destination_symbol;
     int source_operand_twos_complement, destination_operand_twos_complement, print_third_line;
 
+    /* check if there are three tokens */
+    if (tokens[1] == NULL || tokens[2] == NULL) {
+        return instruction_index;
+    }
+
     /* Shift the current_instruction to the left by 5 bits */
     instruction_opcode = num_to_bitfield(current_instruction << 5);
     print_third_line = 1;
@@ -165,6 +170,10 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
     struct bitfield *instruction_opcode, *ARE, *destination_method, *operand_address;
     struct symbol_table *current_symbol;
     int operand_twos_complement;
+
+    if (!is_valid_register(tokens[1]) && !is_valid_symbol(tokens[1], symbol_head) && !(is_valid_number(tokens[1]) && !strcmp(instruction_names[current_instruction], "prn"))) {
+        return instruction_index;
+    }
 
     /* Shift the current_instruction to the left by 5 bits */
     current_instruction <<= 5;
@@ -299,18 +308,24 @@ int encode_instruction(const char line[], int index, struct bitfield *instructio
 /* Encode a string literal into the data array */
 int encode_string(const char line[], int index, struct bitfield * data_array[], int data_index) {
     /* Skip characters until the opening double-quote is encountered */
-    while (line[index] != '"') {
+    while (line[index] != '"' && line[index] != '\n') {
         index++;
+    }
+    if (line[index] == '\n') {
+        return data_index;
     }
 
     index++; /* Skip the opening double-quote */
 
     /* Process characters within the string */
-    while (line[index] != '"') {
+    while (line[index] != '"' && line[index] != '\n') {
         /* Convert the current character to a bitfield and store it in the data array */
         data_array[data_index] = char_to_bitfield(line[index]);
         index++;
         data_index++;
+    }
+    if (line[index] == '\n') {
+        return data_index;
     }
 
     /* Append a null terminator to represent the end of the string */
