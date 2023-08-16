@@ -196,8 +196,7 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
         }
     }
 
-    printf("current index is %d current instruction is %d\n", instruction_index, get_bitfield_value(instruction_opcode));
-    printf("operand address is %d are is %d\n", get_bitfield_value(operand_address), get_bitfield_value(ARE));
+
     /* Store instruction components in instruction_array */
     instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(instruction_opcode) | get_bitfield_value(destination_method));
     instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(operand_address) | get_bitfield_value(ARE));
@@ -288,16 +287,21 @@ int encode_data(const char line[], int index, struct bitfield * data_array[], in
         while (isspace(line[index])) {
             index++;
         }
-
         if (line[index] == '-') {
             modifier = -1;
             index++;
         } else if (line[index] == '+') {
             modifier = 1;
             index++;
-        } else {
+        } else if (!isdigit(line[index])){
+            index++;
+            continue;
+        }
+        else {
             modifier = 1;
         }
+
+
 
         while (line[index] != '\n' && line[index] != ',') {
             if (isdigit(line[index])) {
@@ -311,6 +315,7 @@ int encode_data(const char line[], int index, struct bitfield * data_array[], in
                 if (modifier == -1) {
                     num *= -1;
                     num = twos_complement(num);
+                    printf("num after twos complement is %d\n", num);
                     num |= (1 << 11);
                 }
                 data_array[data_index] = num_to_bitfield(num);
