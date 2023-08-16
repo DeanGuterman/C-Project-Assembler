@@ -144,7 +144,6 @@ int classify_data_or_string(char line[], int index){
     }
 
     memset(prompt, '\0', sizeof(prompt));
-
     /* Skip leading whitespace characters */
     while(isspace(line[index])){
         index++;
@@ -157,7 +156,6 @@ int classify_data_or_string(char line[], int index){
         index++;
         prompt_index++;
     }
-
     /* Compare the prompt with ".string" and ".data" */
     if (strcmp(".string", prompt) == 0){
         return 1;
@@ -184,12 +182,9 @@ int handle_data_or_string(char line[], int index, int line_number, int check_err
         prompt_index++;
     }
 
-
     /* Extract the prompt */
     while(!isspace(line[prompt_index]) && line[prompt_index] != '\n'){
-
         prompt_index++;
-
     }
 
     /* Compare the prompt with ".string" and ".data" */

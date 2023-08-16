@@ -19,6 +19,10 @@ void validate_symbol_instruction(char* line, int line_number, struct symbol_tabl
     }
     while(!isspace(line[index])){
         index++;
+        if (line[index] == ':'){
+            index++;
+            break;
+        }
     }
 
     /* Check if the label is a .data or .string prompt */

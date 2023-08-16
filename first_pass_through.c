@@ -69,6 +69,10 @@ void handle_symbol(struct symbol_table *symbol_head, char line[], int line_numbe
     }
     while(!isspace(line[index])){
         index++;
+        if (line[index] == ':'){
+            index++;
+            break;
+        }
     }
 
     /* Check if the label is a .data or .string prompt */

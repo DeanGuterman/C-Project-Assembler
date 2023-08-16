@@ -1,17 +1,12 @@
-.entry COMPLEXSTART
-.extern COMPLEXFUNC
-COMPLEXMAIN: mov @r1, @r2
-LOOPA:       cmp @r3, @r4
-bne ENDLOOPA
-add @r5, @r6
-sub @r7, @r0
-jsr LOOPB
-prn STR10
-lea DATAA, @r5
-LOOPB:       clr @r1
-not @r2
-COMPLEXSTART:  rts
-ENDLOOPA:    stop
-STR10:       .string "complextest"
-DATAA:       .data -10, -5, 0, 5, 10
-DATAB:       .data 100, 200, 300
+MS1:.string "Lets test"
+LENGTH:.data  6,-9,15
+.extern Test
+MAIN:        mov @r3 ,    @r2
+K:   .data  10,12  ,     13,    14
+LOOP: jmp L1
+prn -5
+sub @r6    ,      @r4
+bne      Test
+L1:  inc K
+.entry LOOP
+END: stop

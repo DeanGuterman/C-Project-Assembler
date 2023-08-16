@@ -315,7 +315,6 @@ int encode_data(const char line[], int index, struct bitfield * data_array[], in
                 if (modifier == -1) {
                     num *= -1;
                     num = twos_complement(num);
-                    printf("num after twos complement is %d\n", num);
                     num |= (1 << 11);
                 }
                 data_array[data_index] = num_to_bitfield(num);
