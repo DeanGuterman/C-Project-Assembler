@@ -27,6 +27,7 @@ int is_valid_operand_num(char num_string[]){
     return 1;
 }
 
+/* Encode a double-operand instruction */
 int encode_double_operand_instruction(char * tokens[], struct bitfield * instruction_array[], int current_instruction, int instruction_index, struct symbol_table * symbol_head, int line_number) {
     struct bitfield *instruction_opcode, *source_ARE, *destination_ARE, *source_method, *destination_method, *source_operand_address, *destination_operand_address;
     struct symbol_table *source_symbol, *destination_symbol;
@@ -79,7 +80,6 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
         }
     }
 
-
     if (strncmp(tokens[2], "@", 1) == 0) {
         destination_method = num_to_bitfield(5 << 2);
         if (strncmp(tokens[1], "@", 1) == 0) {
@@ -122,6 +122,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
         }
     }
 
+    /* Set the encoded instruction and operands into the instruction array */
     instruction_array[instruction_index++] = num_to_bitfield(
             get_bitfield_value(instruction_opcode) | get_bitfield_value(source_method) | get_bitfield_value(destination_method));
 
@@ -132,6 +133,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
         instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(source_operand_address) | get_bitfield_value(destination_operand_address) | get_bitfield_value(source_ARE));
     }
 
+    /* Free allocated memory */
     free(instruction_opcode);
     free(source_method);
     free(source_operand_address);
@@ -139,11 +141,13 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
     free(destination_method);
     free(destination_operand_address);
     free(destination_ARE);
+
+    /* Return the updated instruction index */
     return instruction_index;
 }
 
 
-
+/* Encode a single-operand instruction */
 int encode_single_operand_instruction(char* tokens[], struct bitfield *instruction_array[], int current_instruction, int instruction_index, struct symbol_table *symbol_head, int line_number) {
     struct bitfield *instruction_opcode, *ARE, *destination_method, *operand_address;
     struct symbol_table *current_symbol;
@@ -211,13 +215,18 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
 }
 
 
-int encode_zero_operand_instruction(char* tokens[], struct bitfield *instruction_array[], int current_instruction, int instruction_index){
+/* Encode a zero-operand instruction */
+int encode_zero_operand_instruction(struct bitfield *instruction_array[], int current_instruction, int instruction_index){
     struct bitfield *instruction_opcode;
 
+    /* Calculate and set the instruction opcode by left-shifting the current instruction number by 5 bits */
     instruction_opcode = num_to_bitfield(current_instruction << 5);
+
+    /* Store the instruction opcode in the instruction array at the specified index */
     instruction_array[instruction_index] = instruction_opcode;
     instruction_index++;
 
+    /* Return the updated instruction index */
     return instruction_index;
 }
 
@@ -257,7 +266,7 @@ int encode_instruction(const char line[], int index, struct bitfield *instructio
         return   encode_single_operand_instruction(tokens, instruction_array, current_instruction, instruction_index, symbol_head, line_number);
     }
     else if (current_instruction >= 14){
-       return encode_zero_operand_instruction(tokens, instruction_array, current_instruction, instruction_index);
+       return encode_zero_operand_instruction(instruction_array, current_instruction, instruction_index);
     }
 
     return instruction_index;
