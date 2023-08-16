@@ -43,7 +43,7 @@ void set_symbol_pre_defined_entry(symbol_table* node, int pre_defined_entry);
 int get_symbol_pre_defined_entry(symbol_table* node);
 
 /* Function to check if a symbol already exists in the symbol table */
-int symbol_exists(symbol_table* head, const char* symbol, int line_number, int value);
+int symbol_exists(symbol_table* head, const char* symbol, int line_number);
 
 /* Function to check symbol legality */
 int check_symbol_legality(const char* symbol, int line_number);

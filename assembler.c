@@ -5,7 +5,6 @@
 #include "first_pass_through.h"
 #include "error_detection_pass.h"
 #include "second_pass_through.h"
-#include "assembler.h"
 
 /* Global variables */
 int contains_extern;
@@ -24,9 +23,10 @@ int main(int argc, char* argv[]) {
 
     /* Process each input file */
     for (i = 1; i < argc; i++) {
-        printf("Processing file %s\n", argv[i]);
         struct symbol_table* symbol_head;
         int IC, DC;
+
+        printf("Processing file %s\n", argv[i]);
 
         /* Initialize variables for this file */
         IC = 0;

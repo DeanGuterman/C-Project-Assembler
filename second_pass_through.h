@@ -22,7 +22,7 @@ struct bitfield *char_to_bitfield(char c);
 int twos_complement(int num);
 
 /* Convert a number to a bitfield */
-struct bitfield *num_to_bitfield(int num);
+struct bitfield *num_to_bitfield(unsigned int num);
 
 /* Free memory used by an array of bitfields */
 void free_bitfield_array(struct bitfield *array[]);

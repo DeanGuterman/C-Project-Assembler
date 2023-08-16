@@ -42,12 +42,9 @@ int twos_complement(int num) {
 }
 
 /* Function to convert a number to a bitfield */
-struct bitfield *num_to_bitfield(int num) {
+struct bitfield *num_to_bitfield(unsigned int num) {
     struct bitfield *new_bitfield;
     int i;
-    if (num < 0) {
-        num = twos_complement(num);
-    }
     new_bitfield = malloc(sizeof(struct bitfield));
     new_bitfield->bits = 0;
     for (i = 0; i < 12; i++) {

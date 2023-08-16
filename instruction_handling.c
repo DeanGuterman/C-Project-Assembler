@@ -29,12 +29,12 @@ int find_instruction_index(char* token_instruction, int line_number, int check_e
 void delete_whitespaces(char* token){
     int i;
     int j;
-    int token_length = strlen(token);
+    size_t token_length = strlen(token);
     for (i = 0; i < token_length; i++){
         if (token[i] == '\n'){
             token[i] = '\0';
         }
-        if (token[i] == ' ' || token[i] == '\t'){
+        if (isspace(token[i])){
             for (j = i; j < token_length; j++){
                 token[j] = token[j + 1];
             }

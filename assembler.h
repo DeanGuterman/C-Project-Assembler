@@ -9,7 +9,6 @@
 #include "first_pass_through.h"
 #include "error_detection_pass.h"
 #include "second_pass_through.h"
-#include "assembler.h"
 
 
 #endif

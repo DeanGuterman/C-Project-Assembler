@@ -26,8 +26,8 @@ int check_line_length(const char line[]){
 macro_table* handle_macro_start(char* line, macro_table* macro_tail) {
     /* Create a new macro and add it to the linked list */
     macro_table* new_macro;
-    int len;
-    int i;
+    size_t len;
+    size_t i;
     new_macro = (macro_table*)malloc(sizeof(macro_table));
     strncpy(new_macro->name, line + 5, sizeof(new_macro->name) - 1);
     new_macro->name[sizeof(new_macro->name) - 1] = '\0';
@@ -35,7 +35,7 @@ macro_table* handle_macro_start(char* line, macro_table* macro_tail) {
     /* Remove trailing whitespace from macro name */
     len = strlen(new_macro->name);
     i = len - 1;
-    while (i >= 0 && (new_macro->name[i] == ' ' || new_macro->name[i] == '\t')) {
+    while (i  - 1 >= -1 && isspace(new_macro->name[i])) {
         new_macro->name[i] = '\0';
         i--;
     }

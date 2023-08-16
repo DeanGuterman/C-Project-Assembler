@@ -45,11 +45,13 @@ int handle_string(char line[], int index, int line_number, int check_errors){
         /* Check there are no chars after the ending quotation marks */
         while (line[++index] != '\n'){
             if (!isspace(line[index])){
-                if (check_errors)
-                    printf("Error: non-whitespace characters after ending quotation marks in .string at line %d\n", line_number);
+                if (check_errors) {
+                    printf("the char is %c\n", line[index]);
+                    printf("Error: non-whitespace characters after ending quotation marks in .string at line %d\n",
+                           line_number);
+                }
                 return 0;
             }
-            index++;
         }
     }
 
