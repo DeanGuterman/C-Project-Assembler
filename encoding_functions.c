@@ -48,7 +48,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
         source_ARE = num_to_bitfield(0);
     } else if (source_symbol != NULL) {
         /* Handle symbol addressing */
-        source_method = num_to_bitfield(12);
+        source_method = num_to_bitfield(3 << 9);
         source_operand_address = num_to_bitfield(get_symbol_value(source_symbol) << 2);
 
         /* Check if the symbol is external or entry */
@@ -62,7 +62,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
     } else {
         /* Handle numeric operand */
         if (is_valid_operand_num(tokens[1]) == 1) {
-            source_method = num_to_bitfield(4);
+            source_method = num_to_bitfield(1 << 9);
             source_operand_twos_complement = twos_complement(atoi(tokens[1]));
 
             /* Check if the operand is negative */
@@ -81,7 +81,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
 
 
     if (strncmp(tokens[2], "@", 1) == 0) {
-        destination_method = num_to_bitfield(20);
+        destination_method = num_to_bitfield(5 << 2);
         if (strncmp(tokens[1], "@", 1) == 0) {
             print_third_line = 0;
             destination_operand_address = num_to_bitfield((tokens[2][2] - '0' )<< 2);
@@ -105,7 +105,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
     } else {
         /* Handle numeric operand */
         if (is_valid_operand_num(tokens[2]) == 1) {
-            destination_method = num_to_bitfield(4);
+            destination_method = num_to_bitfield(1 << 2);
             destination_operand_twos_complement = twos_complement(atoi(tokens[2]));
 
             /* Check if the operand is negative */
@@ -122,6 +122,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
         }
     }
 
+    printf("instruction opcode is %d source method is %d destination method is %d\n", get_bitfield_value(instruction_opcode), get_bitfield_value(source_method), get_bitfield_value(destination_method));
     instruction_array[instruction_index++] = num_to_bitfield(
             get_bitfield_value(instruction_opcode) | get_bitfield_value(source_method) | get_bitfield_value(destination_method));
 
@@ -160,7 +161,7 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
     if (strncmp(tokens[1], "@", 1) == 0) {
         /* Handle direct addressing */
         destination_method = num_to_bitfield(20);
-        operand_address = num_to_bitfield(tokens[1][2] << 7);
+        operand_address = num_to_bitfield(tokens[1][2] << 9);
         ARE = num_to_bitfield(0);
     } else if (current_symbol != NULL) {
         /* Handle symbol addressing */
@@ -245,10 +246,14 @@ int encode_instruction(const char line[], int index, struct bitfield *instructio
 
     current_instruction = find_instruction_index(tokens[0], line_number, 0);
 
-    if(current_instruction >= 0 && current_instruction <= 5){
+    if(current_instruction >= 0 && current_instruction <= 4){
+        if (current_instruction == 4)
+            current_instruction = 6;
         return encode_double_operand_instruction(tokens, instruction_array, current_instruction, instruction_index, symbol_head, line_number);
     }
-    else if(current_instruction >= 6 && current_instruction <= 13){
+    else if(current_instruction >= 5 && current_instruction <= 13){
+        if (current_instruction == 6)
+            current_instruction = 4;
         return   encode_single_operand_instruction(tokens, instruction_array, current_instruction, instruction_index, symbol_head, line_number);
     }
     else if (current_instruction >= 14){

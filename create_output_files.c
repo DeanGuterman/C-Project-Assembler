@@ -11,7 +11,6 @@ char extern_list[MAX_MEMORY_SIZE][MAX_SYMBOL_LENGTH];
 
 void add_to_extern_list(const char extern_name[], int instruction_index){
     strcpy(extern_list[instruction_index], extern_name);
-    printf("Added %s to extern list at index %d\n", extern_name, instruction_index);
 }
 
 char* encode_base64(struct bitfield *bf) {
@@ -53,6 +52,7 @@ void create_obj_file(char argv[], struct bitfield *instruction_array[], struct b
     }
 
     fclose(obj_file);
+    printf("Assembler finished successfully!\n");
 }
 
 void create_ent_file(char argv[], struct symbol_table *symbol_head){
@@ -94,6 +94,7 @@ void create_ext_file(char argv[]){
             fprintf(ext_file, "%s %d\n", extern_list[i], i);
         }
     }
+    fclose(ext_file);
 }
 
 void create_output_files(char argv[], struct symbol_table *symbol_head, struct bitfield *instruction_array[], struct bitfield *data_array[], int instruction_limit, int data_limit){

@@ -193,7 +193,10 @@ int get_instruction_line_amount(char line[], int line_number, int index, struct 
     }
     instruction_index = find_instruction_index(tokens[0], line_number, check_errors);
 
-    if(instruction_index >= 0 && instruction_index <= 5){
+
+    if(instruction_index >= 0 && instruction_index <= 4){
+        if (instruction_index == 4)
+            instruction_index = 6;
         if (check_errors == 0){
             if (check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, check_errors) == 2){
                 return 2;
@@ -203,7 +206,9 @@ int get_instruction_line_amount(char line[], int line_number, int index, struct 
         else
         return check_two_operand(line_number, instruction_index, num_of_tokens, tokens, symbol_head, check_errors);
     }
-    else if(instruction_index >= 6 && instruction_index <= 13){
+    else if(instruction_index >= 5 && instruction_index <= 13){
+        if (instruction_index == 6)
+            instruction_index = 4;
         if (check_errors == 0){
             return 2;
         }
