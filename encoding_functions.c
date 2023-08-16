@@ -86,7 +86,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
             print_third_line = 0;
             destination_operand_address = num_to_bitfield((tokens[2][2] - '0' )<< 2);
         } else {
-            destination_operand_address = num_to_bitfield((tokens[2][2] - '0' ) << 7);
+            destination_operand_address = num_to_bitfield((tokens[2][2] - '0' ) << 2);
             destination_ARE = num_to_bitfield(0);
         }
     } else if(destination_symbol != NULL){
@@ -160,7 +160,7 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
     if (strncmp(tokens[1], "@", 1) == 0) {
         /* Handle direct addressing */
         destination_method = num_to_bitfield(5 << 2);
-        operand_address = num_to_bitfield(tokens[1][2] << 7);
+        operand_address = num_to_bitfield((tokens[1][2] - '0') << 2);
         ARE = num_to_bitfield(0);
     } else if (current_symbol != NULL) {
         /* Handle symbol addressing */
@@ -196,8 +196,9 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
         }
     }
 
+    printf("current index is %d current instruction is %d\n", instruction_index, get_bitfield_value(instruction_opcode));
+    printf("operand address is %d are is %d\n", get_bitfield_value(operand_address), get_bitfield_value(ARE));
     /* Store instruction components in instruction_array */
-    printf("current instruction opcode is %d current destination method is %d\n", get_bitfield_value(instruction_opcode), get_bitfield_value(destination_method));
     instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(instruction_opcode) | get_bitfield_value(destination_method));
     instruction_array[instruction_index++] = num_to_bitfield(get_bitfield_value(operand_address) | get_bitfield_value(ARE));
 
