@@ -138,7 +138,10 @@ int check_one_operand(int line_number, int instruction_index, int num_of_tokens,
     }
     /* delete whitespaces from the second token */
     delete_whitespaces(tokens[1]);
-    if (is_valid_register(tokens[1]) || is_valid_symbol(tokens[1], symbol_head)){
+    if (is_valid_register(tokens[1])){
+        return 2;
+    }
+    else if (is_valid_symbol(tokens[1], symbol_head)){
         return 2;
     }
     else if(is_valid_number(tokens[1]) && !strcmp(instruction_names[instruction_index], "prn")){

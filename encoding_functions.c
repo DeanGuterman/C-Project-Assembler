@@ -8,6 +8,8 @@
 
 #include "instruction_handling.h"
 
+#include "create_output_files.h"
+
 
 int is_valid_num(int num) {
     if (num > 2047 || num < -2048) {
@@ -53,6 +55,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
         if (get_symbol_external_or_entry(source_symbol) == 1) {
             source_ARE = num_to_bitfield(1);
             source_operand_address = num_to_bitfield(0);
+            add_to_extern_list(tokens[1], instruction_index + 101);
         } else {
             source_ARE = num_to_bitfield(2);
         }
@@ -80,7 +83,6 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
     if (strncmp(tokens[2], "@", 1) == 0) {
         destination_method = num_to_bitfield(20);
         if (strncmp(tokens[1], "@", 1) == 0) {
-            printf("current instruction: %d\n", current_instruction);
             print_third_line = 0;
             destination_operand_address = num_to_bitfield((tokens[2][2] - '0' )<< 2);
         } else {
@@ -96,6 +98,7 @@ int encode_double_operand_instruction(char * tokens[], struct bitfield * instruc
         if (get_symbol_external_or_entry(destination_symbol) == 1) {
             destination_ARE = num_to_bitfield(1);
             destination_operand_address = num_to_bitfield(0);
+            add_to_extern_list(tokens[1], instruction_index + 102);
         } else {
             destination_ARE = num_to_bitfield(2);
         }
@@ -169,6 +172,7 @@ int encode_single_operand_instruction(char* tokens[], struct bitfield *instructi
             ARE = num_to_bitfield(1);
             free(operand_address);
             operand_address = num_to_bitfield(0);
+            add_to_extern_list(tokens[1], instruction_index + 101);
         } else {
             ARE = num_to_bitfield(2);
         }

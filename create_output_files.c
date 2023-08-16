@@ -7,6 +7,12 @@
 
 
 const char base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+char extern_list[MAX_MEMORY_SIZE][MAX_SYMBOL_LENGTH];
+
+void add_to_extern_list(const char extern_name[], int instruction_index){
+    strcpy(extern_list[instruction_index], extern_name);
+    printf("Added %s to extern list at index %d\n", extern_name, instruction_index);
+}
 
 char* encode_base64(struct bitfield *bf) {
     char *encoded = (char*)malloc(3);
@@ -73,9 +79,28 @@ void create_ent_file(char argv[], struct symbol_table *symbol_head){
     fclose(ent_file);
 }
 
+void create_ext_file(char argv[]){
+    FILE* ext_file;
+    int i;
+
+    ext_file = create_output_file(argv, ".ext");
+    if (ext_file == NULL) {
+        printf("Error creating extern file: %s\n", argv);
+        return;
+    }
+    for (i = 0; i < MAX_MEMORY_SIZE; i++){
+        if (extern_list[i] != NULL){
+            if (extern_list[i][0] != '\0')
+            fprintf(ext_file, "%s %d\n", extern_list[i], i);
+        }
+    }
+}
+
 void create_output_files(char argv[], struct symbol_table *symbol_head, struct bitfield *instruction_array[], struct bitfield *data_array[], int instruction_limit, int data_limit){
     create_obj_file(argv, instruction_array, data_array, instruction_limit, data_limit);
     if (contains_entry)
         create_ent_file(argv, symbol_head);
+    if (contains_extern)
+        create_ext_file(argv);
 }
 

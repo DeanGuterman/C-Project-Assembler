@@ -11,6 +11,8 @@
 
 #include "instruction_handling.h"
 
+#include "create_output_files.h"
+
 struct bitfield;
 
 int encode_string(const char line[], int index, struct bitfield *data_array[], int data_index);
